@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import Pic from '@/components/Pic.astro';
+import Icon from '@/components/Icon.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+import { formatDate } from '@/lib/format';
+
+const albums = (await getCollection('albums')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<ContentPage
+  title="Fotografije"
+  lead="Galerije z dogodkov, delavnic, izletov in kmetij."
+  nextStep="none"
+>
+  {
+    albums.length > 0 ? (
+      <div class="grid grid--3">
+        {albums.map((a) => (
+          <article class="card">
+            <Pic image={a.data.photos[0].src} alt={a.data.photos[0].alt} seed={a.id} ratio="4 / 3" />
+            <div class="card__body">
+              <div class="meta">
+                <Icon name="image" size={20} />
+                <span>{a.data.photos.length} fotografij</span>
+                <time datetime={a.data.date.toISOString().slice(0, 10)}>{formatDate(a.data.date)}</time>
+              </div>
+              <h2><a href={`/aktualno/fotografije/${a.id}/`}>{a.data.title}</a></h2>
+              {a.data.summary && <p>{a.data.summary}</p>}
+              <span class="link-arrow">Odpri galerijo <Icon name="arrow-right" size={20} /></span>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="empty"><p>Galerije bomo objavili kmalu.</p></div>
+    )
+  }
+  <NewsletterBand slot="after" heading="Ostanite v stiku" />
+</ContentPage>

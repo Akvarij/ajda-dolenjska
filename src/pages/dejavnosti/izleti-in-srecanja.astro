@@ -1,0 +1,21 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import EventsView from '@/components/EventsView.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+import { getEventsSplit, tripTypes } from '@/lib/events';
+
+const { upcoming, past } = await getEventsSplit(tripTypes);
+---
+
+<ContentPage
+  title="Izleti in srečanja"
+  lead="Obiski kmetij, izleti in druženja članov ter prijateljev društva."
+  nextStep="none"
+>
+  <EventsView
+    upcoming={upcoming}
+    past={past}
+    emptyText="Trenutno ni napovedanih izletov ali srečanj. Naročite se na e-novice in obvestili vas bomo o novih terminih."
+  />
+  <NewsletterBand slot="after" />
+</ContentPage>

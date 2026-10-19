@@ -1,0 +1,110 @@
+---
+// Fraunces with its optical-size axis (finer at display sizes) and a true italic.
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource-variable/figtree';
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Icon from '@/components/Icon.astro';
+import { site } from '@/config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  /** Absolute or root-relative URL of a social sharing image. */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+}
+
+const { title, description = site.description, noindex = false, ogImage, ogType = 'website' } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} – ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site ?? site.url).href : undefined;
+---
+
+<!doctype html>
+<html lang="sl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f3f8e6" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="sl_SI" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <slot name="head" />
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Preskoči na vsebino</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <a class="to-top" href="#top" aria-label="Na vrh strani">
+      <Icon name="chevron-down" size={22} />
+    </a>
+    <script>
+      import '@/scripts/forms';
+      import '@/scripts/motion';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  .to-top {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--c-green);
+    color: #fff;
+    box-shadow: 0 10px 24px -10px rgb(32 51 28 / 0.6);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 12px;
+    transition:
+      opacity 0.3s,
+      visibility 0.3s,
+      translate 0.3s var(--ease-out),
+      background-color 0.2s;
+  }
+  .to-top svg {
+    rotate: 180deg;
+  }
+  .to-top:hover {
+    background: var(--c-green-deep);
+    color: #fff;
+  }
+  .to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    translate: none;
+  }
+  @media print {
+    .to-top {
+      display: none;
+    }
+  }
+</style>

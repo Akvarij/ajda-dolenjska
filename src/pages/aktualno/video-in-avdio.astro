@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import Icon from '@/components/Icon.astro';
+import Placeholder from '@/components/Placeholder.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+import { formatDate } from '@/lib/format';
+import { toPlayable } from '@/lib/media';
+
+const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<ContentPage
+  title="Video in avdio"
+  lead="Posnetki predavanj, delavnic in pogovorov. Videoposnetki se naložijo šele, ko pritisnete gumb za predvajanje."
+  nextStep="none"
+>
+  {
+    items.length > 0 ? (
+      <div class="grid grid--2">
+        {items.map((m) => {
+          const play = toPlayable(m.data.url);
+          return (
+            <article class="card">
+              {m.data.kind === 'video' && play.kind === 'iframe' ? (
+                <div class="player" data-player data-src={play.src} data-title={m.data.title}>
+                  <Placeholder seed={m.id} />
+                  <button type="button" class="player__btn" aria-label={`Predvajaj: ${m.data.title}`}>
+                    <Icon name="play" size={56} />
+                  </button>
+                  <span class="player__note">{play.provider}</span>
+                </div>
+              ) : m.data.kind === 'avdio' && play.kind === 'audio' ? (
+                <div class="audio">
+                  <Icon name="headphones" size={48} />
+                  <audio controls preload="none" src={play.src}>
+                    <a href={play.src}>Prenesi posnetek</a>
+                  </audio>
+                </div>
+              ) : null}
+              <div class="card__body">
+                <div class="meta">
+                  <span class="badge">{m.data.kind === 'video' ? 'Video' : 'Avdio'}</span>
+                  <time datetime={m.data.date.toISOString().slice(0, 10)}>{formatDate(m.data.date)}</time>
+                  {m.data.duration && <span>{m.data.duration}</span>}
+                </div>
+                <h2>{m.data.title}</h2>
+                <p>{m.data.description}</p>
+                {play.kind === 'link' && (
+                  <a class="link-arrow" href={play.src} target="_blank" rel="noopener">
+                    Odpri posnetek <Icon name="external" size={18} />
+                  </a>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <div class="empty">
+        <p>Posnetke bomo objavili kmalu. Naročite se na e-novice in obvestili vas bomo.</p>
+      </div>
+    )
+  }
+  <NewsletterBand slot="after" heading="Ne zamudite novih posnetkov" />
+</ContentPage>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-player]').forEach((box) => {
+    box.querySelector('button')?.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.src = box.dataset.src ?? '';
+      frame.title = box.dataset.title ?? 'Video';
+      frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      frame.allowFullscreen = true;
+      box.replaceChildren(frame);
+    });
+  });
+</script>
+
+<style>
+  .player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--c-tint);
+  }
+  .player :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .player__btn {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    border: 0;
+    background: rgb(32 51 28 / 0.12);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .player__btn:hover {
+    background: rgb(32 51 28 / 0.28);
+  }
+  .player__btn :global(svg) {
+    filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.35));
+    fill: rgb(79 124 31 / 0.85);
+  }
+  .player__note {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.15rem 0.7rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.9);
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .audio {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: center;
+    padding: 1.75rem 1.25rem;
+    background: var(--c-tint);
+    color: var(--c-green-deep);
+  }
+  .audio audio {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import FarmCard from '@/components/FarmCard.astro';
+import Icon from '@/components/Icon.astro';
+
+const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<ContentPage
+  title="Kmetije"
+  lead="Biodinamične in ekološke kmetije članice društva. Pri vsaki najdete lokacijo, kontakt, ponudbo in spletno stran."
+  nextStep="join"
+  crumbs={[{ label: 'Kmetije' }]}
+>
+  <div class="toolbar">
+    <a class="btn btn--ghost" href="/kmetije/zemljevid/">
+      <Icon name="pin" size={20} /> Zemljevid kmetij
+    </a>
+  </div>
+  <div class="grid grid--3">
+    {farms.map((farm) => <FarmCard farm={farm} level={2} />)}
+  </div>
+</ContentPage>
+
+<style>
+  .toolbar {
+    margin-bottom: 2rem;
+  }
+</style>

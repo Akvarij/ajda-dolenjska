@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import wordmark from '@/assets/brand/logo-wordmark.png';
+import full from '@/assets/brand/logo-full.png';
+
+interface Props {
+  variant?: 'header' | 'full';
+}
+const { variant = 'header' } = Astro.props;
+const alt = 'Ajda Dolenjska, društvo za biološko-dinamično gospodarjenje';
+---
+
+{
+  variant === 'header' ? (
+    <Image src={wordmark} alt={alt} width={300} class="logo logo--header" loading="eager" />
+  ) : (
+    <Image src={full} alt={alt} width={300} class="logo logo--full" />
+  )
+}
+
+<style>
+  .logo--header {
+    height: 3.55rem;
+    width: auto;
+    display: block;
+  }
+  .logo--full {
+    width: min(100%, 12rem);
+    height: auto;
+    display: block;
+  }
+</style>

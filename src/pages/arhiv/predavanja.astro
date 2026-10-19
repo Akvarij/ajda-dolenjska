@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import DocCard from '@/components/DocCard.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+
+const docs = (await getCollection('documents', ({ data }) => data.category === 'predavanje' && data.archived)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<ContentPage title="Starejša predavanja" lead="Predavanja iz preteklih let, ki so še vedno aktualna." nextStep="none">
+  {
+    docs.length > 0 ? (
+      <div class="stack">{docs.map((d) => <DocCard doc={d} level={2} />)}</div>
+    ) : (
+      <div class="empty"><p>Starejših predavanj zaenkrat ni.</p></div>
+    )
+  }
+  <NewsletterBand slot="after" />
+</ContentPage>
+
+<style>
+  .stack {
+    display: grid;
+    gap: 1rem;
+  }
+</style>

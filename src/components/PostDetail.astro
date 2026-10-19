@@ -1,0 +1,75 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Pic from '@/components/Pic.astro';
+import Icon from '@/components/Icon.astro';
+import NextStep from '@/components/NextStep.astro';
+import { formatDate } from '@/lib/format';
+import { kindLabel, type PostEntry } from '@/lib/posts';
+
+interface Props {
+  post: PostEntry;
+}
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const listHref = d.kind === 'clanek' ? '/aktualno/clanki/' : '/aktualno/novice/';
+const listLabel = d.kind === 'clanek' ? 'Članki' : 'Novice';
+const ogImage = d.image?.src;
+---
+
+<BaseLayout title={d.title} description={d.summary} ogType="article" ogImage={ogImage}>
+  <PageHeader
+    title={d.title}
+    lead={d.summary}
+    eyebrow={kindLabel(post)}
+    crumbs={[{ label: 'Aktualno', href: '/aktualno/' }, { label: listLabel, href: listHref }, { label: d.title }]}
+  >
+    <p class="byline">
+      <time datetime={d.date.toISOString().slice(0, 10)}>{formatDate(d.date)}</time>
+      {d.author && <span> · {d.author}</span>}
+    </p>
+  </PageHeader>
+
+  <article class="section section--tight">
+    <div class="container--narrow">
+      {
+        d.image && (
+          <Pic image={d.image} alt={d.imageAlt} ratio="16 / 9" sizes="860px" loading="eager" class="cover" />
+        )
+      }
+      <div class="prose"><Content /></div>
+      {
+        d.relatedFarm && (
+          <p class="farm-link">
+            <Icon name="farm" size={22} />
+            <a href={`/kmetije/${d.relatedFarm.id}/`}>Preberite več o kmetiji</a>
+          </p>
+        )
+      }
+    </div>
+  </article>
+
+  <NextStep variant="article" />
+</BaseLayout>
+
+<style>
+  .byline {
+    margin: 1rem 0 0;
+    font-weight: 600;
+    color: var(--c-ink-soft);
+  }
+  .cover {
+    margin-bottom: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .farm-link {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    margin-top: 2rem;
+    font-weight: 700;
+  }
+</style>

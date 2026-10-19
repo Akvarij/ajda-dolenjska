@@ -1,0 +1,53 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import Icon from '@/components/Icon.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+import JoinBand from '@/components/JoinBand.astro';
+---
+
+<ContentPage
+  title="E-novice"
+  lead="Obvestila o dogodkih, tečajih in novostih iz kmetij, nekajkrat na leto neposredno v vaš e-predal."
+  nextStep="none"
+>
+  <div class="nl-layout">
+    <div class="prose">
+      <h2>Kaj boste prejemali</h2>
+      <ul>
+        <li>vabila na predavanja, delavnice, tečaje in izlete,</li>
+        <li>napovedi izdelave in uporabe biodinamičnih preparatov,</li>
+        <li>novice iz kmetij in društva,</li>
+        <li>koristne nasvete za vrt in njivo skozi leto.</li>
+      </ul>
+      <p>Brez nezaželene pošte. Naročnino lahko kadar koli prekličete.</p>
+    </div>
+    <div class="panel panel--sun">
+      <span class="ic"><Icon name="newspaper" size={30} /></span>
+      <h2>Naročite se</h2>
+      <NewsletterForm id="page-nl" layout="stacked" />
+    </div>
+  </div>
+  <JoinBand slot="after" tone="lime" />
+</ContentPage>
+
+<style>
+  .nl-layout {
+    display: grid;
+    gap: 2.5rem 4rem;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .nl-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .ic {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 0.75rem;
+    border-radius: 20px;
+    background: var(--c-sun);
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import EventsView from '@/components/EventsView.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+import Icon from '@/components/Icon.astro';
+import { getEventsSplit } from '@/lib/events';
+
+const { upcoming, past } = await getEventsSplit();
+---
+
+<ContentPage
+  title="Dogodki"
+  lead="Predavanja, tečaji, delavnice, izleti in srečanja. Pri dogodkih, kjer je prijava obvezna, jo najdete na strani dogodka."
+  nextStep="none"
+>
+  <nav class="filters" aria-label="Vrste dogodkov">
+    <a class="chip chip--on" href="/dejavnosti/dogodki/" aria-current="page">Vsi dogodki</a>
+    <a class="chip" href="/dejavnosti/izobrazevanja-in-delavnice/">Izobraževanja in delavnice</a>
+    <a class="chip" href="/dejavnosti/izleti-in-srecanja/">Izleti in srečanja</a>
+    <a class="chip chip--ics" href="/dejavnosti/dogodki.ics">
+      <Icon name="calendar" size={18} /> Dodaj v svoj koledar
+    </a>
+  </nav>
+
+  <EventsView upcoming={upcoming} past={past} calendar />
+
+  <NewsletterBand slot="after" />
+</ContentPage>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .filters .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    padding-inline: 1.15rem;
+    font-size: 1.05rem;
+    text-decoration: none;
+  }
+  .filters .chip:hover {
+    background: var(--c-tint-strong);
+  }
+  .chip--on {
+    background: var(--c-green);
+    border-color: var(--c-green);
+    color: #fff;
+  }
+  .chip--on:hover {
+    background: var(--c-green-deep) !important;
+    color: #fff;
+  }
+</style>

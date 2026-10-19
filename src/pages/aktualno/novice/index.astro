@@ -1,0 +1,28 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import PostCard from '@/components/PostCard.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+import { getPostsSplit } from '@/lib/posts';
+
+const { current } = await getPostsSplit('novica');
+---
+
+<ContentPage title="Novice" lead="Kaj se dogaja v društvu in na kmetijah." nextStep="none">
+  {
+    current.length > 0 ? (
+      <div class="grid grid--3">
+        {current.map((p) => <PostCard post={p} level={2} />)}
+      </div>
+    ) : (
+      <div class="empty"><p>Za zdaj ni novih novic. Starejše objave najdete v <a href="/arhiv/objave/">arhivu</a>.</p></div>
+    )
+  }
+  <p class="more"><a class="link-arrow" href="/arhiv/objave/">Starejše objave v arhivu</a></p>
+  <NewsletterBand slot="after" heading="Ne zamudite novic" text="Naročite se na e-novice in nove objave prejmite neposredno v e-predal." />
+</ContentPage>
+
+<style>
+  .more {
+    margin-top: 2rem;
+  }
+</style>

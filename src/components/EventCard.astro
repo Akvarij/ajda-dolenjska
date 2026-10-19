@@ -1,0 +1,78 @@
+---
+import Icon from './Icon.astro';
+import { formatDay, formatMonthShort, formatRange, formatWeekday } from '@/lib/format';
+import { eventUrl, timeRange, typeLabels, type EventEntry } from '@/lib/events';
+
+interface Props {
+  /** Heading level of the card title; use 2 when the card list has no h2 above it. */
+  level?: 2 | 3;
+  event: EventEntry;
+  past?: boolean;
+}
+const { event, past = false, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+const d = event.data;
+const time = timeRange(event);
+---
+
+<article class:list={['card', 'event', { 'event--past': past }]}>
+  <div class="event__date" aria-hidden="true">
+    <span class="event__day">{formatDay(d.date)}</span>
+    <span class="event__month">{formatMonthShort(d.date)}</span>
+    <span class="event__weekday">{formatWeekday(d.date)}</span>
+  </div>
+  <div class="card__body">
+    <div class="meta">
+      <span class="badge">{typeLabels[d.type]}</span>
+      {d.registration.required && !past && <span class="badge badge--sun">Prijava obvezna</span>}
+      {past && <span class="badge badge--muted">Že potekel</span>}
+    </div>
+    <Heading><a href={eventUrl(event)}>{d.title}</a></Heading>
+    <ul class="facts">
+      <li>
+        <Icon name="calendar" size={20} />
+        <span>{formatRange(d.date, d.endDate)}{time && `, ${time}`}</span>
+      </li>
+      <li>
+        <Icon name="pin" size={20} />
+        <span>{d.location}</span>
+      </li>
+    </ul>
+    <p>{d.summary}</p>
+    <span class="link-arrow">Več o dogodku <Icon name="arrow-right" size={20} /></span>
+  </div>
+</article>
+
+<style>
+  .event__date {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.75rem 1.4rem;
+    background:
+      radial-gradient(14rem 6rem at 100% 0%, rgb(194 220 114 / 0.35), transparent 70%),
+      linear-gradient(120deg, var(--c-green-deep), var(--c-green));
+    color: #fff;
+    line-height: 1;
+  }
+  .event__day {
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 500;
+  }
+  .event__month {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .event__weekday {
+    margin-left: auto;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  .event--past .event__date {
+    background: #5f6e54;
+  }
+</style>

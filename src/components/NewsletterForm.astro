@@ -1,0 +1,67 @@
+---
+import { site } from '@/config/site';
+
+interface Props {
+  /** "inline" puts the e-mail field and button on one row (footer, bands). */
+  layout?: 'inline' | 'stacked';
+  id?: string;
+}
+const { layout = 'inline', id = 'enovice' } = Astro.props;
+---
+
+<form
+  class:list={['form', 'nl', `nl--${layout}`]}
+  method="post"
+  action={site.forms.newsletterEndpoint || undefined}
+  data-form="e-novice"
+  data-endpoint={site.forms.newsletterEndpoint || undefined}
+  data-mailto={site.forms.fallbackEmail}
+  data-subject="Prijava na e-novice"
+  data-success="Hvala! Na e-novice ste prijavljeni."
+>
+  <input type="hidden" name="_subject" value="Prijava na e-novice" />
+  <div class="nl__row">
+    <div class="field nl__email">
+      <label for={`${id}-email`} class="sr-only">E-naslov</label>
+      <input
+        type="email"
+        id={`${id}-email`}
+        name="email"
+        placeholder="Vaš e-naslov"
+        autocomplete="email"
+        required
+      />
+    </div>
+    <div class="nl__submit">
+      <button type="submit" class="btn btn--primary">Naroči se</button>
+    </div>
+  </div>
+  <label class="check">
+    <input type="checkbox" name="soglasje" id={`${id}-soglasje`} required />
+    <span>
+      Soglašam, da društvo moj e-naslov uporablja za pošiljanje e-novic. Naročnino lahko kadar koli
+      prekličem. <a href="/zasebnost/">Zasebnost</a>
+    </span>
+  </label>
+  <div class="honeypot" aria-hidden="true">
+    <label for={`${id}-gotcha`}>Tega polja ne izpolnjujte</label>
+    <input type="text" name="_gotcha" id={`${id}-gotcha`} tabindex="-1" autocomplete="off" />
+  </div>
+  <p class="form-status" data-status role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .nl__row {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .nl--inline .nl__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+  @media (max-width: 520px) {
+    .nl--inline .nl__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

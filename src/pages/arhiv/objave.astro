@@ -1,0 +1,75 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+import { formatDate } from '@/lib/format';
+import { getPostsSplit, kindLabel, postUrl } from '@/lib/posts';
+
+const { archived } = await getPostsSplit();
+const years = [...new Set(archived.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
+---
+
+<ContentPage
+  title="Arhiv objav"
+  lead="Starejše novice in članki. Objave, starejše od enega leta, se samodejno preselijo sem."
+  nextStep="none"
+>
+  {
+    archived.length > 0 ? (
+      years.map((y) => (
+        <section class="year" aria-labelledby={`y${y}`}>
+          <h2 id={`y${y}`}>{y}</h2>
+          <ul class="rows">
+            {archived
+              .filter((p) => p.data.date.getUTCFullYear() === y)
+              .map((p) => (
+                <li>
+                  <div class="meta">
+                    <span class="badge badge--muted">{kindLabel(p)}</span>
+                    <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time>
+                  </div>
+                  <h3><a href={postUrl(p)}>{p.data.title}</a></h3>
+                  <p>{p.data.summary}</p>
+                </li>
+              ))}
+          </ul>
+        </section>
+      ))
+    ) : (
+      <div class="empty"><p>V arhivu zaenkrat ni objav.</p></div>
+    )
+  }
+  <NewsletterBand slot="after" />
+</ContentPage>
+
+<style>
+  .year {
+    margin-bottom: 2.5rem;
+  }
+  .rows {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 52rem;
+  }
+  .rows li {
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--c-line);
+  }
+  .rows h3 {
+    margin: 0.35rem 0;
+  }
+  .rows h3 a {
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .rows h3 a:hover {
+    color: var(--c-green);
+    text-decoration: underline;
+  }
+  .rows p {
+    margin: 0;
+    color: var(--c-ink-soft);
+  }
+</style>

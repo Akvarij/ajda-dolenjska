@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import Icon from '@/components/Icon.astro';
+import MapEmbed from '@/components/MapEmbed.astro';
+import { site } from '@/config/site';
+import { mapsDirectionsUrl, mapsSearchUrl } from '@/lib/events';
+
+const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<ContentPage
+  title="Zemljevid kmetij"
+  lead="Poiščite najbližjo kmetijo in z enim klikom zaženite navigacijo v Google Zemljevidih."
+  nextStep="join"
+  crumbs={[{ label: 'Kmetije', href: '/kmetije/' }, { label: 'Zemljevid kmetij' }]}
+>
+  {
+    site.farmsMapEmbed && (
+      <section class="map" aria-label="Zemljevid vseh kmetij">
+        <MapEmbed embedUrl={site.farmsMapEmbed} title="Zemljevid kmetij članic" />
+      </section>
+    )
+  }
+
+  <ul class="list">
+    {
+      farms.map((f) => {
+        const address = `${f.data.street}, ${f.data.postal} ${f.data.city}`;
+        return (
+          <li class="card">
+            <div class="card__body row">
+              <div class="row__main">
+                <span class="pinicon"><Icon name="pin" size={26} /></span>
+                <div>
+                  <h2><a href={`/kmetije/${f.id}/`}>{f.data.name}</a></h2>
+                  <p>{address}</p>
+                </div>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn--primary btn--sm" href={mapsDirectionsUrl(address)} target="_blank" rel="noopener">
+                  <Icon name="navigate" size={18} /> Navigacija
+                </a>
+                <a class="btn btn--ghost btn--sm" href={mapsSearchUrl(address)} target="_blank" rel="noopener">
+                  Odpri zemljevid
+                </a>
+              </div>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ul>
+</ContentPage>
+
+<style>
+  .map {
+    margin-bottom: 2.5rem;
+  }
+  .list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+  .row__main {
+    display: flex;
+    gap: 1.1rem;
+    align-items: center;
+  }
+  .row__main p {
+    margin: 0;
+  }
+  .pinicon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--c-tint-strong);
+    color: var(--c-green-deep);
+  }
+</style>

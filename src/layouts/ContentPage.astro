@@ -1,0 +1,43 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import NextStep from '@/components/NextStep.astro';
+import { findNav, nextInSection } from '@/data/nav';
+
+interface Props {
+  title: string;
+  lead?: string;
+  description?: string;
+  /** Override the automatically derived breadcrumbs. */
+  crumbs?: { label: string; href?: string }[];
+  nextStep?: 'learn' | 'join' | 'none';
+}
+const { title, lead, description, nextStep = 'learn' } = Astro.props;
+
+const path = Astro.url.pathname;
+const { section } = findNav(path);
+const crumbs =
+  Astro.props.crumbs ??
+  (section
+    ? [{ label: section.label, href: section.href }, { label: title }]
+    : [{ label: title }]);
+const next = nextInSection(path);
+---
+
+<BaseLayout title={title} description={description ?? lead}>
+  <PageHeader title={title} lead={lead} crumbs={crumbs} />
+  <div class="section section--tight">
+    <div class="container">
+      <slot />
+    </div>
+  </div>
+  <slot name="after" />
+  {
+    nextStep !== 'none' && (
+      <NextStep
+        variant={nextStep === 'join' ? 'article' : 'learn'}
+        next={next && { href: next.href, label: next.label, description: next.description }}
+      />
+    )
+  }
+</BaseLayout>

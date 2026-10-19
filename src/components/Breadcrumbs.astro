@@ -1,0 +1,63 @@
+---
+import Icon from './Icon.astro';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+interface Props {
+  items: Crumb[];
+}
+const { items } = Astro.props;
+const trail: Crumb[] = [{ label: 'Domov', href: '/' }, ...items];
+---
+
+{
+  items.length > 0 && (
+    <nav class="crumbs" aria-label="Drobtinice">
+      <ol>
+        {trail.map((c, i) => (
+          <li>
+            {c.href && i < trail.length - 1 ? (
+              <a href={c.href}>{c.label}</a>
+            ) : (
+              <span aria-current="page">{c.label}</span>
+            )}
+            {i < trail.length - 1 && <Icon name="chevron-down" size={16} class="sep" />}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .crumbs {
+    margin-bottom: 1.25rem;
+    font-size: 0.88rem;
+  }
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  a {
+    color: var(--c-green-deep);
+    font-weight: 600;
+  }
+  span[aria-current] {
+    color: var(--c-ink-soft);
+  }
+  li :global(.sep) {
+    transform: rotate(-90deg);
+    color: var(--c-brand);
+  }
+</style>

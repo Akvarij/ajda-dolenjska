@@ -1,0 +1,109 @@
+---
+import Icon from './Icon.astro';
+import Placeholder from './Placeholder.astro';
+import { mapsDirectionsUrl, mapsEmbedUrl, mapsSearchUrl } from '@/lib/events';
+
+interface Props {
+  /** Address or place name that Google Maps understands. */
+  query?: string;
+  /** Or a ready embed URL (e.g. a Google My Maps map). */
+  embedUrl?: string;
+  title: string;
+  /** Hide the "Navigacija" link when there is no single destination. */
+  directions?: boolean;
+}
+const { query, embedUrl, title, directions = true } = Astro.props;
+const src = embedUrl ?? (query ? mapsEmbedUrl(query) : '');
+---
+
+<div class="map" data-map data-src={src} data-title={title}>
+  <Placeholder seed={7} class="map__bg" />
+  <div class="map__cta">
+    <Icon name="pin" size={36} />
+    <p>
+      Zemljevid se naloži šele po vašem kliku, ker ga ponuja Google. Do takrat se ne pošlje noben
+      podatek.
+    </p>
+    <div class="btn-row">
+      <button class="btn btn--primary" type="button" data-load-map>Prikaži zemljevid</button>
+      {
+        query && (
+          <>
+            <a class="btn btn--ghost" href={mapsSearchUrl(query)} target="_blank" rel="noopener">
+              Odpri v Google Zemljevidih <Icon name="external" size={18} />
+            </a>
+            {directions && (
+              <a class="btn btn--ghost" href={mapsDirectionsUrl(query)} target="_blank" rel="noopener">
+                <Icon name="navigate" size={18} /> Navigacija
+              </a>
+            )}
+          </>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-map]').forEach((box) => {
+    box.querySelector('[data-load-map]')?.addEventListener('click', () => {
+      const src = box.dataset.src;
+      if (!src) return;
+      const frame = document.createElement('iframe');
+      frame.src = src;
+      frame.title = box.dataset.title ?? 'Zemljevid';
+      frame.loading = 'lazy';
+      frame.referrerPolicy = 'no-referrer-when-downgrade';
+      frame.allowFullscreen = true;
+      box.replaceChildren(frame);
+      box.classList.add('map--loaded');
+    });
+  });
+</script>
+
+<style>
+  .map {
+    position: relative;
+    min-height: 22rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--c-line);
+    background: var(--c-tint);
+  }
+  .map :global(.map__bg) {
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+  }
+  .map__cta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 22rem;
+    padding: 2rem 1.25rem;
+    text-align: center;
+  }
+  .map__cta :global(svg:first-child) {
+    color: var(--c-green);
+  }
+  .map__cta p {
+    max-width: 38ch;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background: rgb(255 255 255 / 0.85);
+    border-radius: 16px;
+    font-weight: 600;
+  }
+  .map__cta .btn-row {
+    justify-content: center;
+  }
+  .map :global(iframe) {
+    display: block;
+    width: 100%;
+    height: 26rem;
+    border: 0;
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+import Icon from './Icon.astro';
+import NewsletterForm from './NewsletterForm.astro';
+
+interface Props {
+  heading?: string;
+  text?: string;
+  id?: string;
+}
+const {
+  heading = 'Ne zamudite nobenega dogodka',
+  text = 'Naročite se na e-novice in obvestili vas bomo o novih dogodkih, tečajih in novicah iz kmetij.',
+  id = 'band-nl',
+} = Astro.props;
+---
+
+<section class="nl-band" aria-labelledby={`${id}-title`}>
+  <div class="container nl-band__inner">
+    <div class="nl-band__text">
+      <span class="nl-band__icon"><Icon name="newspaper" size={30} /></span>
+      <div>
+        <h2 id={`${id}-title`}>{heading}</h2>
+        <p>{text}</p>
+      </div>
+    </div>
+    <NewsletterForm id={id} layout="stacked" />
+  </div>
+</section>
+
+<style>
+  .nl-band {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+    background: var(--c-sun-tint);
+  }
+  .nl-band__inner {
+    display: grid;
+    gap: 1.75rem 3rem;
+    align-items: center;
+  }
+  .nl-band__text {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .nl-band__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 20px;
+    background: var(--c-sun);
+    color: var(--c-ink);
+  }
+  h2 {
+    margin-bottom: 0.3em;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+  }
+  p {
+    margin: 0;
+    color: var(--c-ink-soft);
+  }
+  @media (min-width: 960px) {
+    .nl-band__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

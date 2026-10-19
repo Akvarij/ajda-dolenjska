@@ -1,0 +1,215 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Icon from '@/components/Icon.astro';
+import NextStep from '@/components/NextStep.astro';
+import { formatDate } from '@/lib/format';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('albums');
+  return albums.map((album) => ({ params: { slug: album.id }, props: { album } }));
+}
+
+const { album } = Astro.props as { album: CollectionEntry<'albums'> };
+const d = album.data;
+const { Content } = await render(album);
+
+const photos = await Promise.all(
+  d.photos.map(async (p) => ({
+    alt: p.alt,
+    thumb: await getImage({ src: p.src, width: 720, height: 540, fit: 'cover' } as any),
+    full: await getImage({ src: p.src, width: 1800 }),
+  })),
+);
+---
+
+<BaseLayout title={d.title} description={d.summary}>
+  <PageHeader
+    title={d.title}
+    lead={d.summary}
+    eyebrow={formatDate(d.date)}
+    crumbs={[{ label: 'Aktualno', href: '/aktualno/' }, { label: 'Fotografije', href: '/aktualno/fotografije/' }, { label: d.title }]}
+  />
+
+  <div class="section section--tight">
+    <div class="container">
+      <div class="prose intro"><Content /></div>
+      <ul class="gallery" data-gallery>
+        {
+          photos.map((p, i) => (
+            <li>
+              <button type="button" data-index={i} data-full={p.full.src} data-alt={p.alt} aria-label={`Povečaj: ${p.alt}`}>
+                <img src={p.thumb.src} width={720} height={540} alt={p.alt} loading={i < 6 ? 'eager' : 'lazy'} />
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <dialog class="lightbox" aria-label="Povečana fotografija" data-lightbox>
+    <button type="button" class="lb-btn lb-close" data-close aria-label="Zapri"><Icon name="close" size={28} /></button>
+    <button type="button" class="lb-btn lb-prev" data-prev aria-label="Prejšnja fotografija"><Icon name="chevron-down" size={32} /></button>
+    <figure>
+      <img alt="" data-img />
+      <figcaption data-caption></figcaption>
+    </figure>
+    <button type="button" class="lb-btn lb-next" data-next aria-label="Naslednja fotografija"><Icon name="chevron-down" size={32} /></button>
+  </dialog>
+
+  <NextStep variant="article" />
+</BaseLayout>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-gallery] button')];
+  if (dialog && buttons.length) {
+    const img = dialog.querySelector<HTMLImageElement>('[data-img]')!;
+    const caption = dialog.querySelector<HTMLElement>('[data-caption]')!;
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + buttons.length) % buttons.length;
+      const b = buttons[current];
+      img.src = b.dataset.full ?? '';
+      img.alt = b.dataset.alt ?? '';
+      caption.textContent = `${b.dataset.alt ?? ''} (${current + 1}/${buttons.length})`;
+    };
+    buttons.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        show(i);
+        dialog.showModal();
+      }),
+    );
+    dialog.querySelector('[data-close]')!.addEventListener('click', () => dialog.close());
+    dialog.querySelector('[data-prev]')!.addEventListener('click', () => show(current - 1));
+    dialog.querySelector('[data-next]')!.addEventListener('click', () => show(current + 1));
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+    // click on the dark backdrop closes
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  }
+</script>
+
+<style>
+  .intro {
+    margin-bottom: 2rem;
+  }
+  .gallery {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+  .gallery button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--c-tint);
+    cursor: zoom-in;
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+  .gallery button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .lightbox {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(20 30 16 / 0.92);
+    color: #fff;
+  }
+  .lightbox[open] {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+  .lightbox figure {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: center;
+    margin: 0;
+    min-width: 0;
+  }
+  .lightbox img {
+    max-width: 100%;
+    max-height: calc(100dvh - 8rem);
+    border-radius: 12px;
+    object-fit: contain;
+  }
+  .lightbox figcaption {
+    font-size: 1.05rem;
+    text-align: center;
+  }
+  .lb-btn {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.16);
+    color: #fff;
+    cursor: pointer;
+  }
+  .lb-btn:hover {
+    background: rgb(255 255 255 / 0.3);
+  }
+  .lb-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  .lb-prev :global(svg) {
+    transform: rotate(90deg);
+  }
+  .lb-next :global(svg) {
+    transform: rotate(-90deg);
+  }
+  @media (max-width: 600px) {
+    .lightbox[open] {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
+    }
+    .lb-prev,
+    .lb-next {
+      position: absolute;
+      bottom: 1rem;
+    }
+    .lb-prev {
+      left: 1rem;
+    }
+    .lb-next {
+      right: 1rem;
+    }
+  }
+</style>

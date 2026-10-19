@@ -1,0 +1,58 @@
+---
+import EventCard from './EventCard.astro';
+import EventCalendar from './EventCalendar.astro';
+import type { EventEntry } from '@/lib/events';
+
+interface Props {
+  upcoming: EventEntry[];
+  past: EventEntry[];
+  /** Show the month calendar above the list (large screens). */
+  calendar?: boolean;
+  emptyText?: string;
+}
+const { upcoming, past, calendar = false, emptyText = 'Trenutno ni napovedanih dogodkov. Naročite se na e-novice in obvestili vas bomo takoj, ko jih objavimo.' } = Astro.props;
+---
+
+{calendar && <EventCalendar events={[...upcoming, ...past]} />}
+
+<div class="events-section">
+  <h2>Prihajajoči dogodki</h2>
+  {
+    upcoming.length > 0 ? (
+      <div class="grid grid--2">
+        {upcoming.map((e) => <EventCard event={e} />)}
+      </div>
+    ) : (
+      <div class="empty">
+        <p>{emptyText}</p>
+        <p style="margin-top:1rem"><a class="btn btn--primary" href="/drustvo/e-novice/">Naroči se na e-novice</a></p>
+      </div>
+    )
+  }
+</div>
+
+{
+  past.length > 0 && (
+    <div class="events-section">
+      <h2>Pretekli dogodki</h2>
+      <div class="grid grid--2">
+        {past.map((e) => <EventCard event={e} past />)}
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .events-section {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .calendar + .events-section {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .events-section h2 {
+    margin-bottom: 1.5rem;
+  }
+  .events-section:first-child {
+    margin-top: 0;
+  }
+</style>

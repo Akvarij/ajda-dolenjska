@@ -1,0 +1,193 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Icon from '@/components/Icon.astro';
+import Pic from '@/components/Pic.astro';
+import MapEmbed from '@/components/MapEmbed.astro';
+import NextStep from '@/components/NextStep.astro';
+import PostCard from '@/components/PostCard.astro';
+import { telHref } from '@/config/site';
+import { mapsDirectionsUrl } from '@/lib/events';
+import { getPosts } from '@/lib/posts';
+
+export async function getStaticPaths() {
+  const farms = await getCollection('farms');
+  return farms.map((farm) => ({ params: { slug: farm.id }, props: { farm } }));
+}
+
+const { farm } = Astro.props as { farm: CollectionEntry<'farms'> };
+const d = farm.data;
+const { Content } = await render(farm);
+const address = `${d.street}, ${d.postal} ${d.city}`;
+const related = (await getPosts()).filter((p) => p.data.relatedFarm?.id === farm.id);
+---
+
+<BaseLayout title={d.name} description={d.summary}>
+  <PageHeader
+    title={d.name}
+    lead={d.summary}
+    eyebrow={d.certifications.join(' · ') || 'Kmetija članica'}
+    crumbs={[{ label: 'Kmetije', href: '/kmetije/' }, { label: d.name }]}
+  />
+
+  <div class="section section--tight">
+    <div class="container">
+      <!-- Quick access: where, contact, what, website -->
+      <ul class="quick" aria-label="Hitri podatki">
+        <li class="quick__item">
+          <span class="quick__icon"><Icon name="pin" size={26} /></span>
+          <h2>Lokacija</h2>
+          <p>{d.street}<br />{d.postal} {d.city}</p>
+          <a class="link-arrow" href={mapsDirectionsUrl(address)} target="_blank" rel="noopener">
+            Navigacija <Icon name="arrow-right" size={18} />
+          </a>
+        </li>
+        <li class="quick__item">
+          <span class="quick__icon"><Icon name="phone" size={26} /></span>
+          <h2>Kontakt</h2>
+          <p>
+            {d.owner && <>{d.owner}<br /></>}
+            {
+              d.phones.map((p) => (
+                <>
+                  <a href={telHref(p.number)}>{p.number}</a>
+                  {p.label && ` (${p.label})`}
+                  <br />
+                </>
+              ))
+            }
+            {d.email && <a href={`mailto:${d.email}`}>{d.email}</a>}
+          </p>
+        </li>
+        <li class="quick__item">
+          <span class="quick__icon"><Icon name="basket" size={26} /></span>
+          <h2>Ponudba</h2>
+          {
+            d.offer.length > 0 ? (
+              <ul class="chips">
+                {d.offer.map((o) => <li class="chip">{o}</li>)}
+              </ul>
+            ) : (
+              <p>Ponudbo preverite pri kmetiji.</p>
+            )
+          }
+        </li>
+        {
+          d.website && (
+            <li class="quick__item">
+              <span class="quick__icon"><Icon name="external" size={26} /></span>
+              <h2>Spletna stran</h2>
+              <p><a href={d.website} target="_blank" rel="noopener">{d.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a></p>
+            </li>
+          )
+        }
+      </ul>
+
+      <div class:list={['farm-layout', d.image && 'farm-layout--image']}>
+        <div class="prose">
+          <Content />
+          {
+            d.services.length > 0 && (
+              <>
+                <h2>Storitve</h2>
+                <ul>{d.services.map((s) => <li>{s}</li>)}</ul>
+              </>
+            )
+          }
+        </div>
+        {
+          d.image && (
+            <figure class="farm-photo">
+              <Pic image={d.image} alt={d.imageAlt} ratio="4 / 5" sizes="(min-width: 960px) 30vw, 100vw" loading="eager" />
+            </figure>
+          )
+        }
+      </div>
+
+      <section class="block" aria-labelledby="map-title">
+        <h2 id="map-title">Kje nas najdete</h2>
+        <MapEmbed query={address} title={`Zemljevid: ${d.name}`} />
+      </section>
+
+      {
+        related.length > 0 && (
+          <section class="block" aria-labelledby="related-title">
+            <h2 id="related-title">Prispevki o kmetiji</h2>
+            <div class="grid grid--3">{related.map((p) => <PostCard post={p} />)}</div>
+          </section>
+        )
+      }
+    </div>
+  </div>
+
+  <NextStep
+    variant="farm"
+    next={{ href: '/kmetije/', label: 'Poglejte še druge kmetije', description: 'Vse kmetije članice z ponudbo in kontakti.' }}
+  />
+</BaseLayout>
+
+<style>
+  .quick {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0 0 clamp(2.5rem, 5vw, 4rem);
+    padding: 0;
+    list-style: none;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+  .quick__item {
+    padding: 1.4rem 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--c-tint);
+  }
+  .quick__item:nth-child(2) {
+    background: var(--c-sun-tint);
+  }
+  .quick__item:nth-child(3) {
+    background: var(--c-blossom-tint);
+  }
+  .quick__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-bottom: 0.6rem;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--c-green-deep);
+  }
+  .quick h2 {
+    margin: 0 0 0.35rem;
+    font-size: 1.35rem;
+  }
+  .quick p {
+    margin: 0 0 0.5rem;
+  }
+  .quick a {
+    font-weight: 700;
+  }
+  .quick .chip {
+    background: #fff;
+  }
+  .farm-layout--image {
+    display: grid;
+    gap: 2.5rem 4rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .farm-layout--image {
+      grid-template-columns: 1fr 22rem;
+    }
+  }
+  .farm-photo {
+    margin: 0;
+  }
+  .farm-photo :global(.pic) {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .block {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+</style>

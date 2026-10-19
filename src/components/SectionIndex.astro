@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import Icon from './Icon.astro';
+import JoinBand from './JoinBand.astro';
+import { nav } from '@/data/nav';
+
+interface Props {
+  section: string;
+}
+const section = nav.find((s) => s.key === Astro.props.section)!;
+---
+
+<BaseLayout title={section.label} description={section.description}>
+  <PageHeader title={section.label} lead={section.description} crumbs={[{ label: section.label }]} />
+  <div class="section section--tight">
+    <div class="container">
+      <div class="grid grid--3">
+        {
+          section.children.map((c) => (
+            <article class="card tile">
+              <div class="card__body">
+                <span class="tile__icon"><Icon name={c.icon} size={30} /></span>
+                <h2><a href={c.href}>{c.label}</a></h2>
+                <p>{c.description}</p>
+                <span class="link-arrow">Odpri <Icon name="arrow-right" size={20} /></span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <JoinBand tone="sun" />
+</BaseLayout>
+
+<style>
+  .tile__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 0.5rem;
+    border-radius: 20px;
+    background: var(--c-tint-strong);
+    color: var(--c-green-deep);
+  }
+</style>

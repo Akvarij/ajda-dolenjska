@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import Pic from './Pic.astro';
+
+interface Props {
+  /** Heading level of the card title; use 2 when the card list has no h2 above it. */
+  level?: 2 | 3;
+  farm: CollectionEntry<'farms'>;
+}
+const { farm, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+const d = farm.data;
+---
+
+<article class="card">
+  <Pic image={d.image} alt={d.imageAlt} seed={farm.id} />
+  <div class="card__body">
+    <div class="meta">
+      <Icon name="pin" size={20} />
+      <span>{d.city}</span>
+      {d.certifications.map((c) => <span class="badge badge--sun">{c}</span>)}
+    </div>
+    <Heading><a href={`/kmetije/${farm.id}/`}>{d.name}</a></Heading>
+    <p>{d.summary}</p>
+    {
+      d.offer.length > 0 && (
+        <ul class="chips" aria-label="Ponudba">
+          {d.offer.slice(0, 4).map((o) => <li class="chip">{o}</li>)}
+          {d.offer.length > 4 && <li class="chip">+{d.offer.length - 4}</li>}
+        </ul>
+      )
+    }
+    <span class="link-arrow">Poglej kmetijo <Icon name="arrow-right" size={20} /></span>
+  </div>
+</article>

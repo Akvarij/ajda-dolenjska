@@ -1,0 +1,79 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import { formatDate } from '@/lib/format';
+
+interface Props {
+  doc: CollectionEntry<'documents'>;
+  level?: 2 | 3;
+}
+const { doc, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+const d = doc.data;
+const ext = d.file.split('.').pop()?.toUpperCase() ?? 'DATOTEKA';
+---
+
+<article class="doc">
+  <span class="doc__icon"><Icon name="file" size={30} /></span>
+  <div class="doc__body">
+    <Heading>{d.title}</Heading>
+    <p class="doc__meta">
+      <time datetime={d.date.toISOString().slice(0, 10)}>{formatDate(d.date)}</time>
+      {d.speaker && <span> · {d.speaker}</span>}
+    </p>
+    <p>{d.description}</p>
+  </div>
+  <a class="btn btn--ghost btn--sm" href={d.file} download>
+    <Icon name="download" size={20} />
+    Prenesi <span class="sr-only">{d.title}</span>
+    <small>{d.fileInfo ?? ext}</small>
+  </a>
+</article>
+
+<style>
+  .doc {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem 1.5rem;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .doc__icon {
+    display: grid;
+    place-items: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 18px;
+    background: var(--c-tint-strong);
+    color: var(--c-green-deep);
+  }
+  .doc :is(h2, h3) {
+    margin: 0 0 0.15rem;
+    font-size: 1.15rem;
+  }
+  p {
+    margin: 0;
+    color: var(--c-ink-soft);
+  }
+  .doc__meta {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  small {
+    font-size: 0.95rem;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+  @media (max-width: 640px) {
+    .doc {
+      grid-template-columns: auto 1fr;
+    }
+    .doc .btn {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

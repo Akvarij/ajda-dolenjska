@@ -1,0 +1,96 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import Icon from '@/components/Icon.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import MapEmbed from '@/components/MapEmbed.astro';
+import JoinBand from '@/components/JoinBand.astro';
+import { site, fullAddress, telHref } from '@/config/site';
+---
+
+<ContentPage
+  title="Kontakt"
+  lead="Pišite nam ali pokličite. Z veseljem odgovorimo na vprašanja o biodinamiki, tečajih, kmetijah in včlanitvi."
+  nextStep="none"
+>
+  <div class="contact">
+    <div class="info">
+      <article class="panel panel--tint">
+        <h2>{site.legalName}</h2>
+        <ul class="facts">
+          <li>
+            <Icon name="pin" size={24} />
+            <span>{site.address.street}<br />{site.address.postal} {site.address.city}</span>
+          </li>
+          <li>
+            <Icon name="user" size={24} />
+            <span>Kontaktna oseba: <strong>{site.contact.person}</strong></span>
+          </li>
+          <li>
+            <Icon name="phone" size={24} />
+            <a href={telHref(site.contact.phone)}>{site.contact.phone}</a>
+          </li>
+          <li>
+            <Icon name="mail" size={24} />
+            <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+          </li>
+          <li>
+            <Icon name="file" size={24} />
+            <span>Davčna številka: {site.taxId}</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="panel panel--sun">
+        <h2>Tečaji in setveni koledar</h2>
+        <p>
+          Za vprašanja o začetnem tečaju biodinamičnega vrtnarjenja in kmetovanja ter o setvenem
+          koledarju se oglasite tukaj. Za tečaj je potrebna predhodna prijava.
+        </p>
+        <ul class="facts">
+          <li>
+            <Icon name="phone" size={24} />
+            <a href={telHref(site.courseContact.phone)}>{site.courseContact.phone}</a>
+          </li>
+          <li>
+            <Icon name="mail" size={24} />
+            <a href={`mailto:${site.courseContact.email}`}>{site.courseContact.email}</a>
+          </li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="panel form-panel">
+      <h2>Pošljite sporočilo</h2>
+      <ContactForm />
+    </div>
+  </div>
+
+  <section class="map-section" aria-labelledby="map-title">
+    <h2 id="map-title">Kako do nas</h2>
+    <MapEmbed query={fullAddress} title={`Zemljevid: ${fullAddress}`} />
+  </section>
+  <JoinBand slot="after" tone="sun" />
+</ContentPage>
+
+<style>
+  .contact {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  .info {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 960px) {
+    .contact {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+  }
+  .map-section {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .panel .facts {
+    gap: 0.8rem;
+  }
+</style>

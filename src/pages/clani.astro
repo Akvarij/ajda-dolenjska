@@ -1,0 +1,72 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import Icon from '@/components/Icon.astro';
+import EventCard from '@/components/EventCard.astro';
+import { getEventsSplit } from '@/lib/events';
+import type { IconName } from '@/lib/icons';
+
+const { upcoming } = await getEventsSplit();
+
+const shortcuts: { label: string; text: string; href: string; icon: IconName }[] = [
+  { label: 'Dogodki in prijave', text: 'Koledar vseh dogodkov.', href: '/dejavnosti/dogodki/', icon: 'calendar' },
+  { label: 'Setveni koledar', text: 'Kdaj sejati in saditi.', href: '/biodinamika/setveni-koledar/', icon: 'sprout' },
+  { label: 'Gradiva in predavanja', text: 'Priročniki in zapiski.', href: '/biodinamika/gradiva/', icon: 'book' },
+  { label: 'Preparati', text: 'Priprava in uporaba.', href: '/biodinamika/preparati/', icon: 'jar' },
+  { label: 'Dokumenti društva', text: 'Statut in poročila.', href: '/arhiv/dokumenti/', icon: 'file' },
+  { label: 'Kontakt', text: 'Vprašanja društvu.', href: '/drustvo/kontakt/', icon: 'mail' },
+];
+---
+
+<ContentPage
+  title="Za člane"
+  lead="Hiter dostop do vsega, kar člani najpogosteje iščete: dogodki, gradiva, setveni koledar in kontakti."
+  nextStep="none"
+>
+  <div class="grid grid--3">
+    {
+      shortcuts.map((s) => (
+        <article class="card">
+          <div class="card__body row">
+            <span class="ic"><Icon name={s.icon} size={28} /></span>
+            <div>
+              <h2><a href={s.href}>{s.label}</a></h2>
+              <p>{s.text}</p>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <section class="block" aria-labelledby="next-title">
+    <h2 id="next-title">Naslednji dogodki</h2>
+    {
+      upcoming.length > 0 ? (
+        <div class="grid grid--2">{upcoming.slice(0, 2).map((e) => <EventCard event={e} />)}</div>
+      ) : (
+        <div class="empty"><p>Trenutno ni napovedanih dogodkov.</p></div>
+      )
+    }
+  </section>
+</ContentPage>
+
+<style>
+  .row {
+    flex-direction: row;
+    gap: 1.1rem;
+    align-items: center;
+  }
+  .ic {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 18px;
+    background: var(--c-lime);
+    color: var(--c-green-deep);
+  }
+  .block {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+</style>

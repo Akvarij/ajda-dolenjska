@@ -1,0 +1,26 @@
+---
+/** Illustrated stand-in for a photo that has not been supplied yet. */
+import { sceneSvg } from '@/lib/scene.js';
+
+interface Props {
+  seed?: number | string;
+  class?: string;
+}
+const { seed = 1, class: className } = Astro.props;
+const n =
+  typeof seed === 'string' ? [...seed].reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 7) : seed;
+---
+
+<div class:list={['ph', className]} aria-hidden="true" set:html={sceneSvg({ seed: n })} />
+
+<style>
+  .ph {
+    width: 100%;
+    height: 100%;
+  }
+  .ph :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

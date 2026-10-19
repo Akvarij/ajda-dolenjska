@@ -1,0 +1,213 @@
+---
+import { Image } from 'astro:assets';
+import { nav, joinHref, newsletterHref, contactHref } from '@/data/nav';
+import { site, telHref, fullAddress } from '@/config/site';
+import wordmark from '@/assets/brand/logo-wordmark.png';
+import Icon from './Icon.astro';
+import type { IconName } from '@/lib/icons';
+
+const socials = (['facebook', 'instagram', 'youtube'] as const)
+  .filter((k) => site.social[k])
+  .map((k) => ({ key: k as IconName, href: site.social[k], label: k[0].toUpperCase() + k.slice(1) }));
+---
+
+<footer class="site-footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a class="footer__logo" href="/" aria-label="Ajda Dolenjska – domov">
+        <Image src={wordmark} alt="" width={240} />
+      </a>
+      <p>
+        {site.tagline}. Od leta {site.founded} povezujemo vrtičkarje in kmete, ki pridelujejo po
+        biodinamični metodi.
+      </p>
+      {
+        socials.length > 0 && (
+          <ul class="socials">
+            {socials.map((s) => (
+              <li>
+                <a href={s.href} aria-label={s.label} rel="noopener">
+                  <Icon name={s.key} size={20} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <nav aria-labelledby="footer-explore">
+      <h2 class="footer__title" id="footer-explore">Raziskujte</h2>
+      <ul class="footer__links">
+        {
+          nav.map((s) => (
+            <li>
+              <a href={s.href}>{s.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="footer__title">Kontakt</h2>
+      <ul class="footer__contact">
+        <li>
+          <Icon name="pin" size={18} />
+          <span>{fullAddress}</span>
+        </li>
+        <li>
+          <Icon name="phone" size={18} />
+          <a href={telHref(site.contact.phone)}>{site.contact.phone}</a>
+        </li>
+        <li>
+          <Icon name="mail" size={18} />
+          <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+        </li>
+      </ul>
+    </div>
+
+    <nav aria-labelledby="footer-members">
+      <h2 class="footer__title" id="footer-members">Za člane</h2>
+      <ul class="footer__links">
+        <li data-join><a class="join" href={joinHref}>Včlani se</a></li>
+        <li><a href="/clani/">Za člane</a></li>
+        <li><a href={newsletterHref}>E-novice</a></li>
+        <li><a href={contactHref}>Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© {new Date().getFullYear()} {site.legalName}</p>
+    <a href="/zasebnost/">Zasebnost</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    margin-top: clamp(1rem, 3vw, 2rem);
+    padding-top: clamp(3rem, 7vw, 5rem);
+    border-radius: clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.75rem) 0 0;
+    background:
+      radial-gradient(50rem 22rem at 100% 0%, rgb(127 161 60 / 0.22), transparent 70%),
+      radial-gradient(30rem 18rem at 0% 100%, rgb(246 192 74 / 0.1), transparent 70%),
+      var(--c-forest);
+    color: rgb(255 255 255 / 0.78);
+    font-size: 0.95rem;
+  }
+  .footer__grid {
+    display: grid;
+    gap: 2.5rem 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+  @media (min-width: 1000px) {
+    .footer__grid {
+      grid-template-columns: 1.5fr 1fr 1.3fr 1fr;
+    }
+  }
+  .footer__logo {
+    display: inline-block;
+    margin-bottom: 1.1rem;
+  }
+  .footer__logo :global(img) {
+    display: block;
+    width: auto;
+    height: 3rem;
+    /* the green wordmark, drawn in white */
+    filter: brightness(0) invert(1);
+  }
+  .footer__brand p {
+    max-width: 34ch;
+    margin: 0;
+    line-height: 1.6;
+  }
+  .footer__title {
+    margin: 0.4rem 0 1.1rem;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .footer__links {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .footer__contact {
+    display: grid;
+    gap: 0.85rem;
+  }
+  .footer__contact li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+  }
+  .footer__contact :global(svg) {
+    flex: none;
+    margin-top: 0.2em;
+    color: var(--c-lime);
+  }
+  .socials {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+  .socials a {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / 0.25);
+  }
+  .socials a:hover {
+    background: #fff;
+    color: var(--c-forest);
+  }
+  a {
+    color: rgb(255 255 255 / 0.85);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  a:hover {
+    color: var(--c-lime);
+  }
+  .footer__links a {
+    display: inline-block;
+    transition:
+      color 0.15s,
+      translate 0.25s var(--ease-out);
+  }
+  .footer__links a:hover {
+    translate: 4px 0;
+  }
+  .join {
+    color: var(--c-sun);
+    font-weight: 700;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.25rem 1.5rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.85rem;
+    color: rgb(255 255 255 / 0.6);
+  }
+  .footer__bottom p {
+    margin: 0;
+  }
+  :focus-visible {
+    outline-color: var(--c-sun);
+  }
+</style>

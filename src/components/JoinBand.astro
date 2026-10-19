@@ -1,0 +1,129 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import BuckwheatSprig from './BuckwheatSprig.astro';
+import blossoms from '@/assets/photos/cvetoca-ajda.jpg';
+import { joinHref } from '@/data/nav';
+
+interface Props {
+  /** Background of the band around the photo card. */
+  tone?: 'lime' | 'sun';
+  heading?: string;
+  text?: string;
+}
+const {
+  tone = 'lime',
+  heading = 'Postanite del naše skupnosti',
+  text = 'Člani prejemajo setveni koledar, navodila za biodinamične preparate in vabila na izobraževanja, srečanja in obiske kmetij. Pridružite se ljudem, ki jim ni vseeno, kakšno hrano jemo in kakšno zemljo zapuščamo.',
+} = Astro.props;
+---
+
+<section class:list={['join', `join--${tone}`]} data-join aria-labelledby="join-title">
+  <div class="container">
+    <div class="join__card">
+      <Image
+        class="join__photo"
+        src={blossoms}
+        alt=""
+        widths={[640, 1000, 1400, 1900]}
+        sizes="(min-width: 1300px) 1240px, 100vw"
+      />
+      <div class="join__text">
+        <span class="join__eyebrow">Včlanitev</span>
+        <h2 id="join-title">{heading}</h2>
+        <p>{text}</p>
+        <div class="btn-row">
+          <a class="btn btn--sun" href={joinHref}>
+            Postani član <Icon name="arrow-right" size={18} />
+          </a>
+          <a class="btn btn--outline-light" href="/drustvo/o-drustvu/">Več o društvu</a>
+        </div>
+      </div>
+      <BuckwheatSprig class="join__sprig sway" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .join {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .join--sun {
+    background: var(--c-sun-tint);
+  }
+  .join__card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    align-items: center;
+    min-height: 22rem;
+    padding: clamp(2rem, 6vw, 4.5rem);
+    border-radius: clamp(1.75rem, 4vw, 3rem);
+    background: var(--c-forest);
+    box-shadow: 0 30px 60px -30px rgb(31 58 27 / 0.55);
+  }
+  .join__card :global(.join__photo) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: join-pan 30s ease-in-out infinite alternate;
+  }
+  @keyframes join-pan {
+    from {
+      scale: 1.04;
+    }
+    to {
+      scale: 1.14;
+      translate: -2% 1%;
+    }
+  }
+  .join__card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(40rem 20rem at 0% 100%, rgb(246 192 74 / 0.22), transparent 70%),
+      linear-gradient(100deg, rgb(25 50 22 / 0.94) 0%, rgb(25 50 22 / 0.8) 45%, rgb(25 50 22 / 0.42) 100%);
+  }
+  .join__text {
+    max-width: 40rem;
+    color: #fff;
+  }
+  .join__eyebrow {
+    display: inline-block;
+    margin-bottom: 0.9rem;
+    color: var(--c-sun);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .join h2 {
+    color: #fff;
+    font-weight: 400;
+  }
+  .join__text p {
+    margin-bottom: 1.75rem;
+    color: rgb(255 255 255 / 0.88);
+    font-size: 1.05rem;
+  }
+  .join :global(.join__sprig) {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .join__card {
+      grid-template-columns: 1fr auto;
+    }
+    .join :global(.join__sprig) {
+      display: block;
+      width: 11rem;
+      margin-block: -2rem -6rem;
+      opacity: 0.95;
+    }
+  }
+</style>

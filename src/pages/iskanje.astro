@@ -1,0 +1,155 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import Icon from '@/components/Icon.astro';
+---
+
+<ContentPage
+  title="Iskanje"
+  lead="Poiščite dogodke, novice, kmetije, dokumente in vsebine o biodinamiki."
+  nextStep="none"
+>
+  <form class="search" role="search" data-search-form>
+    <label for="q" class="sr-only">Iskalni niz</label>
+    <input type="search" id="q" name="q" placeholder="Na primer: preparat, tečaj, moka …" autocomplete="off" />
+    <button class="btn btn--primary" type="submit"><Icon name="search" size={22} /> Išči</button>
+  </form>
+
+  <p class="status" data-status role="status" aria-live="polite"></p>
+  <ol class="results" data-results></ol>
+
+  <div class="suggest" data-suggest>
+    <h2>Najpogostejše poti</h2>
+    <ul class="chips">
+      <li><a class="chip" href="/biodinamika/kaj-je-biodinamika/">Kaj je biodinamika?</a></li>
+      <li><a class="chip" href="/dejavnosti/dogodki/">Dogodki</a></li>
+      <li><a class="chip" href="/kmetije/">Kmetije</a></li>
+      <li><a class="chip" href="/biodinamika/preparati/">Preparati</a></li>
+      <li><a class="chip" href="/drustvo/vclanitev/">Včlanitev</a></li>
+    </ul>
+  </div>
+</ContentPage>
+
+<script>
+  interface Entry {
+    t: string;
+    u: string;
+    k: string;
+    s: string;
+    b: string;
+  }
+  const form = document.querySelector<HTMLFormElement>('[data-search-form]')!;
+  const input = form.querySelector<HTMLInputElement>('#q')!;
+  const results = document.querySelector<HTMLOListElement>('[data-results]')!;
+  const status = document.querySelector<HTMLElement>('[data-status]')!;
+  const suggest = document.querySelector<HTMLElement>('[data-suggest]')!;
+
+  // "č" matches "c", "Š" matches "s": people rarely type diacritics when searching.
+  const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+  type Prepared = Entry & { nt: string; ns: string; nb: string };
+  let index: Prepared[] | null = null;
+  let loading: Promise<Prepared[]> | null = null;
+
+  const load = () =>
+    (loading ??= fetch('/search-index.json')
+      .then((r) => r.json() as Promise<Entry[]>)
+      .then((all) => (index = all.map((e) => ({ ...e, nt: norm(e.t), ns: norm(e.s), nb: norm(e.b) })))));
+
+  async function run(query: string) {
+    const q = query.trim();
+    const url = new URL(location.href);
+    if (q) url.searchParams.set('q', q);
+    else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+
+    if (q.length < 2) {
+      results.innerHTML = '';
+      status.textContent = '';
+      suggest.hidden = false;
+      return;
+    }
+    suggest.hidden = true;
+    const data = index ?? (await load());
+    const tokens = norm(q).split(/\s+/).filter(Boolean);
+    const hits = data
+      .map((e) => {
+        let score = 0;
+        for (const t of tokens) {
+          const inTitle = e.nt.includes(t);
+          const inSummary = e.ns.includes(t);
+          const inBody = e.nb.includes(t);
+          if (!inTitle && !inSummary && !inBody) return { e, score: 0 };
+          score += (inTitle ? 6 : 0) + (inSummary ? 3 : 0) + (inBody ? 1 : 0);
+        }
+        return { e, score };
+      })
+      .filter((h) => h.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 30);
+
+    status.textContent = hits.length ? `Najdenih rezultatov: ${hits.length}` : `Za »${q}« ni zadetkov. Poskusite drug izraz.`;
+    results.innerHTML = hits
+      .map(
+        ({ e }) =>
+          `<li class="card"><div class="card__body"><span class="badge">${esc(e.k)}</span><h2><a href="${esc(e.u)}">${esc(e.t)}</a></h2>${e.s ? `<p>${esc(e.s)}</p>` : ''}</div></li>`,
+      )
+      .join('');
+  }
+
+  let timer: number | undefined;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = window.setTimeout(() => run(input.value), 120);
+  });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    run(input.value);
+  });
+  const initial = new URL(location.href).searchParams.get('q');
+  if (initial) {
+    input.value = initial;
+    run(initial);
+  }
+  input.focus();
+</script>
+
+<style>
+  .search {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 44rem;
+  }
+  .search input {
+    flex: 1;
+    min-height: 3.75rem;
+    font-size: 1.2rem;
+  }
+  @media (max-width: 520px) {
+    .search {
+      flex-direction: column;
+    }
+  }
+  .status {
+    margin: 1.5rem 0 1rem;
+    font-weight: 700;
+    color: var(--c-ink-soft);
+  }
+  .status:empty {
+    display: none;
+  }
+  .results {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 52rem;
+  }
+  .results :global(.card) {
+    border-radius: 24px;
+  }
+  .suggest {
+    margin-top: 3rem;
+  }
+</style>

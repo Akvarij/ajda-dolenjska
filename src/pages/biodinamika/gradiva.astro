@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import DocCard from '@/components/DocCard.astro';
+import Icon from '@/components/Icon.astro';
+
+const docs = (await getCollection('documents', ({ data }) => data.category !== 'dokument' && !data.archived)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const materials = docs.filter((d) => d.data.category === 'gradivo');
+const lectures = docs.filter((d) => d.data.category === 'predavanje');
+---
+
+<ContentPage
+  title="Gradiva in predavanja"
+  lead="Priročniki, zapiski in predavanja za samostojno učenje. Večino lahko prenesete in natisnete."
+>
+  <section aria-labelledby="gradiva-title">
+    <h2 id="gradiva-title">Gradiva za prenos</h2>
+    {
+      materials.length > 0 ? (
+        <div class="stack">{materials.map((d) => <DocCard doc={d} />)}</div>
+      ) : (
+        <div class="empty"><p>Gradiva bomo objavili kmalu.</p></div>
+      )
+    }
+  </section>
+
+  <section aria-labelledby="predavanja-title" class="block">
+    <h2 id="predavanja-title">Predavanja</h2>
+    {
+      lectures.length > 0 ? (
+        <div class="stack">{lectures.map((d) => <DocCard doc={d} />)}</div>
+      ) : (
+        <div class="empty"><p>Predavanja bomo objavili kmalu.</p></div>
+      )
+    }
+    <p class="more">
+      <a class="link-arrow" href="/aktualno/video-in-avdio/">Posnetki predavanj <Icon name="arrow-right" size={20} /></a>
+      &nbsp;·&nbsp;
+      <a class="link-arrow" href="/arhiv/predavanja/">Starejša predavanja <Icon name="arrow-right" size={20} /></a>
+    </p>
+  </section>
+</ContentPage>
+
+<style>
+  .stack {
+    display: grid;
+    gap: 1rem;
+  }
+  .block {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .more {
+    margin-top: 1.5rem;
+  }
+</style>

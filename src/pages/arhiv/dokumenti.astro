@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import DocCard from '@/components/DocCard.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+
+const docs = (await getCollection('documents', ({ data }) => data.category === 'dokument')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<ContentPage title="Dokumenti" lead="Statut, poročila in drugi dokumenti društva." nextStep="none">
+  {
+    docs.length > 0 ? (
+      <div class="stack">{docs.map((d) => <DocCard doc={d} level={2} />)}</div>
+    ) : (
+      <div class="empty"><p>Dokumentov zaenkrat ni.</p></div>
+    )
+  }
+  <NewsletterBand slot="after" />
+</ContentPage>
+
+<style>
+  .stack {
+    display: grid;
+    gap: 1rem;
+  }
+</style>

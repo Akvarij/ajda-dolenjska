@@ -1,0 +1,670 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import BuckwheatSprig from '@/components/BuckwheatSprig.astro';
+import FieldBackdrop from '@/components/FieldBackdrop.astro';
+import EventCard from '@/components/EventCard.astro';
+import FarmCard from '@/components/FarmCard.astro';
+import PostCard from '@/components/PostCard.astro';
+import JoinBand from '@/components/JoinBand.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import wordmark from '@/assets/brand/logo-wordmark.png';
+import blossom from '@/assets/photos/ajda-cvet.jpg';
+import { getEventsSplit } from '@/lib/events';
+import { getPostsSplit } from '@/lib/posts';
+import { nav, joinHref } from '@/data/nav';
+import { site } from '@/config/site';
+
+const { upcoming } = await getEventsSplit();
+const events = upcoming.slice(0, 3);
+const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.data.order);
+const { current } = await getPostsSplit();
+const posts = current.slice(0, 3);
+const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 4);
+---
+
+<BaseLayout>
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <FieldBackdrop />
+    <div class="container hero__grid">
+      <div class="hero__text">
+        <span class="hero__pill"><span class="hero__dot"></span>{site.tagline}</span>
+        <h1 id="hero-title">Hrana, ki raste <em>v&nbsp;sožitju</em> z&nbsp;zemljo</h1>
+        <p class="lead">
+          Od leta {site.founded} povezujemo vrtičkarje in kmete, ki pridelujejo po biodinamični
+          metodi. Pridite in spoznajte, kako to deluje.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/biodinamika/">
+            O biodinamiki <Icon name="arrow-right" size={18} />
+          </a>
+          <a class="btn btn--glass" href="/dejavnosti/dogodki/">Prihajajoči dogodki</a>
+        </div>
+        <p class="hero__join" data-join>
+          Že veste, da želite z nami? <a href={joinHref}>Včlanite se</a>
+        </p>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <svg class="seal__ring" viewBox="0 0 200 200">
+          <defs>
+            <path id="seal-path" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0" />
+          </defs>
+          <text>
+            <textPath href="#seal-path" textLength="500" lengthAdjust="spacing">
+              DRUŠTVO AJDA DOLENJSKA • OD {site.founded} • BIODINAMIKA •
+            </textPath>
+          </text>
+        </svg>
+        <div class="seal__core">
+          <Image src={wordmark} alt="" width={240} loading="eager" />
+        </div>
+      </div>
+    </div>
+    <a class="hero__scroll" href="#intro">
+      <span>Razišči</span>
+      <span class="hero__scroll-line" aria-hidden="true"></span>
+    </a>
+  </section>
+
+  <!-- ============ INTRO ============ -->
+  <section class="section intro" id="intro" aria-labelledby="intro-title">
+    <div class="container intro__grid">
+      <div class="intro__text">
+        <span class="eyebrow">Naše poslanstvo</span>
+        <h2 id="intro-title">Spodbujamo najstarejšo <em>sonaravno</em> metodo pridelave hrane</h2>
+        <p>
+          Z izobraževanji, predavanji in skupno izdelavo biodinamičnih preparatov približujemo
+          biodinamično pridelavo ljudem, ki jim ni vseeno, kakšno hrano jedo, in kaj se dogaja z
+          okolico in Zemljo.
+        </p>
+        <p>
+          Biodinamika nas uči živeti v partnerstvu in odgovornosti do zemlje, rastlin, živali in
+          ljudi.
+        </p>
+        <a class="link-arrow" href="/drustvo/o-drustvu/">
+          Več o društvu <Icon name="arrow-right" size={18} />
+        </a>
+        <ul class="stats" aria-label="Društvo v številkah">
+          <li>
+            <strong>{site.founded}</strong>
+            <span>začetek delovanja društva</span>
+          </li>
+          <li>
+            <strong>{farms.length}</strong>
+            <span>kmetij članic</span>
+          </li>
+        </ul>
+      </div>
+      <div class="intro__art" aria-hidden="true" data-reveal>
+        <span class="intro__sun"></span>
+        <div class="arch">
+          <Image src={blossom} alt="" widths={[480, 800, 1100]} sizes="(min-width: 900px) 30rem, 90vw" />
+        </div>
+        <BuckwheatSprig class="intro__sprig sway" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BIODYNAMICS ============ -->
+  <section class="section band--tint bd-band" aria-labelledby="bd-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">O biodinamiki</span>
+          <h2 id="bd-title">Odkrijte biodinamiko <em>korak za korakom</em></h2>
+          <p>Razumljivo tudi, če se z njo srečujete prvič.</p>
+        </div>
+        <a class="btn btn--ghost" href="/biodinamika/">Vse o biodinamiki</a>
+      </div>
+      <div class="grid grid--4">
+        {
+          biodynamics.map((b, i) => (
+            <article class="card bd">
+              <div class="card__body">
+                <div class="bd__top">
+                  <span class="bd__icon"><Icon name={b.icon} size={28} /></span>
+                  <span class="bd__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                </div>
+                <h3><a href={b.href}>{b.label}</a></h3>
+                <p>{b.description}</p>
+                <span class="link-arrow">Preberi <Icon name="arrow-right" size={18} /></span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EVENTS ============ -->
+  <section class="section" aria-labelledby="ev-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Dejavnosti</span>
+          <h2 id="ev-title">Prihajajoči dogodki</h2>
+        </div>
+        <a class="btn btn--ghost" href="/dejavnosti/dogodki/">Koledar dogodkov</a>
+      </div>
+      {
+        events.length > 0 ? (
+          <div class="grid grid--3">
+            {events.map((e) => <EventCard event={e} />)}
+          </div>
+        ) : (
+          <div class="empty">
+            <p>Novi dogodki so v pripravi. Naročite se na e-novice in obvestili vas bomo takoj.</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ============ FARMS ============ -->
+  <section class="section band--sun" aria-labelledby="farms-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Kmetije članice</span>
+          <h2 id="farms-title">Spoznajte ljudi, ki pridelujejo</h2>
+          <p>Moka, vino, zelenjava, jajca, meso in še več, neposredno od kmeta.</p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn--ghost" href="/kmetije/zemljevid/">Zemljevid</a>
+          <a class="btn btn--ghost" href="/kmetije/">Vse kmetije</a>
+        </div>
+      </div>
+      <div class="grid grid--3">
+        {farms.slice(0, 3).map((f) => <FarmCard farm={f} />)}
+      </div>
+    </div>
+  </section>
+
+  <JoinBand tone="lime" />
+
+  <!-- ============ NEWS ============ -->
+  <section class="section" aria-labelledby="news-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Aktualno</span>
+          <h2 id="news-title">Novice in članki</h2>
+        </div>
+        <a class="btn btn--ghost" href="/aktualno/">Vse objave</a>
+      </div>
+      {
+        posts.length > 0 ? (
+          <div class="grid grid--3">
+            {posts.map((p) => <PostCard post={p} />)}
+          </div>
+        ) : (
+          <div class="empty"><p>Prve objave kmalu.</p></div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ============ PARTNERS + NEWSLETTER ============ -->
+  <section class="section section--tight band--tint" aria-label="Sodelovanje in e-novice">
+    <div class="container duo">
+      <div class="panel">
+        <span class="duo__icon"><Icon name="institution" size={30} /></span>
+        <h2>Šola, vrtec ali organizacija?</h2>
+        <p>
+          Pripravimo delavnice, obiske kmetij in izobraževanja za otroke, učitelje in lokalne
+          skupnosti. Poglejte dobre prakse in ideje za sodelovanje.
+        </p>
+        <a class="btn btn--primary" href="/dejavnosti/sodelovanje-z-ustanovami/">Sodelovanje z ustanovami</a>
+      </div>
+      <div class="panel panel--sun">
+        <span class="duo__icon"><Icon name="newspaper" size={30} /></span>
+        <h2>Ostanite v stiku</h2>
+        <p>Naročite se na e-novice in ne zamudite dogodkov, tečajev ter novosti iz kmetij.</p>
+        <NewsletterForm id="home-nl" layout="stacked" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: center;
+    min-height: max(36rem, min(100svh, 58rem));
+    /* slide under the floating header */
+    margin-top: calc(-1 * (var(--topbar-h) + var(--header-h)));
+    padding-top: calc(var(--topbar-h) + var(--header-h) + clamp(1.5rem, 5vh, 3.5rem));
+    padding-bottom: clamp(6rem, 13vh, 8rem);
+    background: var(--c-bg);
+  }
+  .hero__grid {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .hero__text > * {
+    animation: rise 1.1s var(--ease-out) both;
+  }
+  .hero__text > :nth-child(2) {
+    animation-delay: 0.12s;
+  }
+  .hero__text > :nth-child(3) {
+    animation-delay: 0.26s;
+  }
+  .hero__text > :nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .hero__text > :nth-child(5) {
+    animation-delay: 0.55s;
+  }
+  .hero__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgb(127 161 60 / 0.35);
+    background: rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--c-green-deep);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .hero__dot {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--c-sun);
+    box-shadow: 0 0 0 0 rgb(246 192 74 / 0.6);
+    animation: ping 2.4s ease-out infinite;
+  }
+  @keyframes ping {
+    70%,
+    100% {
+      box-shadow: 0 0 0 10px rgb(246 192 74 / 0);
+    }
+  }
+  .hero h1 {
+    max-width: 13ch;
+    margin-bottom: 0.45em;
+    font-size: clamp(2.4rem, 5.6vw, 4.25rem);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+  }
+  .hero .lead {
+    margin-bottom: 2rem;
+    color: var(--c-ink);
+  }
+  .btn--glass {
+    background: rgb(255 255 255 / 0.55);
+    border-color: rgb(73 116 25 / 0.45);
+    color: var(--c-green-deep);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .btn--glass:hover {
+    background: #fff;
+    border-color: var(--c-green);
+    color: var(--c-green-deep);
+  }
+  .hero__join {
+    margin: 1.4rem 0 0;
+    color: var(--c-ink-soft);
+    font-size: 0.95rem;
+  }
+  .hero__join a {
+    font-weight: 700;
+  }
+
+  /* rotating seal */
+  .seal {
+    position: relative;
+    justify-self: center;
+    width: clamp(9rem, 17vw, 13rem);
+    aspect-ratio: 1;
+    animation:
+      rise 1.4s 0.5s var(--ease-out) both,
+      breathe 7s 2s ease-in-out infinite alternate;
+  }
+  /* frosted disc behind the lettering */
+  .seal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.55);
+    border: 1px solid rgb(255 255 255 / 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 24px 50px -24px rgb(32 51 28 / 0.45);
+  }
+  .seal__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: spin 40s linear infinite;
+  }
+  .seal__ring text {
+    fill: var(--c-green-deep);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .seal__core {
+    position: absolute;
+    inset: 21%;
+    display: grid;
+    place-items: center;
+    padding: 13%;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 10px 24px -12px rgb(32 51 28 / 0.4);
+  }
+  .seal__core :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  @keyframes spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+  @keyframes breathe {
+    to {
+      scale: 1.05;
+    }
+  }
+
+  /* scroll cue */
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 3.75rem;
+    z-index: 1;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    translate: -50% 0;
+    color: var(--c-green-deep);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .hero__scroll-line {
+    position: relative;
+    width: 1px;
+    height: 3rem;
+    overflow: hidden;
+    background: rgb(51 86 15 / 0.2);
+  }
+  .hero__scroll-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent, var(--c-green));
+    animation: scroll-cue 2.4s ease-in-out infinite;
+  }
+  @keyframes scroll-cue {
+    from {
+      translate: 0 -100%;
+    }
+    to {
+      translate: 0 100%;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+    }
+    .seal {
+      margin-top: -3rem;
+    }
+    .hero__scroll {
+      display: flex;
+    }
+  }
+  @media (max-width: 959px) {
+    .seal {
+      position: absolute;
+      right: 0;
+      top: -1rem;
+      width: 6.5rem;
+    }
+    .hero h1 {
+      padding-right: 5.5rem;
+    }
+  }
+  @media (max-width: 520px) {
+    .hero h1 {
+      padding-right: 0;
+    }
+    .seal {
+      top: auto;
+      bottom: -5.25rem;
+      width: 5.5rem;
+    }
+  }
+
+  /* ---------- intro: rounded sheet sliding over the hero ---------- */
+  .intro {
+    position: relative;
+    z-index: 2;
+    margin-top: -2.75rem;
+    border-radius: 2.75rem 2.75rem 0 0;
+    background: var(--c-bg);
+  }
+  .intro__grid {
+    display: grid;
+    gap: 3rem 5rem;
+    align-items: center;
+  }
+  .intro__grid > * {
+    min-width: 0;
+  }
+  .intro p {
+    max-width: 52ch;
+    color: var(--c-ink-soft);
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 30rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    padding: 1.25rem 1.35rem;
+    border-radius: var(--radius);
+    background: var(--c-tint);
+  }
+  .stats li:nth-child(2) {
+    background: var(--c-blossom-tint);
+  }
+  .stats strong {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.6vw, 2.75rem);
+    font-weight: 400;
+    line-height: 1;
+    color: var(--c-green-deep);
+  }
+  .stats span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--c-ink-soft);
+  }
+  .intro__art {
+    position: relative;
+    width: min(100%, 26rem);
+    margin-inline: auto;
+  }
+  .arch {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 999px 999px 1.75rem 1.75rem;
+    border: 7px solid #fff;
+    box-shadow: var(--shadow);
+  }
+  .arch :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: slow-pan 26s ease-in-out infinite alternate;
+  }
+  @keyframes slow-pan {
+    from {
+      scale: 1.06;
+      translate: -2% 0;
+    }
+    to {
+      scale: 1.14;
+      translate: 2% -2%;
+    }
+  }
+  .intro__sun {
+    position: absolute;
+    right: -2.5rem;
+    top: -2rem;
+    width: 9rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffe08a 0, #f6c04a 55%, rgb(246 192 74 / 0) 72%);
+    opacity: 0.8;
+    animation: float 9s ease-in-out infinite alternate;
+  }
+  @keyframes float {
+    to {
+      translate: -0.75rem 1rem;
+    }
+  }
+  .intro :global(.intro__sprig) {
+    position: absolute;
+    left: -3rem;
+    bottom: -1.5rem;
+    width: 8.5rem;
+    filter: drop-shadow(0 6px 10px rgb(32 51 28 / 0.15));
+  }
+  @media (min-width: 900px) {
+    .intro__grid {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .intro :global(.intro__sprig) {
+      left: -1rem;
+      width: 6.5rem;
+    }
+    .intro__sun {
+      right: -0.5rem;
+      width: 6.5rem;
+    }
+  }
+
+  /* ---------- biodynamics: numbered steps ---------- */
+  .bd {
+    isolation: isolate;
+  }
+  .bd::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(28rem 16rem at 100% 100%, var(--c-tint-strong), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .bd:hover::before,
+  .bd:focus-within::before {
+    opacity: 1;
+  }
+  .bd__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  .bd__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--c-lime);
+    color: var(--c-green-deep);
+    transition:
+      background-color 0.35s,
+      transform 0.5s var(--ease-out);
+  }
+  .bd:hover .bd__icon,
+  .bd:focus-within .bd__icon {
+    background: var(--c-sun);
+    transform: rotate(-12deg) scale(1.08);
+  }
+  .bd__num {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--c-brand);
+    opacity: 0.45;
+    transition: opacity 0.35s;
+  }
+  .bd:hover .bd__num {
+    opacity: 1;
+  }
+
+  /* ---------- partners / newsletter ---------- */
+  .duo {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 900px) {
+    .duo {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .duo__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 0.75rem;
+    border-radius: 20px;
+    background: var(--c-tint-strong);
+    color: var(--c-green-deep);
+  }
+  .panel--sun .duo__icon {
+    background: var(--c-sun);
+    color: var(--c-ink);
+  }
+  .duo .panel p {
+    color: var(--c-ink-soft);
+  }
+</style>

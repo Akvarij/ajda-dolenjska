@@ -1,0 +1,25 @@
+---
+/** Shared bottom of every form: consent checkbox, honeypot, submit button and status line. */
+interface Props {
+  consent: string;
+  submitLabel: string;
+  id: string;
+}
+const { consent, submitLabel, id } = Astro.props;
+---
+
+<label class="check">
+  <input type="checkbox" name="soglasje" id={`${id}-soglasje`} required />
+  <span>
+    {consent}
+    <a href="/zasebnost/">Zasebnost</a>
+  </span>
+</label>
+<div class="honeypot" aria-hidden="true">
+  <label for={`${id}-gotcha`}>Tega polja ne izpolnjujte</label>
+  <input type="text" name="_gotcha" id={`${id}-gotcha`} tabindex="-1" autocomplete="off" />
+</div>
+<div>
+  <button type="submit" class="btn btn--primary">{submitLabel}</button>
+</div>
+<p class="form-status" data-status role="status" aria-live="polite"></p>

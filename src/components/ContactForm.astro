@@ -1,0 +1,63 @@
+---
+import { site } from '@/config/site';
+import FormTail from './FormTail.astro';
+
+interface Props {
+  id?: string;
+  /** Pre-selects a topic, e.g. when linked from the courses page. */
+  topic?: string;
+}
+const { id = 'kontakt', topic } = Astro.props;
+const topics = [
+  'Splošno vprašanje',
+  'Včlanitev',
+  'Tečaji in delavnice',
+  'Kmetije in ponudba',
+  'Sodelovanje ustanov',
+  'Mediji',
+];
+---
+
+<form
+  class="form"
+  method="post"
+  action={site.forms.endpoint || undefined}
+  data-form="kontakt"
+  data-endpoint={site.forms.endpoint || undefined}
+  data-mailto={site.forms.fallbackEmail}
+  data-subject="Sporočilo s spletne strani"
+  data-success="Hvala! Vaše sporočilo smo prejeli, odgovorili vam bomo v nekaj dneh."
+>
+  <input type="hidden" name="_subject" value="Sporočilo s spletne strani" />
+  <div class="form__row">
+    <div class="field">
+      <label for={`${id}-ime`}>Ime in priimek <span class="req">*</span></label>
+      <input type="text" id={`${id}-ime`} name="ime" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for={`${id}-email`}>E-naslov <span class="req">*</span></label>
+      <input type="email" id={`${id}-email`} name="email" autocomplete="email" required />
+    </div>
+  </div>
+  <div class="form__row">
+    <div class="field">
+      <label for={`${id}-telefon`}>Telefon</label>
+      <input type="tel" id={`${id}-telefon`} name="telefon" autocomplete="tel" />
+    </div>
+    <div class="field">
+      <label for={`${id}-tema`}>Zadeva</label>
+      <select id={`${id}-tema`} name="tema">
+        {topics.map((t) => <option selected={t === topic}>{t}</option>)}
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label for={`${id}-sporocilo`}>Sporočilo <span class="req">*</span></label>
+    <textarea id={`${id}-sporocilo`} name="sporocilo" required></textarea>
+  </div>
+  <FormTail
+    id={id}
+    submitLabel="Pošlji sporočilo"
+    consent="Soglašam, da društvo moje podatke uporabi za odgovor na to sporočilo."
+  />
+</form>

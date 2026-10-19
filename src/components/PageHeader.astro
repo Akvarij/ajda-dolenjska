@@ -1,0 +1,91 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import BuckwheatSprig from './BuckwheatSprig.astro';
+import FieldBackdrop from './FieldBackdrop.astro';
+
+interface Props {
+  title: string;
+  lead?: string;
+  eyebrow?: string;
+  crumbs?: { label: string; href?: string }[];
+}
+const { title, lead, eyebrow, crumbs = [] } = Astro.props;
+---
+
+<header class="page-header">
+  <FieldBackdrop variant="calm" />
+  <div class="container page-header__inner">
+    <Breadcrumbs items={crumbs} />
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h1>{title}</h1>
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+  <BuckwheatSprig class="page-header__deco sway" />
+</header>
+
+<style>
+  .page-header {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(180deg, #eef6dc 0%, var(--c-tint) 55%, #fbfdf2 100%);
+    border-radius: 0 0 clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.75rem);
+    /* slide under the floating header */
+    margin-top: calc(-1 * (var(--topbar-h) + var(--header-h)));
+    padding-block: calc(var(--topbar-h) + var(--header-h) + clamp(1.5rem, 4vw, 3rem))
+      clamp(2.25rem, 5vw, 3.75rem);
+  }
+  /* keeps the text readable where the photo begins */
+  .page-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      90deg,
+      rgb(243 248 230 / 0.92) 0,
+      rgb(243 248 230 / 0.75) 38%,
+      rgb(243 248 230 / 0) 72%
+    );
+    pointer-events: none;
+  }
+  .page-header__inner {
+    position: relative;
+    z-index: 1;
+  }
+  .page-header__inner > * {
+    animation: rise 0.9s var(--ease-out) both;
+  }
+  .page-header__inner > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .page-header__inner > :nth-child(3) {
+    animation-delay: 0.16s;
+  }
+  .page-header__inner > :nth-child(n + 4) {
+    animation-delay: 0.24s;
+  }
+  .page-header h1 {
+    margin-bottom: 0.35em;
+    max-width: 20ch;
+  }
+  .page-header .lead {
+    margin-bottom: 0;
+    color: var(--c-ink);
+  }
+  .page-header :global(.page-header__deco) {
+    position: absolute;
+    right: max(1rem, calc((100% - var(--container)) / 2));
+    bottom: -2rem;
+    z-index: 1;
+    width: clamp(7rem, 14vw, 11rem);
+    pointer-events: none;
+  }
+  @media (max-width: 700px) {
+    .page-header :global(.page-header__deco) {
+      opacity: 0.35;
+      right: -2rem;
+    }
+  }
+</style>

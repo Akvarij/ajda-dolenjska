@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /iskanje/
+Disallow: /admin/
+
+Sitemap: https://www.ajda-dolenjska.si/sitemap-index.xml

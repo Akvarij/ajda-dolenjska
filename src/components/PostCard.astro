@@ -1,0 +1,28 @@
+---
+import Icon from './Icon.astro';
+import Pic from './Pic.astro';
+import { formatDate } from '@/lib/format';
+import { kindLabel, postUrl, type PostEntry } from '@/lib/posts';
+
+interface Props {
+  /** Heading level of the card title; use 2 when the card list has no h2 above it. */
+  level?: 2 | 3;
+  post: PostEntry;
+}
+const { post, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+const d = post.data;
+---
+
+<article class="card">
+  <Pic image={d.image} alt={d.imageAlt} seed={post.id} />
+  <div class="card__body">
+    <div class="meta">
+      <span class:list={['badge', d.kind === 'clanek' && 'badge--blossom']}>{kindLabel(post)}</span>
+      <time datetime={d.date.toISOString().slice(0, 10)}>{formatDate(d.date)}</time>
+    </div>
+    <Heading><a href={postUrl(post)}>{d.title}</a></Heading>
+    <p>{d.summary}</p>
+    <span class="link-arrow">Preberi več <Icon name="arrow-right" size={20} /></span>
+  </div>
+</article>

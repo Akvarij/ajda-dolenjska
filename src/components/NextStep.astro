@@ -1,0 +1,164 @@
+---
+import Icon from './Icon.astro';
+import NewsletterForm from './NewsletterForm.astro';
+import { joinHref } from '@/data/nav';
+
+interface Next {
+  href: string;
+  label: string;
+  description?: string;
+}
+interface Props {
+  /**
+   * What the visitor is most likely to want after this page:
+   * - learn: next topic, membership, e-novice (biodynamics pages)
+   * - event: registration (if needed) + e-novice
+   * - past-event: only e-novice + upcoming events
+   * - article: e-novice + membership
+   * - farm: other farms + membership
+   */
+  variant: 'learn' | 'event' | 'past-event' | 'article' | 'farm';
+  next?: Next;
+  /** For "event": the event needs a registration. */
+  registration?: boolean;
+  heading?: string;
+}
+const { variant, next, registration = false, heading = 'Kaj lahko storite naprej?' } = Astro.props;
+
+const wantsNext = variant === 'learn' || variant === 'farm';
+const wantsJoin = variant === 'learn' || variant === 'article' || variant === 'farm';
+const wantsNews = variant !== 'farm';
+---
+
+<section class="next-step band--tint" aria-labelledby="next-step-title">
+  <div class="container">
+    <h2 id="next-step-title">{heading}</h2>
+    <div class="steps">
+      {
+        wantsNext && next && (
+          <a class="step step--link" href={next.href}>
+            <span class="step__icon"><Icon name="arrow-right" size={28} /></span>
+            <span class="step__title">{next.label}</span>
+            {next.description && <span class="step__text">{next.description}</span>}
+          </a>
+        )
+      }
+
+      {
+        variant === 'event' && registration && (
+          <a class="step step--link step--sun" href="#prijava">
+            <span class="step__icon"><Icon name="check" size={28} /></span>
+            <span class="step__title">Prijavite se na dogodek</span>
+            <span class="step__text">Prijava je obvezna. Izpolnite kratek obrazec.</span>
+          </a>
+        )
+      }
+
+      {
+        (variant === 'event' || variant === 'past-event') && (
+          <a class="step step--link" href="/dejavnosti/dogodki/">
+            <span class="step__icon"><Icon name="calendar" size={28} /></span>
+            <span class="step__title">
+              {variant === 'past-event' ? 'Poglejte prihajajoče dogodke' : 'Vsi dogodki'}
+            </span>
+            <span class="step__text">Koledar vseh dogodkov, tečajev in izletov.</span>
+          </a>
+        )
+      }
+
+      {
+        wantsJoin && (
+          <a class="step step--link" href={joinHref} data-join>
+            <span class="step__icon"><Icon name="heart" size={28} /></span>
+            <span class="step__title">Postanite član</span>
+            <span class="step__text">Setveni koledar, navodila za preparate in vabila na dogodke.</span>
+          </a>
+        )
+      }
+
+      {
+        wantsNews && (
+          <div class="step step--news">
+            <span class="step__icon"><Icon name="newspaper" size={28} /></span>
+            <span class="step__title">Ostanite v stiku</span>
+            <span class="step__text">Naročite se na e-novice in ne zamudite nobenega dogodka.</span>
+            <NewsletterForm id="step-nl" layout="stacked" />
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .next-step {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    margin-top: clamp(3rem, 6vw, 5rem);
+    border-radius: clamp(1.75rem, 4vw, 2.75rem);
+  }
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+  .steps {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    align-items: stretch;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    color: var(--c-ink);
+    text-decoration: none;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+  .step--link:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    color: var(--c-ink);
+  }
+  .step--sun {
+    background: var(--c-sun-tint);
+    border-color: #f6dd9b;
+  }
+  .step--news {
+    grid-column: span 2;
+  }
+  @media (max-width: 760px) {
+    .step--news {
+      grid-column: auto;
+    }
+  }
+  .step__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    background: var(--c-tint-strong);
+    color: var(--c-green-deep);
+  }
+  .step--sun .step__icon {
+    background: var(--c-sun);
+    color: var(--c-ink);
+  }
+  .step__title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .step__text {
+    color: var(--c-ink-soft);
+    margin-bottom: 0.5rem;
+  }
+</style>

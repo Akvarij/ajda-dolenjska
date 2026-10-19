@@ -1,0 +1,107 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import Icon from '@/components/Icon.astro';
+import MembershipForm from '@/components/MembershipForm.astro';
+import { site, telHref } from '@/config/site';
+
+const benefits = [
+  { icon: 'calendar', title: 'Setveni koledar', text: 'Kdaj sejati, presajati, negovati in pobirati, vsako leto na dosegu roke.' },
+  { icon: 'jar', title: 'Navodila za preparate', text: 'Praktična pomoč pri pripravi in uporabi biodinamičnih preparatov.' },
+  { icon: 'graduation', title: 'Izobraževanja', text: 'Predavanja, delavnice in začetni tečaj z izkušenimi biodinamiki.' },
+  { icon: 'users', title: 'Skupnost', text: 'Srečanja, izleti in obiski kmetij v družbi ljudi, ki delijo isto pot.' },
+] as const;
+---
+
+<ContentPage
+  title="Včlanitev"
+  lead="Postanite član društva Ajda Dolenjska in se pridružite ljudem, ki pridelujejo hrano v sožitju z zemljo."
+  nextStep="none"
+>
+  <div class="join-layout">
+    <div>
+      <h2>Kaj dobite kot član</h2>
+      <ul class="benefits">
+        {
+          benefits.map((b) => (
+            <li>
+              <span class="ic"><Icon name={b.icon} size={28} /></span>
+              <div>
+                <h3>{b.title}</h3>
+                <p>{b.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="panel panel--tint how">
+        <h3>Kako poteka včlanitev</h3>
+        <ol>
+          <li>Izpolnite pristopno izjavo ob strani.</li>
+          <li>Prejeli boste obvestilo z navodili za plačilo članarine.</li>
+          <li>Po plačilu vas sprejmemo v društvo in vključimo v obveščanje.</li>
+        </ol>
+        <p>
+          Raje po telefonu? Pokličite <a href={telHref(site.contact.phone)}>{site.contact.phone}</a>
+          ({site.contact.person}).
+        </p>
+      </div>
+    </div>
+
+    <div class="panel form-panel">
+      <h2>Pristopna izjava</h2>
+      <MembershipForm />
+    </div>
+  </div>
+</ContentPage>
+
+<style>
+  .join-layout {
+    display: grid;
+    gap: 2.5rem 3.5rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .join-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .benefits {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0 0 2rem;
+    padding: 0;
+    list-style: none;
+  }
+  .benefits li {
+    display: flex;
+    gap: 1.1rem;
+    align-items: flex-start;
+  }
+  .ic {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 18px;
+    background: var(--c-lime);
+    color: var(--c-green-deep);
+  }
+  .benefits h3 {
+    margin: 0 0 0.15rem;
+  }
+  .benefits p {
+    margin: 0;
+    color: var(--c-ink-soft);
+  }
+  .how ol {
+    padding-left: 1.3em;
+    margin: 0 0 1rem;
+  }
+  .how li {
+    margin-bottom: 0.4rem;
+  }
+  .how p {
+    margin: 0;
+  }
+</style>

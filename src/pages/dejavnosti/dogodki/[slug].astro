@@ -1,0 +1,205 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Icon from '@/components/Icon.astro';
+import MapEmbed from '@/components/MapEmbed.astro';
+import NextStep from '@/components/NextStep.astro';
+import RegistrationForm from '@/components/RegistrationForm.astro';
+import { render } from 'astro:content';
+import { site, telHref } from '@/config/site';
+import { formatDate } from '@/lib/format';
+import { getEvents, isPast, typeLabels, whenLabel, mapsDirectionsUrl, type EventEntry } from '@/lib/events';
+
+export async function getStaticPaths() {
+  const events = await getEvents();
+  return events.map((event) => ({ params: { slug: event.id }, props: { event } }));
+}
+
+const { event } = Astro.props as { event: EventEntry };
+const d = event.data;
+const { Content } = await render(event);
+const past = isPast(event);
+const needsRegistration = d.registration.required && !past;
+const when = whenLabel(event);
+const contact = {
+  name: d.contact?.name ?? site.contact.person,
+  phone: d.contact?.phone ?? site.contact.phone,
+  email: d.contact?.email ?? site.contact.email,
+};
+const mapQuery = d.address ?? d.location;
+const section = d.type === 'izobrazevanje' || d.type === 'delavnica'
+  ? { label: 'Izobraževanja in delavnice', href: '/dejavnosti/izobrazevanja-in-delavnice/' }
+  : d.type === 'izlet' || d.type === 'srecanje'
+    ? { label: 'Izleti in srečanja', href: '/dejavnosti/izleti-in-srecanja/' }
+    : { label: 'Dogodki', href: '/dejavnosti/dogodki/' };
+---
+
+<BaseLayout title={d.title} description={d.summary}>
+  <PageHeader
+    title={d.title}
+    lead={d.summary}
+    eyebrow={typeLabels[d.type]}
+    crumbs={[{ label: 'Dejavnosti', href: '/dejavnosti/' }, section, { label: d.title }]}
+  >
+    <div class="btn-row hero-actions">
+      {
+        needsRegistration && (
+          <a class="btn btn--sun" href="#prijava">
+            <Icon name="check" size={20} /> Prijavi se na dogodek
+          </a>
+        )
+      }
+      <a class="btn btn--ghost" href={`/dejavnosti/dogodki/${event.id}.ics`}>
+        <Icon name="calendar" size={20} /> Dodaj v koledar
+      </a>
+    </div>
+  </PageHeader>
+
+  <div class="section section--tight">
+    <div class="container">
+      {
+        past && (
+          <p class="notice notice--past" role="status">
+            <Icon name="info" size={24} /> Ta dogodek je že potekel. Poglejte
+            <a href="/dejavnosti/dogodki/">prihajajoče dogodke</a>.
+          </p>
+        )
+      }
+      {
+        needsRegistration && (
+          <p class="notice" role="status">
+            <Icon name="info" size={24} />
+            <span>
+              <strong>Prijava je obvezna.</strong>
+              {d.registration.deadline && ` Prijavite se do ${formatDate(d.registration.deadline)}.`}
+              {d.registration.note && ` ${d.registration.note}`}
+              <a href="#prijava">Pojdi na prijavo</a>
+            </span>
+          </p>
+        )
+      }
+
+      <div class="event-layout">
+        <div>
+          <div class="prose"><Content /></div>
+
+          {
+            needsRegistration && (
+              <section id="prijava" class="panel panel--sun registration" aria-labelledby="prijava-title">
+                <h2 id="prijava-title">Prijava na dogodek</h2>
+                <RegistrationForm eventTitle={d.title} eventWhen={when} />
+              </section>
+            )
+          }
+        </div>
+
+        <aside class="aside" aria-label="Podatki o dogodku">
+          <div class="panel panel--tint">
+            <h2>Podrobnosti</h2>
+            <ul class="facts">
+              <li>
+                <Icon name="calendar" size={24} />
+                <span><strong>Datum in ura</strong><br />{when}</span>
+              </li>
+              <li>
+                <Icon name="pin" size={24} />
+                <span>
+                  <strong>Lokacija</strong><br />
+                  {d.location}
+                  {d.address && <><br />{d.address}</>}
+                </span>
+              </li>
+              {
+                d.speaker && (
+                  <li>
+                    <Icon name="user" size={24} />
+                    <span><strong>Predavatelj</strong><br />{d.speaker}</span>
+                  </li>
+                )
+              }
+              {
+                d.price && (
+                  <li>
+                    <Icon name="info" size={24} />
+                    <span><strong>Prispevek</strong><br />{d.price}</span>
+                  </li>
+                )
+              }
+              <li>
+                <Icon name="phone" size={24} />
+                <span>
+                  <strong>Kontakt</strong><br />
+                  {contact.name}<br />
+                  <a href={telHref(contact.phone)}>{contact.phone}</a><br />
+                  <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                </span>
+              </li>
+            </ul>
+            <a class="btn btn--ghost btn--sm" href={mapsDirectionsUrl(mapQuery)} target="_blank" rel="noopener">
+              <Icon name="navigate" size={18} /> Navigacija
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      <section class="map-section" aria-labelledby="map-title">
+        <h2 id="map-title">Lokacija na zemljevidu</h2>
+        <MapEmbed query={mapQuery} title={`Zemljevid: ${d.location}`} />
+      </section>
+    </div>
+  </div>
+
+  <NextStep variant={past ? 'past-event' : 'event'} registration={needsRegistration} />
+</BaseLayout>
+
+<style>
+  .hero-actions {
+    margin-top: 1.5rem;
+  }
+  .event-layout {
+    display: grid;
+    gap: 2.5rem 3.5rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .event-layout {
+      grid-template-columns: 1fr 23rem;
+    }
+    .aside {
+      position: sticky;
+      top: calc(var(--header-h) + 1.5rem);
+    }
+  }
+  .notice {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin: 0 0 2rem;
+    padding: 1.1rem 1.4rem;
+    border-radius: 20px;
+    background: var(--c-sun-tint);
+    border: 1px solid #f6dd9b;
+    font-size: 1.1rem;
+  }
+  .notice :global(svg) {
+    flex: none;
+    margin-top: 0.15rem;
+  }
+  .notice--past {
+    background: #f1f3ec;
+    border-color: var(--c-line);
+  }
+  .registration {
+    margin-top: 2.5rem;
+  }
+  .map-section {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .aside h2 {
+    font-size: 1.6rem;
+  }
+  .panel .facts {
+    gap: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+</style>

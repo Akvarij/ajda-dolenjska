@@ -1,0 +1,93 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentPage from '@/layouts/ContentPage.astro';
+import Pic from '@/components/Pic.astro';
+import Icon from '@/components/Icon.astro';
+import { telHref } from '@/config/site';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const { title, lead, image, imageAlt, nextStep, people } = page.data;
+---
+
+<ContentPage title={title} lead={lead} nextStep={nextStep}>
+  <div class:list={['layout', image && 'layout--image']}>
+    <div class="prose">
+      <Content />
+    </div>
+    {
+      image && (
+        <figure class="figure">
+          <Pic image={image} alt={imageAlt} ratio="4 / 5" sizes="(min-width: 900px) 30vw, 100vw" loading="eager" />
+        </figure>
+      )
+    }
+  </div>
+
+  {
+    people && people.length > 0 && (
+      <div class="grid grid--3 people">
+        {people.map((p) => (
+          <article class="card">
+            <div class="card__body">
+              <span class="avatar"><Icon name="user" size={34} /></span>
+              <h2>{p.name}</h2>
+              <p class="role">{p.role}</p>
+              {p.bio && <p>{p.bio}</p>}
+              <ul class="facts">
+                {p.phone && (
+                  <li><Icon name="phone" size={20} /><a href={telHref(p.phone)}>{p.phone}</a></li>
+                )}
+                {p.email && (
+                  <li><Icon name="mail" size={20} /><a href={`mailto:${p.email}`}>{p.email}</a></li>
+                )}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    )
+  }
+</ContentPage>
+
+<style>
+  .layout--image {
+    display: grid;
+    gap: 2.5rem 4rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .layout--image {
+      grid-template-columns: 1fr 22rem;
+    }
+  }
+  .figure {
+    margin: 0;
+  }
+  .figure :global(.pic) {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .people {
+    margin-top: 2.5rem;
+  }
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    background: var(--c-tint-strong);
+    color: var(--c-green-deep);
+  }
+  .role {
+    font-weight: 700;
+    color: var(--c-green-deep) !important;
+  }
+</style>

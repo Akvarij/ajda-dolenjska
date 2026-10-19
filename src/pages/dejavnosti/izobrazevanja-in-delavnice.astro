@@ -1,0 +1,21 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import EventsView from '@/components/EventsView.astro';
+import NewsletterBand from '@/components/NewsletterBand.astro';
+import { getEventsSplit, trainingTypes } from '@/lib/events';
+
+const { upcoming, past } = await getEventsSplit(trainingTypes);
+---
+
+<ContentPage
+  title="Izobraževanja in delavnice"
+  lead="Tečaji, predavanja in delavnice za začetnike in izkušene. Za začetni tečaj biodinamičnega vrtnarjenja in kmetovanja je potrebna predhodna prijava."
+  nextStep="none"
+>
+  <EventsView
+    upcoming={upcoming}
+    past={past}
+    emptyText="Trenutno ni napovedanih izobraževanj. Naročite se na e-novice in obvestili vas bomo, ko objavimo nove termine."
+  />
+  <NewsletterBand slot="after" />
+</ContentPage>
