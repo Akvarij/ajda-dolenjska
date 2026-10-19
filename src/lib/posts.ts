@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { url } from './url';
 
 export type PostEntry = CollectionEntry<'news'>;
 
@@ -9,7 +10,7 @@ export const isArchived = (p: PostEntry) =>
   p.data.archived || (Date.now() - p.data.date.getTime()) / 86_400_000 > ARCHIVE_AFTER_DAYS;
 
 export const postUrl = (p: PostEntry) =>
-  `/aktualno/${p.data.kind === 'clanek' ? 'clanki' : 'novice'}/${p.id}/`;
+  url(`/aktualno/${p.data.kind === 'clanek' ? 'clanki' : 'novice'}/${p.id}/`);
 
 export const kindLabel = (p: PostEntry) => (p.data.kind === 'clanek' ? 'Članek' : 'Novica');
 

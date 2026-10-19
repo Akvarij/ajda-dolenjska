@@ -1,5 +1,6 @@
 ---
 import { site } from '@/config/site';
+import { url } from '@/lib/url';
 
 interface Props {
   /** "inline" puts the e-mail field and button on one row (footer, bands). */
@@ -40,7 +41,7 @@ const { layout = 'inline', id = 'enovice' } = Astro.props;
     <input type="checkbox" name="soglasje" id={`${id}-soglasje`} required />
     <span>
       Soglašam, da društvo moj e-naslov uporablja za pošiljanje e-novic. Naročnino lahko kadar koli
-      prekličem. <a href="/zasebnost/">Zasebnost</a>
+      prekličem. <a href={url('/zasebnost/')}>Zasebnost</a>
     </span>
   </label>
   <div class="honeypot" aria-hidden="true">

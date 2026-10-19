@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import BuckwheatSprig from '@/components/BuckwheatSprig.astro';
+import { url } from '@/lib/url';
 ---
 
 <BaseLayout title="Strani ni mogoče najti" noindex>
@@ -15,8 +16,8 @@ import BuckwheatSprig from '@/components/BuckwheatSprig.astro';
           vrnite na začetek.
         </p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="/">Na začetno stran</a>
-          <a class="btn btn--ghost" href="/iskanje/"><Icon name="search" size={20} /> Iskanje</a>
+          <a class="btn btn--primary" href={url('/')}>Na začetno stran</a>
+          <a class="btn btn--ghost" href={url('/iskanje/')}><Icon name="search" size={20} /> Iskanje</a>
         </div>
       </div>
       <BuckwheatSprig class="nf__sprig sway" />

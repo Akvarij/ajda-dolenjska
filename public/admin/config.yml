@@ -1,10 +1,10 @@
 # Decap CMS: a simple editing screen at /admin/ for 2–3 editors, no technical knowledge needed.
 # It reads and writes the Markdown files in src/content, so every change is a Git commit.
 #
-# BEFORE USE: set `backend.repo` and connect a login method (see README, "Urejanje vsebin").
+# BEFORE USE: connect a login method (see README, "Urejanje vsebin").
 backend:
   name: github
-  repo: CHANGE-ME/ajda-dolenjska   # <- GitHub "owner/repository"
+  repo: Akvarij/ajda-dolenjska   # <- GitHub "owner/repository"
   branch: main
   # base_url: https://your-oauth-proxy.example.com   # needed for GitHub login outside Netlify
 

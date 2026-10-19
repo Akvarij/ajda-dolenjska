@@ -1,4 +1,5 @@
 ---
+import { url } from '@/lib/url';
 /** Shared bottom of every form: consent checkbox, honeypot, submit button and status line. */
 interface Props {
   consent: string;
@@ -12,7 +13,7 @@ const { consent, submitLabel, id } = Astro.props;
   <input type="checkbox" name="soglasje" id={`${id}-soglasje`} required />
   <span>
     {consent}
-    <a href="/zasebnost/">Zasebnost</a>
+    <a href={url('/zasebnost/')}>Zasebnost</a>
   </span>
 </label>
 <div class="honeypot" aria-hidden="true">

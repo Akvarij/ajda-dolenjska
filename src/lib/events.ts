@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { dateKey, formatRange, todayKey } from './format';
+import { url } from './url';
 
 export type EventEntry = CollectionEntry<'events'>;
 export type EventType = EventEntry['data']['type'];
@@ -15,7 +16,7 @@ export const typeLabels: Record<EventType, string> = {
 export const trainingTypes: EventType[] = ['izobrazevanje', 'delavnica'];
 export const tripTypes: EventType[] = ['izlet', 'srecanje'];
 
-export const eventUrl = (e: EventEntry) => `/dejavnosti/dogodki/${e.id}/`;
+export const eventUrl = (e: EventEntry) => url(`/dejavnosti/dogodki/${e.id}/`);
 
 export const endKey = (e: EventEntry) => dateKey(e.data.endDate ?? e.data.date);
 

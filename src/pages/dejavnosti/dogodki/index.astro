@@ -4,6 +4,7 @@ import EventsView from '@/components/EventsView.astro';
 import NewsletterBand from '@/components/NewsletterBand.astro';
 import Icon from '@/components/Icon.astro';
 import { getEventsSplit } from '@/lib/events';
+import { url } from '@/lib/url';
 
 const { upcoming, past } = await getEventsSplit();
 ---
@@ -14,10 +15,10 @@ const { upcoming, past } = await getEventsSplit();
   nextStep="none"
 >
   <nav class="filters" aria-label="Vrste dogodkov">
-    <a class="chip chip--on" href="/dejavnosti/dogodki/" aria-current="page">Vsi dogodki</a>
-    <a class="chip" href="/dejavnosti/izobrazevanja-in-delavnice/">Izobraževanja in delavnice</a>
-    <a class="chip" href="/dejavnosti/izleti-in-srecanja/">Izleti in srečanja</a>
-    <a class="chip chip--ics" href="/dejavnosti/dogodki.ics">
+    <a class="chip chip--on" href={url('/dejavnosti/dogodki/')} aria-current="page">Vsi dogodki</a>
+    <a class="chip" href={url('/dejavnosti/izobrazevanja-in-delavnice/')}>Izobraževanja in delavnice</a>
+    <a class="chip" href={url('/dejavnosti/izleti-in-srecanja/')}>Izleti in srečanja</a>
+    <a class="chip chip--ics" href={url('/dejavnosti/dogodki.ics')}>
       <Icon name="calendar" size={18} /> Dodaj v svoj koledar
     </a>
   </nav>

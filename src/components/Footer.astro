@@ -5,6 +5,7 @@ import { site, telHref, fullAddress } from '@/config/site';
 import wordmark from '@/assets/brand/logo-wordmark.png';
 import Icon from './Icon.astro';
 import type { IconName } from '@/lib/icons';
+import { url } from '@/lib/url';
 
 const socials = (['facebook', 'instagram', 'youtube'] as const)
   .filter((k) => site.social[k])
@@ -14,7 +15,7 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
 <footer class="site-footer">
   <div class="container footer__grid">
     <div class="footer__brand">
-      <a class="footer__logo" href="/" aria-label="Ajda Dolenjska – domov">
+      <a class="footer__logo" href={url('/')} aria-label="Ajda Dolenjska – domov">
         <Image src={wordmark} alt="" width={240} />
       </a>
       <p>
@@ -42,7 +43,7 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
         {
           nav.map((s) => (
             <li>
-              <a href={s.href}>{s.label}</a>
+              <a href={url(s.href)}>{s.label}</a>
             </li>
           ))
         }
@@ -70,17 +71,17 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     <nav aria-labelledby="footer-members">
       <h2 class="footer__title" id="footer-members">Za člane</h2>
       <ul class="footer__links">
-        <li data-join><a class="join" href={joinHref}>Včlani se</a></li>
-        <li><a href="/clani/">Za člane</a></li>
-        <li><a href={newsletterHref}>E-novice</a></li>
-        <li><a href={contactHref}>Kontakt</a></li>
+        <li data-join><a class="join" href={url(joinHref)}>Včlani se</a></li>
+        <li><a href={url('/clani/')}>Za člane</a></li>
+        <li><a href={url(newsletterHref)}>E-novice</a></li>
+        <li><a href={url(contactHref)}>Kontakt</a></li>
       </ul>
     </nav>
   </div>
 
   <div class="container footer__bottom">
     <p>© {new Date().getFullYear()} {site.legalName}</p>
-    <a href="/zasebnost/">Zasebnost</a>
+    <a href={url('/zasebnost/')}>Zasebnost</a>
   </div>
 </footer>
 

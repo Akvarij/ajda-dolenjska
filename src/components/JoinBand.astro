@@ -4,6 +4,7 @@ import Icon from './Icon.astro';
 import BuckwheatSprig from './BuckwheatSprig.astro';
 import blossoms from '@/assets/photos/cvetoca-ajda.jpg';
 import { joinHref } from '@/data/nav';
+import { url } from '@/lib/url';
 
 interface Props {
   /** Background of the band around the photo card. */
@@ -33,10 +34,10 @@ const {
         <h2 id="join-title">{heading}</h2>
         <p>{text}</p>
         <div class="btn-row">
-          <a class="btn btn--sun" href={joinHref}>
+          <a class="btn btn--sun" href={url(joinHref)}>
             Postani član <Icon name="arrow-right" size={18} />
           </a>
-          <a class="btn btn--outline-light" href="/drustvo/o-drustvu/">Več o društvu</a>
+          <a class="btn btn--outline-light" href={url('/drustvo/o-drustvu/')}>Več o društvu</a>
         </div>
       </div>
       <BuckwheatSprig class="join__sprig sway" />

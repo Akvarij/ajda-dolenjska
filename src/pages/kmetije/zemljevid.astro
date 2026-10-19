@@ -5,6 +5,7 @@ import Icon from '@/components/Icon.astro';
 import MapEmbed from '@/components/MapEmbed.astro';
 import { site } from '@/config/site';
 import { mapsDirectionsUrl, mapsSearchUrl } from '@/lib/events';
+import { url } from '@/lib/url';
 
 const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -33,7 +34,7 @@ const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.dat
               <div class="row__main">
                 <span class="pinicon"><Icon name="pin" size={26} /></span>
                 <div>
-                  <h2><a href={`/kmetije/${f.id}/`}>{f.data.name}</a></h2>
+                  <h2><a href={url(`/kmetije/${f.id}/`)}>{f.data.name}</a></h2>
                   <p>{address}</p>
                 </div>
               </div>

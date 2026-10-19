@@ -2,6 +2,7 @@
 import EventCard from './EventCard.astro';
 import EventCalendar from './EventCalendar.astro';
 import type { EventEntry } from '@/lib/events';
+import { url } from '@/lib/url';
 
 interface Props {
   upcoming: EventEntry[];
@@ -25,7 +26,7 @@ const { upcoming, past, calendar = false, emptyText = 'Trenutno ni napovedanih d
     ) : (
       <div class="empty">
         <p>{emptyText}</p>
-        <p style="margin-top:1rem"><a class="btn btn--primary" href="/drustvo/e-novice/">Naroči se na e-novice</a></p>
+        <p style="margin-top:1rem"><a class="btn btn--primary" href={url('/drustvo/e-novice/')}>Naroči se na e-novice</a></p>
       </div>
     )
   }

@@ -7,6 +7,7 @@ import Icon from '@/components/Icon.astro';
 import NextStep from '@/components/NextStep.astro';
 import { formatDate } from '@/lib/format';
 import { kindLabel, type PostEntry } from '@/lib/posts';
+import { url } from '@/lib/url';
 
 interface Props {
   post: PostEntry;
@@ -44,7 +45,7 @@ const ogImage = d.image?.src;
         d.relatedFarm && (
           <p class="farm-link">
             <Icon name="farm" size={22} />
-            <a href={`/kmetije/${d.relatedFarm.id}/`}>Preberite več o kmetiji</a>
+            <a href={url(`/kmetije/${d.relatedFarm.id}/`)}>Preberite več o kmetiji</a>
           </p>
         )
       }

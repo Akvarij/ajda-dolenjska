@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { url } from '@/lib/url';
 
 interface Crumb {
   label: string;
@@ -19,7 +20,7 @@ const trail: Crumb[] = [{ label: 'Domov', href: '/' }, ...items];
         {trail.map((c, i) => (
           <li>
             {c.href && i < trail.length - 1 ? (
-              <a href={c.href}>{c.label}</a>
+              <a href={url(c.href)}>{c.label}</a>
             ) : (
               <span aria-current="page">{c.label}</span>
             )}

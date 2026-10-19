@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import ContentPage from '@/layouts/ContentPage.astro';
 import FarmCard from '@/components/FarmCard.astro';
 import Icon from '@/components/Icon.astro';
+import { url } from '@/lib/url';
 
 const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -14,7 +15,7 @@ const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.dat
   crumbs={[{ label: 'Kmetije' }]}
 >
   <div class="toolbar">
-    <a class="btn btn--ghost" href="/kmetije/zemljevid/">
+    <a class="btn btn--ghost" href={url('/kmetije/zemljevid/')}>
       <Icon name="pin" size={20} /> Zemljevid kmetij
     </a>
   </div>

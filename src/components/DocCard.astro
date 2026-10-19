@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
 import { formatDate } from '@/lib/format';
+import { url } from '@/lib/url';
 
 interface Props {
   doc: CollectionEntry<'documents'>;
@@ -23,7 +24,7 @@ const ext = d.file.split('.').pop()?.toUpperCase() ?? 'DATOTEKA';
     </p>
     <p>{d.description}</p>
   </div>
-  <a class="btn btn--ghost btn--sm" href={d.file} download>
+  <a class="btn btn--ghost btn--sm" href={url(d.file)} download>
     <Icon name="download" size={20} />
     Prenesi <span class="sr-only">{d.title}</span>
     <small>{d.fileInfo ?? ext}</small>

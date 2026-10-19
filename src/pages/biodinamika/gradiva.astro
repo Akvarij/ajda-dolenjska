@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import ContentPage from '@/layouts/ContentPage.astro';
 import DocCard from '@/components/DocCard.astro';
 import Icon from '@/components/Icon.astro';
+import { url } from '@/lib/url';
 
 const docs = (await getCollection('documents', ({ data }) => data.category !== 'dokument' && !data.archived)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -36,9 +37,9 @@ const lectures = docs.filter((d) => d.data.category === 'predavanje');
       )
     }
     <p class="more">
-      <a class="link-arrow" href="/aktualno/video-in-avdio/">Posnetki predavanj <Icon name="arrow-right" size={20} /></a>
+      <a class="link-arrow" href={url('/aktualno/video-in-avdio/')}>Posnetki predavanj <Icon name="arrow-right" size={20} /></a>
       &nbsp;·&nbsp;
-      <a class="link-arrow" href="/arhiv/predavanja/">Starejša predavanja <Icon name="arrow-right" size={20} /></a>
+      <a class="link-arrow" href={url('/arhiv/predavanja/')}>Starejša predavanja <Icon name="arrow-right" size={20} /></a>
     </p>
   </section>
 </ContentPage>

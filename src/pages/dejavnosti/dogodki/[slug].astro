@@ -9,6 +9,7 @@ import { render } from 'astro:content';
 import { site, telHref } from '@/config/site';
 import { formatDate } from '@/lib/format';
 import { getEvents, isPast, typeLabels, whenLabel, mapsDirectionsUrl, type EventEntry } from '@/lib/events';
+import { url } from '@/lib/url';
 
 export async function getStaticPaths() {
   const events = await getEvents();
@@ -49,7 +50,7 @@ const section = d.type === 'izobrazevanje' || d.type === 'delavnica'
           </a>
         )
       }
-      <a class="btn btn--ghost" href={`/dejavnosti/dogodki/${event.id}.ics`}>
+      <a class="btn btn--ghost" href={url(`/dejavnosti/dogodki/${event.id}.ics`)}>
         <Icon name="calendar" size={20} /> Dodaj v koledar
       </a>
     </div>
@@ -61,7 +62,7 @@ const section = d.type === 'izobrazevanje' || d.type === 'delavnica'
         past && (
           <p class="notice notice--past" role="status">
             <Icon name="info" size={24} /> Ta dogodek je že potekel. Poglejte
-            <a href="/dejavnosti/dogodki/">prihajajoče dogodke</a>.
+            <a href={url('/dejavnosti/dogodki/')}>prihajajoče dogodke</a>.
           </p>
         )
       }

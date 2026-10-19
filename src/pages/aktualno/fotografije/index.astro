@@ -5,6 +5,7 @@ import Pic from '@/components/Pic.astro';
 import Icon from '@/components/Icon.astro';
 import NewsletterBand from '@/components/NewsletterBand.astro';
 import { formatDate } from '@/lib/format';
+import { url } from '@/lib/url';
 
 const albums = (await getCollection('albums')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
@@ -26,7 +27,7 @@ const albums = (await getCollection('albums')).sort((a, b) => b.data.date.getTim
                 <span>{a.data.photos.length} fotografij</span>
                 <time datetime={a.data.date.toISOString().slice(0, 10)}>{formatDate(a.data.date)}</time>
               </div>
-              <h2><a href={`/aktualno/fotografije/${a.id}/`}>{a.data.title}</a></h2>
+              <h2><a href={url(`/aktualno/fotografije/${a.id}/`)}>{a.data.title}</a></h2>
               {a.data.summary && <p>{a.data.summary}</p>}
               <span class="link-arrow">Odpri galerijo <Icon name="arrow-right" size={20} /></span>
             </div>

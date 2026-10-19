@@ -2,6 +2,7 @@
 import Icon from './Icon.astro';
 import NewsletterForm from './NewsletterForm.astro';
 import { joinHref } from '@/data/nav';
+import { url } from '@/lib/url';
 
 interface Next {
   href: string;
@@ -36,7 +37,7 @@ const wantsNews = variant !== 'farm';
     <div class="steps">
       {
         wantsNext && next && (
-          <a class="step step--link" href={next.href}>
+          <a class="step step--link" href={url(next.href)}>
             <span class="step__icon"><Icon name="arrow-right" size={28} /></span>
             <span class="step__title">{next.label}</span>
             {next.description && <span class="step__text">{next.description}</span>}
@@ -56,7 +57,7 @@ const wantsNews = variant !== 'farm';
 
       {
         (variant === 'event' || variant === 'past-event') && (
-          <a class="step step--link" href="/dejavnosti/dogodki/">
+          <a class="step step--link" href={url('/dejavnosti/dogodki/')}>
             <span class="step__icon"><Icon name="calendar" size={28} /></span>
             <span class="step__title">
               {variant === 'past-event' ? 'Poglejte prihajajoče dogodke' : 'Vsi dogodki'}
@@ -68,7 +69,7 @@ const wantsNews = variant !== 'farm';
 
       {
         wantsJoin && (
-          <a class="step step--link" href={joinHref} data-join>
+          <a class="step step--link" href={url(joinHref)} data-join>
             <span class="step__icon"><Icon name="heart" size={28} /></span>
             <span class="step__title">Postanite član</span>
             <span class="step__text">Setveni koledar, navodila za preparate in vabila na dogodke.</span>

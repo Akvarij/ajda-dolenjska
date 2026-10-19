@@ -1,6 +1,7 @@
 ---
 import ContentPage from '@/layouts/ContentPage.astro';
 import Icon from '@/components/Icon.astro';
+import { url } from '@/lib/url';
 ---
 
 <ContentPage
@@ -8,7 +9,7 @@ import Icon from '@/components/Icon.astro';
   lead="Poiščite dogodke, novice, kmetije, dokumente in vsebine o biodinamiki."
   nextStep="none"
 >
-  <form class="search" role="search" data-search-form>
+  <form class="search" role="search" data-search-form data-index={url('/search-index.json')}>
     <label for="q" class="sr-only">Iskalni niz</label>
     <input type="search" id="q" name="q" placeholder="Na primer: preparat, tečaj, moka …" autocomplete="off" />
     <button class="btn btn--primary" type="submit"><Icon name="search" size={22} /> Išči</button>
@@ -20,11 +21,11 @@ import Icon from '@/components/Icon.astro';
   <div class="suggest" data-suggest>
     <h2>Najpogostejše poti</h2>
     <ul class="chips">
-      <li><a class="chip" href="/biodinamika/kaj-je-biodinamika/">Kaj je biodinamika?</a></li>
-      <li><a class="chip" href="/dejavnosti/dogodki/">Dogodki</a></li>
-      <li><a class="chip" href="/kmetije/">Kmetije</a></li>
-      <li><a class="chip" href="/biodinamika/preparati/">Preparati</a></li>
-      <li><a class="chip" href="/drustvo/vclanitev/">Včlanitev</a></li>
+      <li><a class="chip" href={url('/biodinamika/kaj-je-biodinamika/')}>Kaj je biodinamika?</a></li>
+      <li><a class="chip" href={url('/dejavnosti/dogodki/')}>Dogodki</a></li>
+      <li><a class="chip" href={url('/kmetije/')}>Kmetije</a></li>
+      <li><a class="chip" href={url('/biodinamika/preparati/')}>Preparati</a></li>
+      <li><a class="chip" href={url('/drustvo/vclanitev/')}>Včlanitev</a></li>
     </ul>
   </div>
 </ContentPage>
@@ -52,7 +53,7 @@ import Icon from '@/components/Icon.astro';
   let loading: Promise<Prepared[]> | null = null;
 
   const load = () =>
-    (loading ??= fetch('/search-index.json')
+    (loading ??= fetch(form.dataset.index!)
       .then((r) => r.json() as Promise<Entry[]>)
       .then((all) => (index = all.map((e) => ({ ...e, nt: norm(e.t), ns: norm(e.s), nb: norm(e.b) })))));
 

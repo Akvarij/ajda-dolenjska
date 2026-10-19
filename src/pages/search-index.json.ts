@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { nav } from '@/data/nav';
 import { eventUrl, getEvents, typeLabels } from '@/lib/events';
 import { getPosts, kindLabel, postUrl } from '@/lib/posts';
+import { url } from '@/lib/url';
 
 interface Entry {
   /** title */
@@ -31,9 +32,10 @@ export const GET: APIRoute = async () => {
   const entries: Entry[] = [];
   const seen = new Set<string>();
   const add = (e: Entry) => {
-    if (seen.has(e.u)) return;
-    seen.add(e.u);
-    entries.push(e);
+    const u = url(e.u);
+    if (seen.has(u)) return;
+    seen.add(u);
+    entries.push({ ...e, u });
   };
 
   for (const p of await getCollection('pages')) {

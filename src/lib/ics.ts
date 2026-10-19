@@ -1,5 +1,5 @@
 import { dateKey } from './format';
-import type { EventEntry } from './events';
+import { eventUrl, type EventEntry } from './events';
 
 const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
 
@@ -49,7 +49,7 @@ export function buildIcs(events: EventEntry[], siteUrl: string) {
     lines.push(`SUMMARY:${esc(d.title)}`);
     lines.push(`LOCATION:${esc(d.address ? `${d.location}, ${d.address}` : d.location)}`);
     lines.push(`DESCRIPTION:${esc(d.summary)}`);
-    lines.push(`URL:${new URL(`/dejavnosti/dogodki/${e.id}/`, siteUrl).href}`, 'END:VEVENT');
+    lines.push(`URL:${new URL(eventUrl(e), siteUrl).href}`, 'END:VEVENT');
   }
   lines.push('END:VCALENDAR');
   return lines.map(fold).join('\r\n') + '\r\n';

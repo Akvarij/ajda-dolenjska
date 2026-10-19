@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
 import Pic from './Pic.astro';
+import { url } from '@/lib/url';
 
 interface Props {
   /** Heading level of the card title; use 2 when the card list has no h2 above it. */
@@ -21,7 +22,7 @@ const d = farm.data;
       <span>{d.city}</span>
       {d.certifications.map((c) => <span class="badge badge--sun">{c}</span>)}
     </div>
-    <Heading><a href={`/kmetije/${farm.id}/`}>{d.name}</a></Heading>
+    <Heading><a href={url(`/kmetije/${farm.id}/`)}>{d.name}</a></Heading>
     <p>{d.summary}</p>
     {
       d.offer.length > 0 && (

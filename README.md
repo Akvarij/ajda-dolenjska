@@ -11,7 +11,16 @@ npm run build      # preveri tipe in zgradi v dist/
 npm run preview    # ogled zgrajene strani
 ```
 
-Potrebno: Node 20.3+ (testirano na 20.19). Astro 5 je izbran namenoma, ker Astro 6/7 zahtevata Node 22.12+. Ko boste na Node 22, je nadgradnja enovrstična (`npm i astro@latest`) in odpravi obvestilo o ranljivosti pri `npm audit` (obdelava AVIF slik, ki je ne uporabljamo).
+Potrebno: Node 20.3+ (testirano na 20.19; gradnja na GitHubu teče na Node 22). Astro 5 je izbran namenoma, ker Astro 6/7 zahtevata Node 22.12+. Ko boste na Node 22, je nadgradnja enovrstična (`npm i astro@latest`) in odpravi obvestilo o ranljivosti pri `npm audit` (obdelava AVIF slik, ki je ne uporabljamo).
+
+## Objava (GitHub Pages)
+
+Vsaka sprememba na veji `main` se samodejno objavi prek [.github/workflows/deploy.yml](.github/workflows/deploy.yml), poleg tega se stran zgradi vsak dan ponoči.
+
+- Predogled: <https://akvarij.github.io/ajda-dolenjska/>. Ker je stran v podmapi, gredo notranje povezave v kodi skozi `url()` iz [src/lib/url.ts](src/lib/url.ts), npr. `href={url('/kmetije/')}`. V Markdown vsebinah povezave pišete kot doslej (`/kmetije/`), podmapo doda gradnja.
+- Predogled ima oznako `noindex`, zato ga iskalniki ne prikažejo. Indeksira se samo gradnja za pravo domeno (`site.url`).
+- Lokalni ogled, enak GitHubovemu: `SITE=https://akvarij.github.io BASE=/ajda-dolenjska/ npm run build`, nato `npm run preview` z istima spremenljivkama in <http://localhost:4321/ajda-dolenjska/>.
+- Prehod na `www.ajda-dolenjska.si`: v GitHubu (Settings → Pages → Custom domain) vpišite domeno, pri ponudniku DNS pa nastavite CNAME `www` → `akvarij.github.io`. Delovni tok novo domeno prevzame sam; stran je takrat v korenu domene in se indeksira.
 
 ## Kako je zgrajena
 
@@ -61,7 +70,7 @@ Podroben opis dogodka.
 
 Stran dogodka samodejno dobi obrazec za prijavo (če je `required: true`), zemljevid, navigacijo in gumb »Dodaj v koledar«. Pretekli dogodki se označijo kot »že potekel« in namesto prijave ponudijo e-novice.
 
-> **Pomembno:** stran je statična, zato se »prihajajoče/pretekle« in »arhiv po enem letu« preračunajo ob vsaki gradnji. Nastavite dnevno samodejno gradnjo (npr. GitHub Actions `schedule` ali Netlify build hook), da stran ostane točna tudi, če nihče ne objavi nove vsebine.
+> **Pomembno:** stran je statična, zato se »prihajajoče/pretekle« in »arhiv po enem letu« preračunajo ob vsaki gradnji. Zato se stran na GitHubu zgradi tudi vsak dan ponoči (`schedule` v [.github/workflows/deploy.yml](.github/workflows/deploy.yml)) in ostane točna, čeprav nihče ne objavi nove vsebine.
 
 ## Urejanje brez tehničnega znanja (2–3 osebe)
 
@@ -69,7 +78,7 @@ V [public/admin/](public/admin/) je pripravljen **Decap CMS**: urejevalnik v brs
 
 Pred uporabo je treba:
 
-1. Spletno stran (repozitorij) objaviti na GitHubu in v [public/admin/config.yml](public/admin/config.yml) nastaviti `backend.repo`.
+1. Repozitorij je na GitHubu (`Akvarij/ajda-dolenjska`, nastavljeno v [public/admin/config.yml](public/admin/config.yml)).
 2. Urediti prijavo urednikov: na Netlify jo ponudi vgrajeno, drugje je potreben majhen OAuth posrednik ([navodila Decap](https://decapcms.org/docs/github-backend/)).
 3. Lokalni preizkus: `npx decap-server` v drugem oknu, nato `/admin/` ob `npm run dev`.
 

@@ -16,6 +16,7 @@ import { getEventsSplit } from '@/lib/events';
 import { getPostsSplit } from '@/lib/posts';
 import { nav, joinHref } from '@/data/nav';
 import { site } from '@/config/site';
+import { url } from '@/lib/url';
 
 const { upcoming } = await getEventsSplit();
 const events = upcoming.slice(0, 3);
@@ -38,13 +39,13 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
           metodi. Pridite in spoznajte, kako to deluje.
         </p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="/biodinamika/">
+          <a class="btn btn--primary" href={url('/biodinamika/')}>
             O biodinamiki <Icon name="arrow-right" size={18} />
           </a>
-          <a class="btn btn--glass" href="/dejavnosti/dogodki/">Prihajajoči dogodki</a>
+          <a class="btn btn--glass" href={url('/dejavnosti/dogodki/')}>Prihajajoči dogodki</a>
         </div>
         <p class="hero__join" data-join>
-          Že veste, da želite z nami? <a href={joinHref}>Včlanite se</a>
+          Že veste, da želite z nami? <a href={url(joinHref)}>Včlanite se</a>
         </p>
       </div>
       <div class="seal" aria-hidden="true">
@@ -84,7 +85,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
           Biodinamika nas uči živeti v partnerstvu in odgovornosti do zemlje, rastlin, živali in
           ljudi.
         </p>
-        <a class="link-arrow" href="/drustvo/o-drustvu/">
+        <a class="link-arrow" href={url('/drustvo/o-drustvu/')}>
           Več o društvu <Icon name="arrow-right" size={18} />
         </a>
         <ul class="stats" aria-label="Društvo v številkah">
@@ -117,7 +118,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
           <h2 id="bd-title">Odkrijte biodinamiko <em>korak za korakom</em></h2>
           <p>Razumljivo tudi, če se z njo srečujete prvič.</p>
         </div>
-        <a class="btn btn--ghost" href="/biodinamika/">Vse o biodinamiki</a>
+        <a class="btn btn--ghost" href={url('/biodinamika/')}>Vse o biodinamiki</a>
       </div>
       <div class="grid grid--4">
         {
@@ -128,7 +129,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
                   <span class="bd__icon"><Icon name={b.icon} size={28} /></span>
                   <span class="bd__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                 </div>
-                <h3><a href={b.href}>{b.label}</a></h3>
+                <h3><a href={url(b.href)}>{b.label}</a></h3>
                 <p>{b.description}</p>
                 <span class="link-arrow">Preberi <Icon name="arrow-right" size={18} /></span>
               </div>
@@ -147,7 +148,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
           <span class="eyebrow">Dejavnosti</span>
           <h2 id="ev-title">Prihajajoči dogodki</h2>
         </div>
-        <a class="btn btn--ghost" href="/dejavnosti/dogodki/">Koledar dogodkov</a>
+        <a class="btn btn--ghost" href={url('/dejavnosti/dogodki/')}>Koledar dogodkov</a>
       </div>
       {
         events.length > 0 ? (
@@ -173,8 +174,8 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
           <p>Moka, vino, zelenjava, jajca, meso in še več, neposredno od kmeta.</p>
         </div>
         <div class="btn-row">
-          <a class="btn btn--ghost" href="/kmetije/zemljevid/">Zemljevid</a>
-          <a class="btn btn--ghost" href="/kmetije/">Vse kmetije</a>
+          <a class="btn btn--ghost" href={url('/kmetije/zemljevid/')}>Zemljevid</a>
+          <a class="btn btn--ghost" href={url('/kmetije/')}>Vse kmetije</a>
         </div>
       </div>
       <div class="grid grid--3">
@@ -193,7 +194,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
           <span class="eyebrow">Aktualno</span>
           <h2 id="news-title">Novice in članki</h2>
         </div>
-        <a class="btn btn--ghost" href="/aktualno/">Vse objave</a>
+        <a class="btn btn--ghost" href={url('/aktualno/')}>Vse objave</a>
       </div>
       {
         posts.length > 0 ? (
@@ -217,7 +218,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
           Pripravimo delavnice, obiske kmetij in izobraževanja za otroke, učitelje in lokalne
           skupnosti. Poglejte dobre prakse in ideje za sodelovanje.
         </p>
-        <a class="btn btn--primary" href="/dejavnosti/sodelovanje-z-ustanovami/">Sodelovanje z ustanovami</a>
+        <a class="btn btn--primary" href={url('/dejavnosti/sodelovanje-z-ustanovami/')}>Sodelovanje z ustanovami</a>
       </div>
       <div class="panel panel--sun">
         <span class="duo__icon"><Icon name="newspaper" size={30} /></span>

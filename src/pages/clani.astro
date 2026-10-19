@@ -4,6 +4,7 @@ import Icon from '@/components/Icon.astro';
 import EventCard from '@/components/EventCard.astro';
 import { getEventsSplit } from '@/lib/events';
 import type { IconName } from '@/lib/icons';
+import { url } from '@/lib/url';
 
 const { upcoming } = await getEventsSplit();
 
@@ -29,7 +30,7 @@ const shortcuts: { label: string; text: string; href: string; icon: IconName }[]
           <div class="card__body row">
             <span class="ic"><Icon name={s.icon} size={28} /></span>
             <div>
-              <h2><a href={s.href}>{s.label}</a></h2>
+              <h2><a href={url(s.href)}>{s.label}</a></h2>
               <p>{s.text}</p>
             </div>
           </div>
