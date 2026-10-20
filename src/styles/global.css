@@ -27,7 +27,9 @@
 
   --c-line: #e3ebd0;
   --c-focus: #1f6fb5;
-  --c-forest: #1f3a1b; /* footer and photo overlays */
+  --c-forest: #1f3a1b; /* dark bands and photo overlays */
+  --c-demeter: #ee7203; /* Demeter orange: footer */
+  --c-on-demeter: #17280f; /* text on Demeter orange: 5.2:1 (white is only 3:1) */
 
   --font-body: 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;

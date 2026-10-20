@@ -91,11 +91,8 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     margin-top: clamp(1rem, 3vw, 2rem);
     padding-top: clamp(3rem, 7vw, 5rem);
     border-radius: clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.75rem) 0 0;
-    background:
-      radial-gradient(50rem 22rem at 100% 0%, rgb(127 161 60 / 0.22), transparent 70%),
-      radial-gradient(30rem 18rem at 0% 100%, rgb(246 192 74 / 0.1), transparent 70%),
-      var(--c-forest);
-    color: rgb(255 255 255 / 0.78);
+    background: var(--c-demeter);
+    color: var(--c-on-demeter);
     font-size: 0.95rem;
   }
   .footer__grid {
@@ -127,7 +124,7 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
   }
   .footer__title {
     margin: 0.4rem 0 1.1rem;
-    color: #fff;
+    color: var(--c-on-demeter);
     font-family: var(--font-body);
     font-size: 0.78rem;
     font-weight: 700;
@@ -155,7 +152,6 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
   .footer__contact :global(svg) {
     flex: none;
     margin-top: 0.2em;
-    color: var(--c-lime);
   }
   .socials {
     display: flex;
@@ -168,19 +164,20 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     width: 2.6rem;
     height: 2.6rem;
     border-radius: 50%;
-    border: 1px solid rgb(255 255 255 / 0.25);
+    border: 1px solid rgb(23 40 15 / 0.35);
   }
   .socials a:hover {
-    background: #fff;
-    color: var(--c-forest);
+    background: var(--c-on-demeter);
+    color: var(--c-demeter);
   }
   a {
-    color: rgb(255 255 255 / 0.85);
+    color: var(--c-on-demeter);
     text-decoration: none;
-    transition: color 0.15s;
+    text-underline-offset: 0.2em;
   }
   a:hover {
-    color: var(--c-lime);
+    color: var(--c-on-demeter);
+    text-decoration: underline;
   }
   .footer__links a {
     display: inline-block;
@@ -192,8 +189,8 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     translate: 4px 0;
   }
   .join {
-    color: var(--c-sun);
     font-weight: 700;
+    text-decoration: underline;
   }
   .footer__bottom {
     display: flex;
@@ -201,14 +198,13 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     justify-content: space-between;
     gap: 0.5rem 2rem;
     padding-block: 1.25rem 1.5rem;
-    border-top: 1px solid rgb(255 255 255 / 0.12);
+    border-top: 1px solid rgb(23 40 15 / 0.2);
     font-size: 0.85rem;
-    color: rgb(255 255 255 / 0.6);
   }
   .footer__bottom p {
     margin: 0;
   }
   :focus-visible {
-    outline-color: var(--c-sun);
+    outline-color: var(--c-on-demeter);
   }
 </style>

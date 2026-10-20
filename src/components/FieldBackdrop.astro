@@ -1,10 +1,10 @@
 ---
 /**
- * Animated field backdrop: a photo with a sunny sky tint, slowly drifting
- * clouds, sun rays, floating pollen and buckwheat blossoms carried by the wind.
- * Everything moving is decorative and stops for visitors who prefer reduced
- * motion. `hero` is the full version for the home page, `calm` a lighter one
- * for page headers.
+ * Animated field backdrop: a photo with a sunny sky tint, a still sun,
+ * floating pollen, buckwheat blossoms carried by the wind and, on the home
+ * page, bees. Everything moving is decorative and stops for visitors who
+ * prefer reduced motion. `hero` is the full, unclouded version for the home
+ * page, `calm` a lighter one with drifting clouds for page headers.
  */
 import { Image } from 'astro:assets';
 import field from '@/assets/photos/polje-ajde.jpg';
@@ -41,6 +41,9 @@ const petals = hero
 
 const petal =
   'M0-7c2.2 0 2.6 3.3 0 5.4C-2.6-3.7-2.2-7 0-7zm6.7 2.2C7.4-2.7 4.7-.9 2.2-1.9c1.5-2.3 3.8-4.9 4.5-2.9zM4.1 5.7C2.4 7 .9 4.1 1.5 1.5c2.6.9 4.3 2.9 2.6 4.2zm-8.2 0C-5.8 4.4-4.1 2.4-1.5 1.5c.6 2.6-.9 5.5-2.6 4.2zM-6.7-2.8C-6-4.7-3.7-2.2-2.2-1.9-4.7-.9-7.4-2.7-6.7-2.8z';
+
+// Which way each bee sets off: they are drawn facing right, -1 flies left first.
+const bees = hero ? [1, -1, -1] : [];
 ---
 
 <div class:list={['field', `field--${variant}`, className]} aria-hidden="true">
@@ -56,14 +59,16 @@ const petal =
     />
     <div class="field__sky"></div>
   </div>
-  <div class="field__rays motion-only"></div>
   <div class="field__sun"></div>
-  <div class="field__clouds motion-only">
-    <span class="cloud cloud--1"></span>
-    <span class="cloud cloud--2"></span>
-    <span class="cloud cloud--3"></span>
-  </div>
-  <div class="field__wash"></div>
+  {
+    !hero && (
+      <div class="field__clouds motion-only">
+        <span class="cloud cloud--1" />
+        <span class="cloud cloud--2" />
+        <span class="cloud cloud--3" />
+      </div>
+    )
+  }
   <div class="field__drift motion-only">
     {
       motes.map((m) => (
@@ -88,37 +93,37 @@ const petal =
   </div>
   {
     hero && (
-      <div class="field__flutter motion-only">
-        <span class="fly fly--1">
-          <span class="fly__path">
-            <svg class="butterfly" viewBox="-20 -16 40 32">
-              <g class="wing wing--l">
-                <path d="M-1-2C-6-15-19-14-17-5-16 0-8 1-1 0z" />
-                <path d="M-1 1C-9 2-14 9-10 13-6 15-2 8-1 2z" />
-              </g>
-              <g class="wing wing--r">
-                <path d="M1-2C6-15 19-14 17-5 16 0 8 1 1 0z" />
-                <path d="M1 1C9 2 14 9 10 13 6 15 2 8 1 2z" />
-              </g>
-              <rect class="butterfly__body" x="-1.2" y="-6" width="2.4" height="15" rx="1.2" />
-            </svg>
+      <div class="field__buzz motion-only">
+        {bees.map((face, i) => (
+          <span class={`bee-fly bee-fly--${i + 1}`} style={`--face:${face}`}>
+            <span class="bee-fly__path">
+              <svg class="bee" viewBox="-24 -22 48 36">
+                <defs>
+                  <clipPath id={`bee-body-${i}`}>
+                    <ellipse cx="0" cy="2" rx="12" ry="8.5" />
+                  </clipPath>
+                </defs>
+                <g class="bee__wing bee__wing--back">
+                  <ellipse cx="-4" cy="-8" rx="5" ry="9" transform="rotate(-28 -4 -8)" />
+                </g>
+                <path class="bee__sting" d="M-11 .6-17 2.6-11 4.6z" />
+                <ellipse class="bee__body" cx="0" cy="2" rx="12" ry="8.5" />
+                <g clip-path={`url(#bee-body-${i})`} class="bee__stripes">
+                  <rect x="-8.5" y="-8" width="3.4" height="20" />
+                  <rect x="-1.6" y="-8" width="3.4" height="20" />
+                  <rect x="5.2" y="-8" width="2.8" height="20" />
+                </g>
+                <ellipse class="bee__outline" cx="0" cy="2" rx="12" ry="8.5" />
+                <path class="bee__antenna" d="M13.5-3.5c.5-3 2-5 4.5-5.5M11.5-4c-.3-3 .5-5.5 2.5-6.5" />
+                <circle class="bee__head" cx="12.5" cy="1" r="5" />
+                <circle class="bee__eye" cx="14.6" cy="-.2" r="1.3" />
+                <g class="bee__wing">
+                  <ellipse cx="1.5" cy="-9.5" rx="5.5" ry="10" transform="rotate(16 1.5 -9.5)" />
+                </g>
+              </svg>
+            </span>
           </span>
-        </span>
-        <span class="fly fly--2">
-          <span class="fly__path">
-            <svg class="butterfly butterfly--white" viewBox="-20 -16 40 32">
-              <g class="wing wing--l">
-                <path d="M-1-2C-6-15-19-14-17-5-16 0-8 1-1 0z" />
-                <path d="M-1 1C-9 2-14 9-10 13-6 15-2 8-1 2z" />
-              </g>
-              <g class="wing wing--r">
-                <path d="M1-2C6-15 19-14 17-5 16 0 8 1 1 0z" />
-                <path d="M1 1C9 2 14 9 10 13 6 15 2 8 1 2z" />
-              </g>
-              <rect class="butterfly__body" x="-1.2" y="-6" width="2.4" height="15" rx="1.2" />
-            </svg>
-          </span>
-        </span>
+        ))}
       </div>
     )
   }
@@ -173,61 +178,36 @@ const petal =
     );
     mix-blend-mode: multiply;
   }
-  .field__sun {
-    background:
-      radial-gradient(circle at 80% 10%, rgb(255 246 214 / 0.95) 0, rgb(255 226 140 / 0.55) 7%, transparent 26%),
-      radial-gradient(circle at 80% 10%, rgb(255 236 170 / 0.35) 0, transparent 50%);
-    animation: sun-pulse 9s ease-in-out infinite alternate;
-  }
-  @keyframes sun-pulse {
-    to {
-      opacity: 0.75;
-    }
-  }
-  .field__rays {
-    inset: -60%;
-    background: repeating-conic-gradient(
-      from 0deg at 50% 50%,
-      rgb(255 244 205 / 0.26) 0deg 3deg,
-      transparent 3deg 13deg
+  /* a still sun: a white-hot core with a soft warm glow that lights up the sky */
+  .field > .field__sun {
+    inset: auto;
+    left: 80%;
+    top: 24%;
+    width: clamp(16rem, 26vw, 24rem);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    background: radial-gradient(
+      circle closest-side,
+      #fff 0,
+      #fffef8 9%,
+      rgb(255 248 220 / 0.95) 12%,
+      rgb(255 236 180 / 0.7) 16%,
+      rgb(255 226 150 / 0.4) 26%,
+      rgb(255 220 140 / 0.18) 46%,
+      rgb(255 220 140 / 0) 100%
     );
-    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0, rgb(0 0 0 / 0.4) 18%, transparent 36%);
-    mask-image: radial-gradient(circle at 50% 50%, #000 0, rgb(0 0 0 / 0.4) 18%, transparent 36%);
-    /* centre the rotating disc on the sun (80% / 10% of the field):
-       the disc is 220% of the field, so 30% / -40% of the field = 13.6% / -18.2% of it */
-    translate: 13.6% -18.2%;
-    animation: rays 120s linear infinite;
+    mix-blend-mode: screen;
   }
-  @keyframes rays {
-    to {
-      rotate: 360deg;
-    }
-  }
-
-  /* ---------- light wash behind the text ---------- */
-  .field--hero .field__wash {
-    background:
-      linear-gradient(0deg, var(--c-bg) 0, rgb(255 253 247 / 0) 14%),
-      linear-gradient(
-        90deg,
-        rgb(255 253 247 / 0.94) 0,
-        rgb(255 253 247 / 0.84) 30%,
-        rgb(255 253 247 / 0.32) 54%,
-        rgb(255 253 247 / 0) 70%
-      );
-  }
+  /* on narrow screens the hero text covers the middle: keep the sun above it */
   @media (max-width: 959px) {
-    .field--hero .field__wash {
-      background:
-        linear-gradient(0deg, var(--c-bg) 0, rgb(255 253 247 / 0) 14%),
-        linear-gradient(
-          180deg,
-          rgb(255 253 247 / 0.3) 0,
-          rgb(255 253 247 / 0.8) 28%,
-          rgb(255 253 247 / 0.8) 70%,
-          rgb(255 253 247 / 0.1) 100%
-        );
+    .field--hero > .field__sun {
+      top: 14%;
     }
+  }
+  .field--calm > .field__sun {
+    left: 64%;
+    top: 40%;
+    width: clamp(11rem, 18vw, 16rem);
   }
 
   /* ---------- clouds ---------- */
@@ -360,46 +340,73 @@ const petal =
     }
   }
 
-  /* ---------- butterflies ---------- */
-  .fly {
+  /* ---------- bees: out and back, turning round at each end ---------- */
+  .bee-fly {
     position: absolute;
     inset: auto;
-    animation: fly-x var(--fx) ease-in-out infinite alternate;
+    animation: bee-x var(--fx) ease-in-out infinite;
   }
-  .fly__path {
+  .bee-fly__path {
     display: block;
-    animation: fly-y var(--fy) ease-in-out infinite alternate;
+    animation: bee-y var(--fy) ease-in-out infinite alternate;
   }
-  .fly--1 {
-    left: 58%;
-    top: 30%;
-    --fx: 11s;
-    --fy: 3.7s;
-    --range-x: 22cqw;
-    --range-y: 12cqh;
+  .bee-fly--1 {
+    left: 52%;
+    top: 34%;
+    --fx: 12s;
+    --fy: 1.9s;
+    --range-x: 26cqw;
+    --range-y: 7cqh;
   }
-  .fly--2 {
-    left: 72%;
-    top: 58%;
-    --fx: 14s;
-    --fy: 4.6s;
-    --range-x: -18cqw;
-    --range-y: -10cqh;
+  .bee-fly--2 {
+    left: 86%;
+    top: 56%;
+    --fx: 15s;
+    --fy: 2.4s;
+    --range-x: -24cqw;
+    --range-y: -9cqh;
   }
-  @keyframes fly-x {
-    from {
+  .bee-fly--3 {
+    left: 74%;
+    top: 74%;
+    --fx: 10s;
+    --fy: 1.6s;
+    --range-x: -14cqw;
+    --range-y: 5cqh;
+  }
+  /* on narrow screens, fly above and below the hero text instead */
+  @media (max-width: 959px) {
+    .bee-fly--1 {
+      left: 12%;
+      top: 12%;
+    }
+    .bee-fly--3 {
+      top: 90%;
+    }
+  }
+  @keyframes bee-x {
+    0% {
       translate: 0 0;
-      rotate: -8deg;
+      scale: var(--face) 1;
+    }
+    46% {
+      scale: var(--face) 1;
     }
     50% {
-      rotate: 10deg;
-    }
-    to {
       translate: var(--range-x) 0;
-      rotate: -4deg;
+    }
+    54% {
+      scale: calc(var(--face) * -1) 1;
+    }
+    96% {
+      scale: calc(var(--face) * -1) 1;
+    }
+    100% {
+      translate: 0 0;
+      scale: var(--face) 1;
     }
   }
-  @keyframes fly-y {
+  @keyframes bee-y {
     from {
       translate: 0 0;
     }
@@ -407,35 +414,62 @@ const petal =
       translate: 0 var(--range-y);
     }
   }
-  .butterfly {
+  .bee {
     display: block;
-    width: 2.4rem;
+    width: 2.3rem;
     height: auto;
     overflow: visible;
     filter: drop-shadow(0 4px 4px rgb(32 51 28 / 0.25));
+    animation: bee-hover 0.35s ease-in-out infinite alternate;
   }
-  .fly--2 .butterfly {
-    width: 1.8rem;
+  .bee-fly--2 .bee {
+    width: 2rem;
   }
-  .wing {
-    fill: #f7d84f;
-    stroke: #d9a91a;
+  .bee-fly--3 .bee {
+    width: 1.7rem;
+  }
+  @keyframes bee-hover {
+    to {
+      translate: 0 2px;
+    }
+  }
+  .bee__body {
+    fill: #f6c13a;
+  }
+  .bee__stripes,
+  .bee__head,
+  .bee__sting {
+    fill: #2c2214;
+  }
+  .bee__outline {
+    fill: none;
+    stroke: #2c2214;
+    stroke-width: 1;
+  }
+  .bee__eye {
+    fill: #fff;
+  }
+  .bee__antenna {
+    fill: none;
+    stroke: #2c2214;
+    stroke-width: 1;
+    stroke-linecap: round;
+  }
+  .bee__wing {
+    fill: rgb(255 255 255 / 0.78);
+    stroke: #9ab3c4;
     stroke-width: 0.6;
     transform-box: view-box;
-    transform-origin: 0 0;
-    animation: flap 0.32s ease-in-out infinite alternate;
+    transform-origin: 0 -3px;
+    animation: buzz 0.07s linear infinite alternate;
   }
-  .butterfly--white .wing {
-    fill: #fffdf5;
-    stroke: #c9cdb8;
-    animation-duration: 0.26s;
+  .bee__wing--back {
+    fill: rgb(235 244 250 / 0.7);
+    animation-delay: -0.035s;
   }
-  .butterfly__body {
-    fill: #4a3b22;
-  }
-  @keyframes flap {
+  @keyframes buzz {
     to {
-      transform: scaleX(0.25);
+      transform: rotate(-30deg) scaleY(0.7);
     }
   }
 
