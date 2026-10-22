@@ -151,11 +151,16 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     align-items: center;
     height: var(--topbar-h);
   }
+  /* a light pill keeps the links readable over a deep blue sky */
   .topbar ul {
     display: flex;
     gap: 1.6rem;
-    margin: 0;
-    padding: 0 1.5rem 0 0;
+    margin: 0 0.6rem 0 0;
+    padding: 0.3rem 1rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     list-style: none;
   }
   .topbar a {

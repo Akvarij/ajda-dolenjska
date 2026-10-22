@@ -111,7 +111,7 @@ Stari naslovi WordPress (`/pridelovalci`, `/ekoloska-kmetija-*`, `/kontakti`, `/
 Naslednje je **vzorčno** in ga je treba nadomestiti z resničnim gradivom:
 
 - **Fotografije.** Povsod, kjer ni slike, je narisana ilustracija ([src/lib/scene.js](src/lib/scene.js)); galeriji in PDF-ji so ustvarjeni z `node scripts/generate-sample-assets.mjs`. Prave fotografije dodajte v vsebine (`image:`).
-- **Fotografije polja ajde** v [src/assets/photos/](src/assets/photos/) (glava domače strani, glave podstrani, uvod, pas »Včlanitev«) so z [Unsplash](https://unsplash.com/license) (brezplačna uporaba, navedba avtorja ni obvezna). Ko bo društvo imelo lastne fotografije, zamenjajte datoteke z istim imenom: `polje-ajde.jpg` (široka krajina z nebom v zgornji polovici), `ajda-cvet.jpg`, `cvetoca-ajda.jpg`.
+- **Fotografije polja ajde** v [src/assets/photos/](src/assets/photos/) (glava domače strani, glave podstrani, uvod, pas »Včlanitev«) so z [Unsplash](https://unsplash.com/license) (brezplačna uporaba, navedba avtorja ni obvezna). Ko bo društvo imelo lastne fotografije, zamenjajte datoteke z istim imenom: `ajdovo-polje.jpg` (široka krajina z nebom v zgornji polovici), `ajda-cvet.jpg`, `cvetoca-ajda.jpg`.
 - **Logotip.** Iz obstoječe JPG datoteke (248 px / 939 px) je narejen prosojen PNG ([src/assets/brand/](src/assets/brand/)). Za oster izris na vseh zaslonih potrebujete vektorsko datoteko (SVG).
 - **Dogodki, novice, članki, galerije, dokumenti** so primeri. Izjema so podatki o kmetijah in kontaktih, prepisani s stare strani.
 - **Vodstvo** vsebuje samo kontaktno osebo.

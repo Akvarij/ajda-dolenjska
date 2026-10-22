@@ -217,9 +217,13 @@ collections:
     create: false
     nested: { depth: 3 }
     meta: { path: { widget: string, label: Pot, index_file: index } }
+    # Most pages sit one folder deeper (pages/drustvo/...) than other entries.
+    media_folder: /src/assets/uploads
+    public_folder: ../../../assets/uploads
     fields:
       - { label: Naslov, name: title, widget: string }
       - { label: Uvodno besedilo, name: lead, widget: text, required: false }
+      - { label: Slika v glavi strani, name: headerImage, widget: image, required: false, hint: 'Fotografija za naslovom strani. Brez nje je tam ajdovo polje.' }
       - { label: Slika, name: image, widget: image, required: false }
       - { label: Opis slike, name: imageAlt, widget: string, required: false }
       - label: Na koncu strani ponudi

@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
-import BuckwheatSprig from '@/components/BuckwheatSprig.astro';
 import FieldBackdrop from '@/components/FieldBackdrop.astro';
 import EventCard from '@/components/EventCard.astro';
 import FarmCard from '@/components/FarmCard.astro';
@@ -88,7 +87,6 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
         <div class="arch">
           <Image src={blossom} alt="" widths={[480, 800, 1100]} sizes="(min-width: 900px) 30rem, 90vw" />
         </div>
-        <BuckwheatSprig class="intro__sprig sway" />
       </div>
     </div>
   </section>
@@ -479,23 +477,12 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
       translate: -0.75rem 1rem;
     }
   }
-  .intro :global(.intro__sprig) {
-    position: absolute;
-    left: -3rem;
-    bottom: -1.5rem;
-    width: 8.5rem;
-    filter: drop-shadow(0 6px 10px rgb(32 51 28 / 0.15));
-  }
   @media (min-width: 900px) {
     .intro__grid {
       grid-template-columns: 1.15fr 0.85fr;
     }
   }
   @media (max-width: 520px) {
-    .intro :global(.intro__sprig) {
-      left: -1rem;
-      width: 6.5rem;
-    }
     .intro__sun {
       right: -0.5rem;
       width: 6.5rem;

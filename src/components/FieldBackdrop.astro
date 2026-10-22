@@ -1,20 +1,27 @@
 ---
 /**
- * Animated field backdrop: a photo with a sunny sky tint, a still sun,
- * floating pollen, buckwheat blossoms carried by the wind and, on the home
- * page, bees. Everything moving is decorative and stops for visitors who
- * prefer reduced motion. `hero` is the full, unclouded version for the home
- * page, `calm` a lighter one with drifting clouds for page headers.
+ * Animated field backdrop: a photo, a still sun, floating pollen and, on the
+ * home page, bees. Everything moving is decorative and stops for visitors who
+ * prefer reduced motion. `hero` is
+ * the full, unclouded version for the home page, `calm` a lighter one with
+ * drifting clouds for page headers. `photo` defaults to the buckwheat field.
  */
 import { Image } from 'astro:assets';
-import field from '@/assets/photos/polje-ajde.jpg';
+import type { ImageMetadata } from 'astro';
+import field from '@/assets/photos/ajdovo-polje.jpg';
 
 interface Props {
   variant?: 'hero' | 'calm';
+  photo?: ImageMetadata;
+  /** Which part of the photo to keep in view when it is cropped (CSS object-position). */
+  focus?: string;
   class?: string;
 }
-const { variant = 'hero', class: className } = Astro.props;
+const { variant = 'hero', photo = field, focus, class: className } = Astro.props;
 const hero = variant === 'hero';
+// The buckwheat photo has a hazy white sky, so it gets a blue tint, a drawn sun and clouds.
+// Other photos keep their own sky and light.
+const paintSky = photo === field;
 
 // Deterministic pseudo-random numbers so every build renders the same scene.
 let seed = hero ? 11 : 5;
@@ -28,40 +35,31 @@ const motes = Array.from({ length: hero ? 18 : 9 }, () => ({
   delay: (-between(0, 26)).toFixed(1),
   sway: between(10, 26).toFixed(0),
 }));
-const petals = hero
-  ? Array.from({ length: 9 }, () => ({
-      top: between(4, 70).toFixed(1),
-      size: between(10, 18).toFixed(1),
-      dur: between(18, 32).toFixed(1),
-      delay: (-between(0, 32)).toFixed(1),
-      fall: between(12, 34).toFixed(0),
-      pink: rand() > 0.6,
-    }))
-  : [];
-
-const petal =
-  'M0-7c2.2 0 2.6 3.3 0 5.4C-2.6-3.7-2.2-7 0-7zm6.7 2.2C7.4-2.7 4.7-.9 2.2-1.9c1.5-2.3 3.8-4.9 4.5-2.9zM4.1 5.7C2.4 7 .9 4.1 1.5 1.5c2.6.9 4.3 2.9 2.6 4.2zm-8.2 0C-5.8 4.4-4.1 2.4-1.5 1.5c.6 2.6-.9 5.5-2.6 4.2zM-6.7-2.8C-6-4.7-3.7-2.2-2.2-1.9-4.7-.9-7.4-2.7-6.7-2.8z';
 
 // Which way each bee sets off: they are drawn facing right, -1 flies left first.
 const bees = hero ? [1, -1, -1] : [];
 ---
 
-<div class:list={['field', `field--${variant}`, className]} aria-hidden="true">
+<div
+  class:list={['field', `field--${variant}`, className]}
+  style={focus && `--focus:${focus}`}
+  aria-hidden="true"
+>
   <div class="field__zoom">
     <Image
       class="field__photo"
-      src={field}
+      src={photo}
       alt=""
-      widths={hero ? [800, 1280, 1800, 2400] : [800, 1280, 1800]}
+      widths={(hero ? [800, 1280, 1800, 2400] : [800, 1280, 1800]).filter((w) => w <= photo.width)}
       sizes={hero ? '100vw' : '(min-width: 900px) 60vw, 100vw'}
       loading={hero ? 'eager' : 'lazy'}
       fetchpriority={hero ? 'high' : 'auto'}
     />
-    <div class="field__sky"></div>
+    {paintSky && <div class="field__sky" />}
   </div>
-  <div class="field__sun"></div>
+  {paintSky && <div class="field__sun" />}
   {
-    !hero && (
+    !hero && paintSky && (
       <div class="field__clouds motion-only">
         <span class="cloud cloud--1" />
         <span class="cloud cloud--2" />
@@ -76,18 +74,6 @@ const bees = hero ? [1, -1, -1] : [];
           class="mote"
           style={`--x:${m.left}%;--s:${m.size}px;--dur:${m.dur}s;--delay:${m.delay}s;--sway:${m.sway}px`}
         />
-      ))
-    }
-    {
-      petals.map((p) => (
-        <svg
-          class:list={['petal', { 'petal--pink': p.pink }]}
-          viewBox="-8 -8 16 16"
-          style={`--y:${p.top}%;--s:${p.size}px;--dur:${p.dur}s;--delay:${p.delay}s;--fall:${p.fall}cqh`}
-        >
-          <path d={petal} />
-          <circle r="1.6" />
-        </svg>
       ))
     }
   </div>
@@ -152,7 +138,7 @@ const bees = hero ? [1, -1, -1] : [];
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 50% 62%;
+    object-position: var(--focus, 50% 62%);
   }
   @keyframes slow-zoom {
     from {
@@ -291,52 +277,6 @@ const bees = hero ? [1, -1, -1] : [];
     100% {
       opacity: 0;
       translate: 0 -112cqh;
-    }
-  }
-
-  /* ---------- buckwheat blossoms carried by the wind ---------- */
-  .petal {
-    position: absolute;
-    left: 0;
-    top: var(--y);
-    width: var(--s);
-    height: var(--s);
-    fill: #fff;
-    opacity: 0;
-    filter: drop-shadow(0 2px 3px rgb(32 51 28 / 0.25));
-    animation: blow var(--dur) linear var(--delay) infinite;
-  }
-  .petal circle {
-    fill: #f6c04a;
-  }
-  .petal--pink {
-    fill: #fbd3d7;
-  }
-  @keyframes blow {
-    0% {
-      opacity: 0;
-      translate: -3rem 0;
-      rotate: 0deg;
-    }
-    8% {
-      opacity: 0.95;
-    }
-    30% {
-      translate: 30cqw calc(var(--fall) * 0.2);
-    }
-    55% {
-      translate: 55cqw calc(var(--fall) * 0.65);
-    }
-    80% {
-      translate: 82cqw calc(var(--fall) * 0.55);
-    }
-    92% {
-      opacity: 0.9;
-    }
-    100% {
-      opacity: 0;
-      translate: calc(100cqw + 2rem) var(--fall);
-      rotate: 600deg;
     }
   }
 
@@ -484,7 +424,7 @@ const bees = hero ? [1, -1, -1] : [];
     animation-duration: 50s;
   }
   .field--calm .field__zoom :global(.field__photo) {
-    object-position: 50% 42%;
+    object-position: var(--focus, 50% 42%);
   }
   .field--calm .cloud {
     filter: blur(8px);

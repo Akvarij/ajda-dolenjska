@@ -1,6 +1,7 @@
 ---
 title: "O društvu"
 lead: "Društvo Ajda Dolenjska deluje od leta 2005. Vrtičkarje in kmete spodbujamo k uporabi najstarejše in najuglednejše sonaravne metode pridelave hrane, imenovane biološko-dinamična metoda ali krajše biodinamika."
+headerImage: ../../../assets/photos/setev-na-njivi.jpg
 nextStep: join
 ---
 

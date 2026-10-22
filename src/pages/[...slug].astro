@@ -12,10 +12,10 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { Content } = await render(page);
-const { title, lead, image, imageAlt, nextStep, people } = page.data;
+const { title, lead, image, imageAlt, headerImage, nextStep, people } = page.data;
 ---
 
-<ContentPage title={title} lead={lead} nextStep={nextStep}>
+<ContentPage title={title} lead={lead} nextStep={nextStep} headerImage={headerImage}>
   <div class:list={['layout', image && 'layout--image']}>
     <div class="prose">
       <Content />

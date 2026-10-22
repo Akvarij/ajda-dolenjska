@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import BuckwheatSprig from './BuckwheatSprig.astro';
 import blossoms from '@/assets/photos/cvetoca-ajda.jpg';
 import { joinHref } from '@/data/nav';
 import { url } from '@/lib/url';
@@ -40,7 +39,6 @@ const {
           <a class="btn btn--outline-light" href={url('/drustvo/o-drustvu/')}>Več o društvu</a>
         </div>
       </div>
-      <BuckwheatSprig class="join__sprig sway" />
     </div>
   </div>
 </section>
@@ -112,19 +110,5 @@ const {
     margin-bottom: 1.75rem;
     color: rgb(255 255 255 / 0.88);
     font-size: 1.05rem;
-  }
-  .join :global(.join__sprig) {
-    display: none;
-  }
-  @media (min-width: 900px) {
-    .join__card {
-      grid-template-columns: 1fr auto;
-    }
-    .join :global(.join__sprig) {
-      display: block;
-      width: 11rem;
-      margin-block: -2rem -6rem;
-      opacity: 0.95;
-    }
   }
 </style>

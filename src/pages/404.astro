@@ -1,43 +1,22 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
-import BuckwheatSprig from '@/components/BuckwheatSprig.astro';
 import { url } from '@/lib/url';
 ---
 
 <BaseLayout title="Strani ni mogoče najti" noindex>
-  <section class="section nf">
-    <div class="container nf__inner">
-      <div>
-        <span class="eyebrow">Napaka 404</span>
-        <h1>Te strani ni na njivi</h1>
-        <p class="lead">
-          Povezava morda ni več veljavna ali pa se je stran preselila. Poskusite z iskanjem ali se
-          vrnite na začetek.
-        </p>
-        <div class="btn-row">
-          <a class="btn btn--primary" href={url('/')}>Na začetno stran</a>
-          <a class="btn btn--ghost" href={url('/iskanje/')}><Icon name="search" size={20} /> Iskanje</a>
-        </div>
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Napaka 404</span>
+      <h1>Te strani ni na njivi</h1>
+      <p class="lead">
+        Povezava morda ni več veljavna ali pa se je stran preselila. Poskusite z iskanjem ali se
+        vrnite na začetek.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/')}>Na začetno stran</a>
+        <a class="btn btn--ghost" href={url('/iskanje/')}><Icon name="search" size={20} /> Iskanje</a>
       </div>
-      <BuckwheatSprig class="nf__sprig sway" />
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .nf__inner {
-    display: grid;
-    gap: 2rem;
-    align-items: center;
-  }
-  .nf :global(.nf__sprig) {
-    width: 12rem;
-    justify-self: center;
-  }
-  @media (min-width: 800px) {
-    .nf__inner {
-      grid-template-columns: 1fr auto;
-    }
-  }
-</style>

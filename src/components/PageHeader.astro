@@ -1,19 +1,21 @@
 ---
 import Breadcrumbs from './Breadcrumbs.astro';
-import BuckwheatSprig from './BuckwheatSprig.astro';
 import FieldBackdrop from './FieldBackdrop.astro';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
   lead?: string;
   eyebrow?: string;
   crumbs?: { label: string; href?: string }[];
+  /** Background photo; the buckwheat field when not given. */
+  photo?: ImageMetadata;
 }
-const { title, lead, eyebrow, crumbs = [] } = Astro.props;
+const { title, lead, eyebrow, crumbs = [], photo } = Astro.props;
 ---
 
 <header class="page-header">
-  <FieldBackdrop variant="calm" />
+  <FieldBackdrop variant="calm" photo={photo} focus={photo && '50% 8%'} />
   <div class="container page-header__inner">
     <Breadcrumbs items={crumbs} />
     {eyebrow && <span class="eyebrow">{eyebrow}</span>}
@@ -21,7 +23,6 @@ const { title, lead, eyebrow, crumbs = [] } = Astro.props;
     {lead && <p class="lead">{lead}</p>}
     <slot />
   </div>
-  <BuckwheatSprig class="page-header__deco sway" />
 </header>
 
 <style>
@@ -73,19 +74,5 @@ const { title, lead, eyebrow, crumbs = [] } = Astro.props;
   .page-header .lead {
     margin-bottom: 0;
     color: var(--c-ink);
-  }
-  .page-header :global(.page-header__deco) {
-    position: absolute;
-    right: max(1rem, calc((100% - var(--container)) / 2));
-    bottom: -2rem;
-    z-index: 1;
-    width: clamp(7rem, 14vw, 11rem);
-    pointer-events: none;
-  }
-  @media (max-width: 700px) {
-    .page-header :global(.page-header__deco) {
-      opacity: 0.35;
-      right: -2rem;
-    }
   }
 </style>

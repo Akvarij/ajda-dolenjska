@@ -12,6 +12,8 @@ const pages = defineCollection({
       lead: z.string().optional(),
       image: image().optional(),
       imageAlt: z.string().default(''),
+      /** Photo behind the page title instead of the buckwheat field. */
+      headerImage: image().optional(),
       /** Which "what next?" suggestion to show at the end of the page. */
       nextStep: z.enum(['learn', 'join', 'none']).default('learn'),
       people: z
