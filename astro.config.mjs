@@ -40,7 +40,7 @@ export default defineConfig({
       '/ekoloska-kmetija-zupan': '/kmetije/ekoloska-kmetija-zupan/',
       '/ekoloska-kmetija-franko': '/kmetije/ekoloska-kmetija-franko/',
       '/kontakti': '/drustvo/kontakt/',
-      '/setveni-koledar': '/biodinamika/setveni-koledar/',
+      '/setveni-koledar': '/biodinamika/pomembne-osebnosti/',
       '/category/galerija': '/aktualno/fotografije/',
     }).map(([from, to]) => [from, prefix + to]),
   ),

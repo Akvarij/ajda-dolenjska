@@ -176,7 +176,7 @@ collections:
         name: category
         widget: select
         options:
-          - { label: Gradivo (Biodinamika), value: gradivo }
+          - { label: Gradivo (Arhiv, Gradiva in predavanja), value: gradivo }
           - { label: Predavanje, value: predavanje }
           - { label: Dokument društva (Arhiv), value: dokument }
       - { label: Datum, name: date, widget: datetime, date_format: 'YYYY-MM-DD', format: 'YYYY-MM-DD', time_format: false }

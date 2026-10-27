@@ -10,7 +10,7 @@ Pripravili smo novo spletno stran društva. Namen je preprost: da bi se vsak, ki
 
 ## Kaj je novega
 
-- **Uvod v biodinamiko** za začetnike: [kaj je biodinamika](/biodinamika/kaj-je-biodinamika/), [preparati](/biodinamika/preparati/) in [gradiva](/biodinamika/gradiva/).
+- **Uvod v biodinamiko** za začetnike: [o biodinamiki](/biodinamika/o-biodinamiki/), [preparati](/biodinamika/preparati/) in [kompost](/biodinamika/kompost/).
 - **Koledar dogodkov** s prijavo na dogodke: [dogodki](/dejavnosti/dogodki/).
 - **Predstavitev kmetij** z lokacijo, kontaktom in ponudbo: [kmetije](/kmetije/).
 - **Iskanje** po vseh vsebinah in prenos dokumentov.
