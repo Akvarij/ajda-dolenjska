@@ -4,21 +4,20 @@ lead: "Krajše biodinamika: kaj je, od kod izvira in za kaj si biodinamiki priza
 nextStep: learn
 ---
 
-Biodinamika je sonaravni način kmetijskega gospodarjenja, ki za vzgojo in pridelavo rastlin uporablja [biodinamične preparate](/biodinamika/preparati/) ter oživlja zemljo z zrelim [kompostom](/biodinamika/kompost/). Pri setvi, presajanju, negovanju, spravilu in skladiščenju upošteva delovanje kozmičnih energij. Tako pridelana hrana je energetsko polnovredna in notranje urejena, kar prinaša zdravje živalim in ljudem, ki jo uživajo.
+Biodinamika je sonaravni način kmetijskega gospodarjenja, ki za vzgojo in pridelavo rastlin uporablja [biodinamične preparate](/biodinamika/preparati/) ter oživlja zemljo z zrelim [kompostom](/biodinamika/kompost/). Pri setvi, presajanju, negovanju, spravilu in skladiščenju pridelkov upošteva delovanje kozmičnih energij. Tako pridelana hrana je energetsko polnovredna in notranje urejena, kar prinaša zdravje živalim in ljudem, ki jo uživajo.
 
 Utemeljitelj biodinamike je [dr. Rudolf Steiner](/biodinamika/pomembne-osebnosti/). Leta 1924 je v Koberwitzu na Kmetijskem tečaju v osmih predavanjih podal širše gledanje na življenje rastlin, živali in Zemlje same ter vplive kozmičnih sil nanje. V prevodu Mete Vrhunc je vsebina tečaja objavljena v knjigi z naslovom *Temelji uspešnega kmetovanja v očeh duhovne znanosti*.
 
 <!-- SLIKA: vabilo na Kmetijski tečaj -->
 
-Biodinamično pridelana hrana je označena s certifikatom Demeter.
+Biodinamično pridelana hrana je označena s certifikatom [Demeter](/biodinamika/demeter/).
 
-<!-- SLIKA: certifikat Demeter -->
-
-Biodinamika je več kot le ekološki način pridelave hrane, čeprav je bila prva, ki je uvedla ekološko gospodarjenje. Je ena najbolj temeljito teoretično raziskanih metod pridelave, preizkušena v praksi v vseh klimatskih pogojih Zemlje in razširjena na vseh celinah. Zanjo veljajo najstrožji kriteriji pridelave hrane, saj ne uporablja industrijsko izdelanih umetnih gnojil in mineralov, kemičnih sredstev ali škropiv ter gensko spremenjenih ali s kemičnimi sredstvi razkuženih semen. Tudi pri zatiranju škodljivih žuželk in obvladovanju rastlinskih bolezni ponuja rešitve brez uporabe fitofarmacevtskih sredstev.
+Biodinamika je več kot le ekološki način pridelave hrane, čeprav je bila prva, ki je uvedla ekološko gospodarjenje. Je ena najbolj temeljito teoretično raziskanih metod pridelave, preizkušena v praksi v vseh klimatskih pogojih Zemlje in razširjena na vseh celinah. Zanjo veljajo najstrožji kriteriji pridelave hrane, saj ne uporablja industrijsko izdelanih umetnih gnojil in mineralov, kemičnih sredstev ali škropiv ter gensko spremenjenih ali s kemičnimi sredstvi razkuženih semen. Tudi pri obvladovanju rastlinskih bolezni in škodljivcev uporablja rešitve brez fitofarmacevtskih sredstev.
 
 Biodinamiki si prizadevamo za:
 
 - ohranjanje in izboljševanje živih in rodovitnih tal ter ohranjanje njihove življenjske moči,
+- ozaveščanje, da življenje na Zemlji omogočajo sile iz kozmosa, in delo v skladu z njimi,
 - pridelavo najkakovostnejše hrane,
 - ohranjanje pestrosti in kaljivosti semen,
 - širjenje znanja in praktičnega izvajanja biodinamike ter izmenjavo izkušenj,
