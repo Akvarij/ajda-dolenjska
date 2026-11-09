@@ -10,7 +10,7 @@ Za vse, ki se z biodinamiko šele spoznavajo, pripravljamo **začetni tečaj bio
 
 ## Preparati in svetovanje
 
-Skupaj izdelujemo biodinamične preparate, člani pa prejmejo navodila za njihovo uporabo in setveni koledar. Za nasvete o vrtu in njivi nas [kontaktirajte](/drustvo/kontakt/).
+Skupaj izdelujemo biodinamične preparate, člani pa se na delavnicah naučijo, kako jih uporabljati, in lahko kupijo setveni koledar. Za nasvete o vrtu in njivi nas [kontaktirajte](/drustvo/kontakt/).
 
 ## Pridelki in izdelki naših kmetij
 

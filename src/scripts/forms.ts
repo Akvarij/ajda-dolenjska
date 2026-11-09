@@ -33,6 +33,8 @@ forms.forEach((form) => {
     const data = new FormData(form);
     if (data.get('_gotcha')) return;
     data.delete('_gotcha');
+    // Tells the receiving script which sheet the submission belongs on.
+    data.append('_form', form.dataset.form ?? '');
 
     const endpoint = form.dataset.endpoint;
     if (endpoint) {

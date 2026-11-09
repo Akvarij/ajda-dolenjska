@@ -1,25 +1,22 @@
 ---
-title: "O društvu"
-lead: "Društvo Ajda Dolenjska deluje od leta 2005. Vrtičkarje in kmete spodbujamo k uporabi najstarejše in najuglednejše sonaravne metode pridelave hrane, imenovane biološko-dinamična metoda ali krajše biodinamika."
+title: "Podatki o društvu"
+lead: "Kdo smo, kje delujemo in kako nas najdete."
 headerImage: ../../../assets/photos/setev-na-njivi.jpg
-nextStep: join
+nextStep: learn
 ---
 
-## Kdo smo
+Društvo Ajda Dolenjska deluje na območju Dolenjske in Suhe krajine, kjer so naravne razmere večinoma ugodne za kmetovanje in vrtnarjenje. Nekoliko zahtevnejši so pogoji v Suhi krajini, kjer se že dolgo srečujejo s pomanjkanjem vode. V zadnjih letih pa zaradi vse pogostejših suš težave z oskrbo z vodo postajajo vse bolj izrazite tudi na drugih območjih.
 
-Smo društvo za biološko-dinamično gospodarjenje z Dolenjske. Povezujemo vrtičkarje, kmete, družine in vse, ki jim ni vseeno, kakšno hrano jedo ter kaj se dogaja z okoljem in Zemljo.
+Med člani društva prevladujejo vrtičkarji, imamo pa tudi nekaj kmetov s certifikatom za ekološko kmetovanje. Društvo združuje približno 70 članov, med katerimi je največ upokojencev. Povezuje nas zanimanje za biodinamično gospodarjenje, skrb za rodovitnost zemlje, pridelavo zdrave hrane, spoštljiv odnos do narave in ustvarjanje skupnosti.
 
-## Kaj počnemo
+## Osnovni podatki o društvu
 
-- **Izobražujemo.** Pripravljamo predavanja, delavnice in začetne tečaje biodinamičnega vrtnarjenja in kmetovanja.
-- **Pripravljamo preparate.** Skupaj izdelujemo biodinamične preparate in se učimo, kako jih uporabljati.
-- **Povezujemo kmetije.** V društvu je pet kmetij, ki jih lahko obiščete in pri njih kupite pridelke: [kmetije članice](/kmetije/).
-- **Družimo se.** Organiziramo izlete, obiske kmetij in srečanja članov.
+- **Ime društva:** Društvo za biološko-dinamično gospodarjenje Ajda Dolenjska
+- **Skrajšano ime društva:** Društvo Ajda Dolenjska
+- **Predsednik:** Jože Gregorčič
+- **Podpredsednika:** Jožica Troje in Peter Goršin
+- **Naslov društva:** Gorenja vas pri Šmarjeti 7, 8220 Šmarješke Toplice
+- **GSM:** [040 458 598](tel:+38640458598)
+- **E-naslov:** [joze.jojo@gmail.com](mailto:joze.jojo@gmail.com)
 
-## Zakaj biodinamika?
-
-Biodinamična metoda omogoča izjemne pridelke brez uporabe strupov in umetnih gnojil. Veliko pozornosti namenjamo pestrosti rastlin in kakovosti tal, kar je pogoj za ekološko ravnotežje. Biodinamična metoda nas uči živeti v partnerstvu in odgovornosti do zemlje, rastlin, živali in ljudi.
-
-## Pridružite se nam
-
-Naše društvo je odprto vsem, ki želijo spoznavati biodinamiko in jo uresničevati na vrtu, njivi ali v družini. [Včlanite se](/drustvo/vclanitev/) ali nam [pišite](/drustvo/kontakt/).
+Društvo deluje na območju občin Novo mesto, Dolenjske Toplice, Žužemberk, Trebnje, Mokronog-Trebelno, Šmarješke Toplice, Škocjan, Šentjernej in Mirna Peč.

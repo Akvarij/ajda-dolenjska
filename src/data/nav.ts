@@ -77,40 +77,82 @@ export const nav: NavSection[] = [
   },
   {
     key: 'drustvo',
-    label: 'Društvo Ajda',
+    label: 'O društvu',
     href: '/drustvo/',
     icon: 'users',
-    description: 'Kdo smo, kdo vodi društvo in kako se nam lahko pridružite ali nas kontaktirate.',
+    description: 'Kdo smo, kako delujemo in kako se nam lahko pridružite.',
     children: [
       {
-        label: 'O društvu',
+        label: 'Podatki o društvu',
         href: '/drustvo/o-drustvu/',
         icon: 'info',
-        description: 'Zgodba in poslanstvo društva, ki deluje od leta 2005.',
+        description: 'Kje delujemo, kdo smo in osnovni podatki o društvu.',
       },
       {
-        label: 'Vodstvo',
+        label: 'Namen, cilji in dejavnosti',
+        href: '/drustvo/namen-in-cilji/',
+        icon: 'leaf',
+        description: 'Čemu je društvo namenjeno, kaj želi doseči in s čim se ukvarja.',
+      },
+      {
+        label: 'Vodstvo in organizacija',
         href: '/drustvo/vodstvo/',
+        icon: 'users',
+        description: 'Predsednik, podpredsednika, upravni in nadzorni odbor.',
+      },
+      {
+        label: 'Statut društva',
+        href: '/drustvo/statut/',
+        icon: 'file',
+        description: 'Temeljni akt društva za prenos.',
+      },
+      {
+        label: 'Zgodovina društva',
+        href: '/drustvo/zgodovina/',
+        icon: 'clock',
+        description: 'Prehojena pot društva od ustanovitve leta 2005 do danes.',
+      },
+      {
+        label: 'Pomembne osebnosti društva',
+        href: '/drustvo/pomembne-osebnosti/',
         icon: 'user',
-        description: 'Ljudje, ki vodijo društvo in skrbijo za dejavnosti.',
+        description: 'Člani, ki so pomembno prispevali k delu društva.',
       },
       {
-        label: 'Kontakt',
-        href: '/drustvo/kontakt/',
-        icon: 'mail',
-        description: 'Naslov, telefon, e-pošta in kontaktni obrazec.',
+        label: 'Povezanost z Zvezo biodinamikov',
+        href: '/drustvo/zveza-biodinamikov/',
+        icon: 'institution',
+        description: 'Poslanstvo in cilji Zveze biodinamikov Slovenije.',
       },
       {
-        label: 'Včlanitev',
+        label: 'Izobraževanje in dogodki',
+        href: '/drustvo/izobrazevanje/',
+        icon: 'graduation',
+        description: 'Osnovni tečaj biodinamike, predavanja, prikazi dobrih praks in ekskurzije.',
+      },
+      {
+        label: 'Kako postati član',
         href: '/drustvo/vclanitev/',
         icon: 'heart',
-        description: 'Postanite član in se nam pridružite pri učenju in pridelavi.',
+        description: 'Članstvo, članarina in pristopnica v društvo.',
       },
       {
-        label: 'E-novice',
-        href: '/drustvo/e-novice/',
-        icon: 'newspaper',
-        description: 'Obvestila o dogodkih in novostih neposredno v vaš e-predal.',
+        label: 'Iz življenja društva – fotogalerija',
+        href: '/aktualno/fotografije/',
+        icon: 'image',
+        description: 'Galerije z dogodkov, delavnic, izletov in kmetij.',
+      },
+      {
+        label: 'Članki',
+        href: '/aktualno/clanki/',
+        icon: 'book',
+        description: 'Daljši prispevki o biodinamiki, vrtu in kmetovanju.',
+      },
+      {
+        label: 'Donacije in dohodnina',
+        href: '/drustvo/donacije/',
+        icon: 'sprout',
+        description: 'Kako lahko delu društva namenite do 1 % dohodnine.',
       },
     ],
   },
@@ -256,21 +298,18 @@ export const contactHref = '/drustvo/kontakt/';
 export const sectionForPath = (path: string) =>
   nav.find((s) => path === s.href || path.startsWith(s.href));
 
-/** Find a nav item (or section) by its URL for breadcrumbs. */
+/**
+ * Find a nav item (or section) by its URL for breadcrumbs. A page belongs to the section its URL
+ * sits in, even when another section's menu also links to it (Fotografije and Članki).
+ */
 export function findNav(path: string): { section?: NavSection; item?: NavItem } {
-  for (const section of nav) {
-    const item = section.children.find((c) => c.href === path);
-    if (item) return { section, item };
-    if (section.href === path) return { section };
-  }
-  return {};
+  const section = sectionForPath(path);
+  return { section, item: section?.children.find((c) => c.href === path) };
 }
 
 /** Next item in a section, used for the "next step" suggestion on content pages. */
 export function nextInSection(path: string): NavItem | undefined {
-  for (const section of nav) {
-    const i = section.children.findIndex((c) => c.href === path);
-    if (i >= 0) return section.children[i + 1];
-  }
-  return undefined;
+  const children = sectionForPath(path)?.children ?? [];
+  const i = children.findIndex((c) => c.href === path);
+  return i >= 0 ? children[i + 1] : undefined;
 }

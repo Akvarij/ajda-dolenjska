@@ -5,6 +5,7 @@ import ContactForm from '@/components/ContactForm.astro';
 import MapEmbed from '@/components/MapEmbed.astro';
 import JoinBand from '@/components/JoinBand.astro';
 import { site, fullAddress, telHref } from '@/config/site';
+import { url } from '@/lib/url';
 ---
 
 <ContentPage
@@ -43,19 +44,10 @@ import { site, fullAddress, telHref } from '@/config/site';
       <article class="panel panel--sun">
         <h2>Tečaji in setveni koledar</h2>
         <p>
-          Za vprašanja o začetnem tečaju biodinamičnega vrtnarjenja in kmetovanja ter o setvenem
-          koledarju se oglasite tukaj. Za tečaj je potrebna predhodna prijava.
+          Za vprašanja o osnovnem tečaju biodinamike in o setvenem koledarju se obrnite na kontaktno
+          osebo društva. Za tečaj je potrebna predhodna prijava.
         </p>
-        <ul class="facts">
-          <li>
-            <Icon name="phone" size={24} />
-            <a href={telHref(site.courseContact.phone)}>{site.courseContact.phone}</a>
-          </li>
-          <li>
-            <Icon name="mail" size={24} />
-            <a href={`mailto:${site.courseContact.email}`}>{site.courseContact.email}</a>
-          </li>
-        </ul>
+        <p><a class="link-arrow" href={url('/drustvo/izobrazevanje/')}>Več o tečaju <Icon name="arrow-right" size={20} /></a></p>
       </article>
     </div>
 

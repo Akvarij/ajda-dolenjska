@@ -17,18 +17,13 @@ export const site = {
     postal: '8220',
     city: 'Šmarješke Toplice',
   },
-  taxId: 'SI79287379',
+  taxId: '79287379',
 
   /** Main contact person (shown on Kontakt, footer, forms). */
   contact: {
     person: 'Jože Gregorčič',
     phone: '040 458 598',
     email: 'joze.jojo@gmail.com',
-  },
-  /** Contact for beginner courses and the planting calendar. */
-  courseContact: {
-    phone: '031 645 476',
-    email: 'joze.lusavec@gmail.com',
   },
 
   /**

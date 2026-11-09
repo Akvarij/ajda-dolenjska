@@ -1,6 +1,7 @@
 ---
 import { site } from '@/config/site';
 import FormTail from './FormTail.astro';
+import { url } from '@/lib/url';
 
 const id = 'clan';
 ---
@@ -51,9 +52,17 @@ const id = 'clan';
     <label for={`${id}-sporocilo`}>Kaj vas zanima?</label>
     <textarea id={`${id}-sporocilo`} name="sporocilo"></textarea>
   </div>
+  <label class="check" for={`${id}-izjava`}>
+    <input type="checkbox" name="izjava" id={`${id}-izjava`} value="Da" required />
+    <span>
+      Izjavljam, da sem seznanjen/a z <a href={url('/drustvo/namen-in-cilji/')}>namenom, cilji</a> in načinom delovanja
+      Društva za biološko-dinamično gospodarjenje Ajda Dolenjska (v nadaljevanju Društvo), da sem seznanjen/a s <a href={url('/dokumenti/statut-drustva.pdf')}>Statutom
+      Društva</a> in sprejemam njegova določila ter da se želim včlaniti v Društvo.
+    </span>
+  </label>
   <FormTail
     id={id}
-    submitLabel="Pošlji pristopno izjavo"
-    consent="Soglašam, da društvo moje podatke obdela za namen včlanitve in obveščanja članov."
+    submitLabel="Oddaj pristopnico"
+    consent="Soglašam, da Društvo obdeluje moje podatke, ki so navedeni v tem obrazcu, in sicer za potrebe društva in v okviru njegove dejavnosti ter za izvrševanje mojih pravic in obveznosti, ki jih imam kot član/ica Društva."
   />
 </form>
