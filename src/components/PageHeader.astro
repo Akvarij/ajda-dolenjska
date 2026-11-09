@@ -14,8 +14,8 @@ interface Props {
 const { title, lead, eyebrow, crumbs = [], photo } = Astro.props;
 ---
 
-<header class="page-header">
-  <FieldBackdrop variant="calm" photo={photo} focus={photo && '50% 8%'} />
+<header class:list={['page-header', { 'page-header--photo': photo }]}>
+  <FieldBackdrop variant="calm" photo={photo} focus={photo && '50% 25%'} />
   <div class="container page-header__inner">
     <Breadcrumbs items={crumbs} />
     {eyebrow && <span class="eyebrow">{eyebrow}</span>}
@@ -36,6 +36,14 @@ const { title, lead, eyebrow, crumbs = [], photo } = Astro.props;
     margin-top: calc(-1 * (var(--topbar-h) + var(--header-h)));
     padding-block: calc(var(--topbar-h) + var(--header-h) + clamp(1.5rem, 4vw, 3rem))
       clamp(2.25rem, 5vw, 3.75rem);
+  }
+  /* A custom photo needs more height, so its subject shows below the floating menu. */
+  @media (min-width: 701px) {
+    .page-header--photo {
+      min-height: clamp(26rem, 38vw, 34rem);
+      display: flex;
+      align-items: center;
+    }
   }
   /* keeps the text readable where the photo begins */
   .page-header::after {
