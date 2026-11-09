@@ -39,8 +39,11 @@ export const site = {
   forms: {
     /** Contact, membership and event registration. Empty = mailto: fallback. */
     endpoint: (import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined) ?? '',
-    /** E-novice sign-up. Empty = mailto: fallback. */
-    newsletterEndpoint: (import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT as string | undefined) ?? '',
+    /** E-novice sign-up. Falls back to the main form endpoint, then to mailto:. */
+    newsletterEndpoint:
+      ((import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT as string | undefined) ||
+        (import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined)) ??
+      '',
     /** Where mailto: fallbacks are sent. */
     fallbackEmail: 'joze.jojo@gmail.com',
   },
