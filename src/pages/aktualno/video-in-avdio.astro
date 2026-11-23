@@ -21,7 +21,7 @@ const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime(
         {items.map((m) => {
           const play = toPlayable(m.data.url);
           return (
-            <article class="card">
+            <article class="card" data-tone="coral">
               {m.data.kind === 'video' && play.kind === 'iframe' ? (
                 <div class="player" data-player data-src={play.src} data-title={m.data.title}>
                   <Placeholder seed={m.id} />
@@ -82,7 +82,7 @@ const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime(
   .player {
     position: relative;
     aspect-ratio: 16 / 9;
-    background: var(--c-tint);
+    background: var(--c-coral-tint);
   }
   .player :global(iframe) {
     position: absolute;
@@ -108,7 +108,7 @@ const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime(
   }
   .player__btn :global(svg) {
     filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.35));
-    fill: rgb(79 124 31 / 0.85);
+    fill: rgb(63 82 34 / 0.88);
   }
   .player__note {
     position: absolute;
@@ -125,8 +125,8 @@ const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime(
     gap: 0.75rem;
     justify-items: center;
     padding: 1.75rem 1.25rem;
-    background: var(--c-tint);
-    color: var(--c-green-deep);
+    background: var(--c-coral-tint);
+    color: var(--c-ink);
   }
   .audio audio {
     width: 100%;

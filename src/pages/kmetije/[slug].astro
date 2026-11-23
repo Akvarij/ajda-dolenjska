@@ -139,13 +139,13 @@ const related = (await getPosts()).filter((p) => p.data.relatedFarm?.id === farm
   .quick__item {
     padding: 1.4rem 1.5rem;
     border-radius: var(--radius-lg);
-    background: var(--c-tint);
+    background: var(--c-green-tint);
   }
   .quick__item:nth-child(2) {
-    background: var(--c-sun-tint);
+    background: var(--c-yellow-tint);
   }
   .quick__item:nth-child(3) {
-    background: var(--c-blossom-tint);
+    background: var(--c-coral-tint);
   }
   .quick__icon {
     display: inline-grid;
@@ -155,7 +155,7 @@ const related = (await getPosts()).filter((p) => p.data.relatedFarm?.id === farm
     margin-bottom: 0.6rem;
     border-radius: 50%;
     background: #fff;
-    color: var(--c-green-deep);
+    color: var(--c-link);
   }
   .quick h2 {
     margin: 0 0 0.35rem;

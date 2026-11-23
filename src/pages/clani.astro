@@ -5,6 +5,7 @@ import EventCard from '@/components/EventCard.astro';
 import { getEventsSplit } from '@/lib/events';
 import type { IconName } from '@/lib/icons';
 import { url } from '@/lib/url';
+import { toneFor } from '@/data/nav';
 
 const { upcoming } = await getEventsSplit();
 
@@ -26,7 +27,7 @@ const shortcuts: { label: string; text: string; href: string; icon: IconName }[]
   <div class="grid grid--3">
     {
       shortcuts.map((s) => (
-        <article class="card">
+        <article class="card" data-tone={toneFor(s.href)}>
           <div class="card__body row">
             <span class="ic"><Icon name={s.icon} size={28} /></span>
             <div>
@@ -64,8 +65,8 @@ const shortcuts: { label: string; text: string; href: string; icon: IconName }[]
     width: 3.75rem;
     height: 3.75rem;
     border-radius: 18px;
-    background: var(--c-lime);
-    color: var(--c-green-deep);
+    background: var(--tone);
+    color: var(--c-ink);
   }
   .block {
     margin-top: clamp(2.5rem, 5vw, 4rem);

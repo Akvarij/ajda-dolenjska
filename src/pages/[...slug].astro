@@ -33,7 +33,7 @@ const { title, lead, image, imageAlt, headerImage, nextStep, people } = page.dat
     people && people.length > 0 && (
       <div class="grid grid--3 people">
         {people.map((p) => (
-          <article class="card">
+          <article class="card" data-tone="olive">
             <div class="card__body">
               <span class="avatar"><Icon name="user" size={34} /></span>
               <h2>{p.name}</h2>
@@ -83,11 +83,11 @@ const { title, lead, image, imageAlt, headerImage, nextStep, people } = page.dat
     height: 4.5rem;
     margin-bottom: 0.5rem;
     border-radius: 50%;
-    background: var(--c-tint-strong);
-    color: var(--c-green-deep);
+    background: var(--tone);
+    color: var(--c-ink);
   }
   .role {
     font-weight: 700;
-    color: var(--c-green-deep) !important;
+    color: var(--c-link) !important;
   }
 </style>

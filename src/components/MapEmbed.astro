@@ -68,7 +68,7 @@ const src = embedUrl ?? (query ? mapsEmbedUrl(query) : '');
     border-radius: var(--radius-lg);
     overflow: hidden;
     border: 1px solid var(--c-line);
-    background: var(--c-tint);
+    background: var(--c-green-tint);
   }
   .map :global(.map__bg) {
     position: absolute;
@@ -87,7 +87,7 @@ const src = embedUrl ?? (query ? mapsEmbedUrl(query) : '');
     text-align: center;
   }
   .map__cta :global(svg:first-child) {
-    color: var(--c-green);
+    color: var(--c-link);
   }
   .map__cta p {
     max-width: 38ch;

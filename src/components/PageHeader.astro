@@ -30,11 +30,11 @@ const { title, lead, eyebrow, crumbs = [], photo } = Astro.props;
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background: linear-gradient(180deg, #eef6dc 0%, var(--c-tint) 55%, #fbfdf2 100%);
+    background: linear-gradient(180deg, var(--c-blue-tint) 0%, var(--c-green-tint) 60%, var(--c-bg) 100%);
     border-radius: 0 0 clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.75rem);
     /* slide under the floating header */
     margin-top: calc(-1 * (var(--topbar-h) + var(--header-h)));
-    padding-block: calc(var(--topbar-h) + var(--header-h) + clamp(1.5rem, 4vw, 3rem))
+    padding-block: calc(var(--topbar-h) + var(--header-h) + var(--badge-overhang) + clamp(1.5rem, 4vw, 3rem))
       clamp(2.25rem, 5vw, 3.75rem);
   }
   /* A custom photo needs more height, so its subject shows below the floating menu. */
@@ -53,9 +53,9 @@ const { title, lead, eyebrow, crumbs = [], photo } = Astro.props;
     z-index: 0;
     background: linear-gradient(
       90deg,
-      rgb(243 248 230 / 0.92) 0,
-      rgb(243 248 230 / 0.75) 38%,
-      rgb(243 248 230 / 0) 72%
+      color-mix(in srgb, var(--c-green-tint) 92%, transparent) 0,
+      color-mix(in srgb, var(--c-green-tint) 75%, transparent) 38%,
+      transparent 72%
     );
     pointer-events: none;
   }

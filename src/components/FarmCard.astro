@@ -14,13 +14,13 @@ const Heading = `h${level}` as 'h2' | 'h3';
 const d = farm.data;
 ---
 
-<article class="card">
+<article class="card" data-tone="green">
   <Pic image={d.image} alt={d.imageAlt} seed={farm.id} />
   <div class="card__body">
     <div class="meta">
       <Icon name="pin" size={20} />
       <span>{d.city}</span>
-      {d.certifications.map((c) => <span class="badge badge--sun">{c}</span>)}
+      {d.certifications.map((c) => <span class="badge badge--yellow">{c}</span>)}
     </div>
     <Heading><a href={url(`/kmetije/${farm.id}/`)}>{d.name}</a></Heading>
     <p>{d.summary}</p>

@@ -30,7 +30,7 @@ Vsaka sprememba na veji `main` se samodejno objavi prek [.github/workflows/deplo
 | Navigacija in zemljevid strani (glava, noga, razdelki, drobtinice) | [src/data/nav.ts](src/data/nav.ts)                       |
 | Vsebine (Markdown)                                                 | [src/content/](src/content/)                             |
 | Oblika vsebin (obvezna polja ...)                                  | [src/content.config.ts](src/content.config.ts)           |
-| Barve, pisave, osnovni slogi                                       | [src/styles/global.css](src/styles/global.css) (`:root`) |
+| Barve (pet pastelnih iz logotipa, ena na vrsto vsebine), pisave  | [src/styles/global.css](src/styles/global.css) (`:root`), `toneFor` v [src/data/nav.ts](src/data/nav.ts) |
 | Komponente (kartice, obrazci, koledar ...)                         | [src/components/](src/components/)                       |
 | Animacije: polje v glavi (oblaki, cvetni prah, metulja)            | [src/components/FieldBackdrop.astro](src/components/FieldBackdrop.astro) |
 | Animacije ob drsenju, plavajoča glava, gumb »na vrh«               | [src/scripts/motion.ts](src/scripts/motion.ts)           |
@@ -112,7 +112,7 @@ Naslednje je **vzorčno** in ga je treba nadomestiti z resničnim gradivom:
 
 - **Fotografije.** Povsod, kjer ni slike, je narisana ilustracija ([src/lib/scene.js](src/lib/scene.js)); galeriji in PDF-ji so ustvarjeni z `node scripts/generate-sample-assets.mjs`. Prave fotografije dodajte v vsebine (`image:`).
 - **Fotografije polja ajde** v [src/assets/photos/](src/assets/photos/) (glava domače strani, glave podstrani, uvod, pas »Včlanitev«) so z [Unsplash](https://unsplash.com/license) (brezplačna uporaba, navedba avtorja ni obvezna). Ko bo društvo imelo lastne fotografije, zamenjajte datoteke z istim imenom: `ajdovo-polje.jpg` (široka krajina z nebom v zgornji polovici), `ajda-cvet.jpg`, `cvetoca-ajda.jpg`.
-- **Logotip.** Iz obstoječe JPG datoteke (248 px / 939 px) je narejen prosojen PNG ([src/assets/brand/](src/assets/brand/)). Za oster izris na vseh zaslonih potrebujete vektorsko datoteko (SVG).
+- **Logotip.** Barvni (`logo-barvni.png`) in črni (`logo-crni.png`, za tiskovine; na strani se ne uporablja) logotip v [src/assets/brand/](src/assets/brand/) sta začasno narejena iz JPG datotek (prosojno ozadje). Ko bodo na voljo SVG datoteke, jih dodajte v isto mapo in zamenjajte ime datoteke v [src/assets/brand/logo.ts](src/assets/brand/logo.ts) (glava in noga ga prebereta od tam), nato preverite z `npm run build`. Iz SVG se lahko naredi tudi nova ikona strani (`public/favicon.svg`).
 - **Dogodki, novice, članki, galerije, dokumenti** so primeri. Izjema so podatki o kmetijah in kontaktih, prepisani s stare strani.
 - **Vodstvo** vsebuje samo kontaktno osebo.
 - **Davčna številka** v nogi je prepisana s stare strani (»SI79287379«); preverite oznako.

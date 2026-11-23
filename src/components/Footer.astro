@@ -1,8 +1,7 @@
 ---
-import { Image } from 'astro:assets';
 import { nav, joinHref, newsletterHref, contactHref } from '@/data/nav';
 import { site, telHref, fullAddress } from '@/config/site';
-import wordmark from '@/assets/brand/logo-wordmark.png';
+import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import type { IconName } from '@/lib/icons';
 import { url } from '@/lib/url';
@@ -16,7 +15,7 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
   <div class="container footer__grid">
     <div class="footer__brand">
       <a class="footer__logo" href={url('/')} aria-label="Ajda Dolenjska – domov">
-        <Image src={wordmark} alt="" width={240} />
+        <Logo variant="footer" />
       </a>
       <p>
         {site.tagline}. Od leta {site.founded} povezujemo vrtičkarje in kmete, ki pridelujejo po
@@ -91,8 +90,8 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     margin-top: clamp(1rem, 3vw, 2rem);
     padding-top: clamp(3rem, 7vw, 5rem);
     border-radius: clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.75rem) 0 0;
-    background: var(--c-demeter);
-    color: var(--c-on-demeter);
+    background: var(--c-olive);
+    color: var(--c-ink);
     font-size: 0.95rem;
   }
   .footer__grid {
@@ -106,16 +105,13 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
       grid-template-columns: 1.5fr 1fr 1.3fr 1fr;
     }
   }
+  /* the full colour logo on a white tile, like the header badge */
   .footer__logo {
     display: inline-block;
-    margin-bottom: 1.1rem;
-  }
-  .footer__logo :global(img) {
-    display: block;
-    width: auto;
-    height: 3rem;
-    /* the green wordmark, drawn in white */
-    filter: brightness(0) invert(1);
+    margin-bottom: 1.25rem;
+    padding: 0.9rem;
+    border-radius: var(--radius-lg);
+    background: #fff;
   }
   .footer__brand p {
     max-width: 34ch;
@@ -124,7 +120,7 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
   }
   .footer__title {
     margin: 0.4rem 0 1.1rem;
-    color: var(--c-on-demeter);
+    color: var(--c-ink);
     font-family: var(--font-body);
     font-size: 0.78rem;
     font-weight: 700;
@@ -164,19 +160,19 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     width: 2.6rem;
     height: 2.6rem;
     border-radius: 50%;
-    border: 1px solid rgb(23 40 15 / 0.35);
+    border: 1px solid rgb(32 51 28 / 0.35);
   }
   .socials a:hover {
-    background: var(--c-on-demeter);
-    color: var(--c-demeter);
+    background: var(--c-ink);
+    color: var(--c-olive);
   }
   a {
-    color: var(--c-on-demeter);
+    color: var(--c-ink);
     text-decoration: none;
     text-underline-offset: 0.2em;
   }
   a:hover {
-    color: var(--c-on-demeter);
+    color: var(--c-ink);
     text-decoration: underline;
   }
   .footer__links a {
@@ -198,13 +194,10 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     justify-content: space-between;
     gap: 0.5rem 2rem;
     padding-block: 1.25rem 1.5rem;
-    border-top: 1px solid rgb(23 40 15 / 0.2);
+    border-top: 1px solid rgb(32 51 28 / 0.2);
     font-size: 0.85rem;
   }
   .footer__bottom p {
     margin: 0;
-  }
-  :focus-visible {
-    outline-color: var(--c-on-demeter);
   }
 </style>

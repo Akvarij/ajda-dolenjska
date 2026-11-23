@@ -21,13 +21,13 @@ import JoinBand from '@/components/JoinBand.astro';
       </ul>
       <p>Brez nezaželene pošte. Naročnino lahko kadar koli prekličete.</p>
     </div>
-    <div class="panel panel--sun">
+    <div class="panel panel--yellow">
       <span class="ic"><Icon name="newspaper" size={30} /></span>
       <h2>Naročite se</h2>
       <NewsletterForm id="page-nl" layout="stacked" />
     </div>
   </div>
-  <JoinBand slot="after" tone="lime" />
+  <JoinBand slot="after" />
 </ContentPage>
 
 <style>
@@ -48,6 +48,6 @@ import JoinBand from '@/components/JoinBand.astro';
     height: 4rem;
     margin-bottom: 0.75rem;
     border-radius: 20px;
-    background: var(--c-sun);
+    background: var(--c-yellow);
   }
 </style>

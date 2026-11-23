@@ -14,7 +14,7 @@ const d = doc.data;
 const ext = d.file.split('.').pop()?.toUpperCase() ?? 'DATOTEKA';
 ---
 
-<article class="doc">
+<article class="doc" data-tone="olive">
   <span class="doc__icon"><Icon name="file" size={30} /></span>
   <div class="doc__body">
     <Heading>{d.title}</Heading>
@@ -49,8 +49,8 @@ const ext = d.file.split('.').pop()?.toUpperCase() ?? 'DATOTEKA';
     width: 3.75rem;
     height: 3.75rem;
     border-radius: 18px;
-    background: var(--c-tint-strong);
-    color: var(--c-green-deep);
+    background: var(--tone);
+    color: var(--c-ink);
   }
   .doc :is(h2, h3) {
     margin: 0 0 0.15rem;

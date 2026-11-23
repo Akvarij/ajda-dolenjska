@@ -298,6 +298,21 @@ export const contactHref = '/drustvo/kontakt/';
 export const sectionForPath = (path: string) =>
   nav.find((s) => path === s.href || path.startsWith(s.href));
 
+/** The pastels from the logo; each kind of content keeps one, so colour tells visitors where they are. */
+export type Tone = 'yellow' | 'coral' | 'green' | 'blue' | 'olive';
+
+const SECTION_TONES: Record<string, Tone> = {
+  biodinamika: 'yellow',
+  drustvo: 'olive',
+  dejavnosti: 'blue',
+  kmetije: 'green',
+  aktualno: 'coral',
+  arhiv: 'olive',
+};
+
+/** Tone of the section a URL sits in (styles: [data-tone] in global.css). */
+export const toneFor = (path: string): Tone => SECTION_TONES[sectionForPath(path)?.key ?? ''] ?? 'olive';
+
 /**
  * Find a nav item (or section) by its URL for breadcrumbs. A page belongs to the section its URL
  * sits in, even when another section's menu also links to it (Fotografije and Članki).

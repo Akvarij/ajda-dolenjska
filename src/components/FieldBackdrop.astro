@@ -156,7 +156,7 @@ const bees = hero ? [1, -1, -1] : [];
     inset: 0;
     background: linear-gradient(
       180deg,
-      #86c6ea 0%,
+      var(--c-blue) 0%,
       #b3dbf1 18%,
       #dcefee 32%,
       #fff3d2 42%,
@@ -249,7 +249,7 @@ const bees = hero ? [1, -1, -1] : [];
     width: var(--s);
     height: var(--s);
     border-radius: 50%;
-    background: radial-gradient(circle, #fffbe6 0, #ffe07a 45%, rgb(246 192 74 / 0) 72%);
+    background: radial-gradient(circle, #fffbe6 0, var(--c-yellow) 45%, rgb(255 224 138 / 0) 72%);
     box-shadow: 0 0 10px 2px rgb(255 226 130 / 0.55);
     opacity: 0;
     animation: mote-rise var(--dur) linear var(--delay) infinite;

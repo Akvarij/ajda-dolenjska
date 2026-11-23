@@ -3,7 +3,7 @@
  * the sample content points at. Run once with:  node scripts/generate-sample-assets.mjs
  * Replace the files (and the entries in src/content) with real material.
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { sceneSvg } from '../src/lib/scene.js';
 
 mkdirSync('src/assets/sample', { recursive: true });
@@ -47,5 +47,15 @@ const docs = {
   'statut-drustva': 'Statut drustva Ajda Dolenjska',
   'predavanje-2023-tla-in-zivljenje': 'Tla in zivljenje - predavanje 2023',
 };
-for (const [file, title] of Object.entries(docs)) writeFileSync(`public/dokumenti/${file}.pdf`, pdf(title, note), 'latin1');
-console.log('Generated 8 sample photos and', Object.keys(docs).length, 'sample PDFs.');
+// Never overwrite a real document that has replaced its placeholder (e.g. the statute).
+for (const [file, title] of Object.entries(docs)) {
+  const path = `public/dokumenti/${file}.pdf`;
+
+  if (existsSync(path)) {
+    console.log(`[sample-assets] Kept existing ${path}`);
+    continue;
+  }
+
+  writeFileSync(path, pdf(title, note), 'latin1');
+}
+console.log('[sample-assets] Generated 8 sample photos; missing placeholder PDFs written.');

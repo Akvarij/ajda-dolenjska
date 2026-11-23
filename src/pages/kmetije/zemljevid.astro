@@ -29,7 +29,7 @@ const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.dat
       farms.map((f) => {
         const address = `${f.data.street}, ${f.data.postal} ${f.data.city}`;
         return (
-          <li class="card">
+          <li class="card" data-tone="green">
             <div class="card__body row">
               <div class="row__main">
                 <span class="pinicon"><Icon name="pin" size={26} /></span>
@@ -87,7 +87,7 @@ const farms = (await getCollection('farms')).sort((a, b) => a.data.order - b.dat
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 50%;
-    background: var(--c-tint-strong);
-    color: var(--c-green-deep);
+    background: var(--c-green-soft);
+    color: var(--c-link);
   }
 </style>

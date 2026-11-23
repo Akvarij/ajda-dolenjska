@@ -92,7 +92,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
   </section>
 
   <!-- ============ BIODYNAMICS ============ -->
-  <section class="section band--tint bd-band" aria-labelledby="bd-title">
+  <section class="section band--sand bd-band" aria-labelledby="bd-title">
     <div class="container">
       <div class="section-head">
         <div>
@@ -105,7 +105,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
       <div class="grid grid--4">
         {
           biodynamics.map((b, i) => (
-            <article class="card bd">
+            <article class="card card--solid bd" data-tone="yellow">
               <div class="card__body">
                 <div class="bd__top">
                   <span class="bd__icon"><Icon name={b.icon} size={28} /></span>
@@ -147,7 +147,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
   </section>
 
   <!-- ============ FARMS ============ -->
-  <section class="section band--sun" aria-labelledby="farms-title">
+  <section class="section band--yellow" aria-labelledby="farms-title">
     <div class="container">
       <div class="section-head">
         <div>
@@ -166,7 +166,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     </div>
   </section>
 
-  <JoinBand tone="lime" />
+  <JoinBand />
 
   <!-- ============ NEWS ============ -->
   <section class="section" aria-labelledby="news-title">
@@ -191,9 +191,9 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
   </section>
 
   <!-- ============ PARTNERS + NEWSLETTER ============ -->
-  <section class="section section--tight band--tint" aria-label="Sodelovanje in e-novice">
+  <section class="section section--tight band--green" aria-label="Sodelovanje in e-novice">
     <div class="container duo">
-      <div class="panel">
+      <div class="panel panel--solid" data-tone="blue">
         <span class="duo__icon"><Icon name="institution" size={30} /></span>
         <h2>Šola, vrtec ali organizacija?</h2>
         <p>
@@ -202,7 +202,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
         </p>
         <a class="btn btn--primary" href={url('/dejavnosti/sodelovanje-z-ustanovami/')}>Sodelovanje z ustanovami</a>
       </div>
-      <div class="panel panel--sun">
+      <div class="panel panel--solid" data-tone="yellow">
         <span class="duo__icon"><Icon name="newspaper" size={30} /></span>
         <h2>Ostanite v stiku</h2>
         <p>Naročite se na e-novice in ne zamudite dogodkov, tečajev ter novosti iz kmetij.</p>
@@ -222,7 +222,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     min-height: max(36rem, min(100svh, 58rem));
     /* slide under the floating header */
     margin-top: calc(-1 * (var(--topbar-h) + var(--header-h)));
-    padding-top: calc(var(--topbar-h) + var(--header-h) + clamp(1.5rem, 5vh, 3.5rem));
+    padding-top: calc(var(--topbar-h) + var(--header-h) + var(--badge-overhang) + clamp(1.5rem, 5vh, 3.5rem));
     padding-bottom: clamp(6rem, 13vh, 8rem);
     background: var(--c-bg);
   }
@@ -264,11 +264,8 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     margin-bottom: 1.5rem;
     padding: 0.45rem 1rem;
     border-radius: 999px;
-    border: 1px solid rgb(127 161 60 / 0.35);
-    background: rgb(255 255 255 / 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: var(--c-green-deep);
+    background: var(--c-green-tint);
+    color: var(--c-ink);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.16em;
@@ -279,14 +276,14 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: var(--c-sun);
-    box-shadow: 0 0 0 0 rgb(246 192 74 / 0.6);
+    background: var(--c-coral);
+    box-shadow: 0 0 0 0 rgb(255 143 146 / 0.7);
     animation: ping 2.4s ease-out infinite;
   }
   @keyframes ping {
     70%,
     100% {
-      box-shadow: 0 0 0 10px rgb(246 192 74 / 0);
+      box-shadow: 0 0 0 10px rgb(255 143 146 / 0);
     }
   }
   .hero h1 {
@@ -303,15 +300,15 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
   }
   .btn--glass {
     background: rgb(255 255 255 / 0.55);
-    border-color: rgb(73 116 25 / 0.45);
-    color: var(--c-green-deep);
+    border-color: rgb(63 82 34 / 0.45);
+    color: var(--c-link);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
   .btn--glass:hover {
     background: #fff;
-    border-color: var(--c-green);
-    color: var(--c-green-deep);
+    border-color: var(--c-link);
+    color: var(--c-link);
   }
   .hero__join {
     margin: 1.4rem 0 0;
@@ -333,7 +330,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     align-items: center;
     gap: 0.6rem;
     translate: -50% 0;
-    color: var(--c-green-deep);
+    color: var(--c-link);
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.3em;
@@ -350,13 +347,13 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     width: 1px;
     height: 3rem;
     overflow: hidden;
-    background: rgb(51 86 15 / 0.2);
+    background: rgb(63 82 34 / 0.2);
   }
   .hero__scroll-line::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent, var(--c-green));
+    background: linear-gradient(180deg, transparent, var(--c-link));
     animation: scroll-cue 2.4s ease-in-out infinite;
   }
   @keyframes scroll-cue {
@@ -414,22 +411,22 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     min-width: 0;
     padding: 1.25rem 1.35rem;
     border-radius: var(--radius);
-    background: var(--c-tint);
+    background: var(--c-yellow);
   }
   .stats li:nth-child(2) {
-    background: var(--c-blossom-tint);
+    background: var(--c-green);
   }
   .stats strong {
     font-family: var(--font-display);
     font-size: clamp(2rem, 3.6vw, 2.75rem);
     font-weight: 400;
     line-height: 1;
-    color: var(--c-green-deep);
+    color: var(--c-ink);
   }
   .stats span {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--c-ink-soft);
+    color: var(--c-ink);
   }
   .intro__art {
     position: relative;
@@ -468,7 +465,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     width: 9rem;
     aspect-ratio: 1;
     border-radius: 50%;
-    background: radial-gradient(circle, #ffe08a 0, #f6c04a 55%, rgb(246 192 74 / 0) 72%);
+    background: radial-gradient(circle, #fff3c8 0, var(--c-yellow) 55%, rgb(255 224 138 / 0) 72%);
     opacity: 0.8;
     animation: float 9s ease-in-out infinite alternate;
   }
@@ -490,22 +487,6 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
   }
 
   /* ---------- biodynamics: numbered steps ---------- */
-  .bd {
-    isolation: isolate;
-  }
-  .bd::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: radial-gradient(28rem 16rem at 100% 100%, var(--c-tint-strong), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-  .bd:hover::before,
-  .bd:focus-within::before {
-    opacity: 1;
-  }
   .bd__top {
     display: flex;
     align-items: flex-start;
@@ -518,15 +499,12 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 50%;
-    background: var(--c-lime);
-    color: var(--c-green-deep);
-    transition:
-      background-color 0.35s,
-      transform 0.5s var(--ease-out);
+    background: #fff;
+    color: var(--c-ink);
+    transition: transform 0.5s var(--ease-out);
   }
   .bd:hover .bd__icon,
   .bd:focus-within .bd__icon {
-    background: var(--c-sun);
     transform: rotate(-12deg) scale(1.08);
   }
   .bd__num {
@@ -535,8 +513,8 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     font-style: italic;
     font-weight: 300;
     line-height: 1;
-    color: var(--c-brand);
-    opacity: 0.45;
+    color: var(--c-ink);
+    opacity: 0.35;
     transition: opacity 0.35s;
   }
   .bd:hover .bd__num {
@@ -560,14 +538,7 @@ const biodynamics = nav.find((s) => s.key === 'biodinamika')!.children.slice(0, 
     height: 4rem;
     margin-bottom: 0.75rem;
     border-radius: 20px;
-    background: var(--c-tint-strong);
-    color: var(--c-green-deep);
-  }
-  .panel--sun .duo__icon {
-    background: var(--c-sun);
+    background: #fff;
     color: var(--c-ink);
-  }
-  .duo .panel p {
-    color: var(--c-ink-soft);
   }
 </style>

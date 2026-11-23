@@ -3,7 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import Icon from './Icon.astro';
 import JoinBand from './JoinBand.astro';
-import { nav } from '@/data/nav';
+import { nav, toneFor } from '@/data/nav';
 import { url } from '@/lib/url';
 
 interface Props {
@@ -19,7 +19,7 @@ const section = nav.find((s) => s.key === Astro.props.section)!;
       <div class="grid grid--3">
         {
           section.children.map((c) => (
-            <article class="card tile">
+            <article class="card card--solid tile" data-tone={toneFor(c.href)}>
               <div class="card__body">
                 <span class="tile__icon"><Icon name={c.icon} size={30} /></span>
                 <h2><a href={url(c.href)}>{c.label}</a></h2>
@@ -32,7 +32,7 @@ const section = nav.find((s) => s.key === Astro.props.section)!;
       </div>
     </div>
   </div>
-  <JoinBand tone="sun" />
+  <JoinBand band="yellow" />
 </BaseLayout>
 
 <style>
@@ -43,7 +43,7 @@ const section = nav.find((s) => s.key === Astro.props.section)!;
     height: 4rem;
     margin-bottom: 0.5rem;
     border-radius: 20px;
-    background: var(--c-tint-strong);
-    color: var(--c-green-deep);
+    background: #fff;
+    color: var(--c-ink);
   }
 </style>

@@ -15,12 +15,13 @@ function rng(a) {
   };
 }
 
+// Built from the site palette (global.css): blue sky, yellow sun, green and olive hills.
 const palettes = [
-  { sky: ['#cfeaf7', '#fff7dc'], sun: '#ffd56a', hills: ['#d6e8a6', '#b5d67b', '#8dbb52', '#6aa23c'] },
-  { sky: ['#d9f0fb', '#f4fbff'], sun: '#fff1a8', hills: ['#dcebb0', '#bddb84', '#98c25d', '#74a845'] },
-  { sky: ['#ffe8bf', '#ffd6c2'], sun: '#ffc857', hills: ['#e3e9a8', '#c4d97a', '#9cc255', '#78a63f'] },
-  { sky: ['#e8f3df', '#fbfff2'], sun: '#ffe48a', hills: ['#d3e6a8', '#b0d57c', '#8abb55', '#68a03e'] },
-  { sky: ['#d4ecf5', '#fffbea'], sun: '#ffdb70', hills: ['#cfe5a0', '#abd176', '#86b84e', '#639b38'] },
+  { sky: ['#bcdcf1', '#fff6dc'], sun: '#ffe08a', hills: ['#dcefc0', '#b6dd77', '#9bb27a', '#7f9a5f'] },
+  { sky: ['#cfe6f5', '#f6fbff'], sun: '#fff0b8', hills: ['#e2f1c9', '#c3e38e', '#a7c27f', '#86a065'] },
+  { sky: ['#ffe9c4', '#ffd9d6'], sun: '#ffe08a', hills: ['#e6eecd', '#c9e397', '#a9c483', '#8aa569'] },
+  { sky: ['#dff0e0', '#fbfff2'], sun: '#ffe08a', hills: ['#d9edbd', '#b6dd77', '#98b577', '#7b965c'] },
+  { sky: ['#c6e2f3', '#fffbea'], sun: '#ffe69e', hills: ['#d6eab6', '#b0d672', '#94ad74', '#778f58'] },
 ];
 
 /**
@@ -59,7 +60,7 @@ export function sceneSvg({ seed = 1, width = 1200, height = 800, xmlns = false }
     const x = rand() * W;
     const y = H * 0.72 + rand() * H * 0.28;
     const r = 3 + rand() * 4 * (y / H);
-    blooms.push(`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${r.toFixed(1)}" fill="${rand() > 0.45 ? '#ffffff' : '#f6b8bf'}" opacity="0.92"/>`);
+    blooms.push(`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${r.toFixed(1)}" fill="${rand() > 0.45 ? '#ffffff' : '#ffc2c4'}" opacity="0.92"/>`);
   }
 
   const sunX = W * (0.2 + rand() * 0.6);

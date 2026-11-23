@@ -172,12 +172,12 @@ const data = events.map((e) => ({
     height: 3rem;
     border: 0;
     border-radius: 50%;
-    background: var(--c-tint);
-    color: var(--c-green-deep);
+    background: var(--c-blue-tint);
+    color: var(--c-ink);
     cursor: pointer;
   }
   .icon-btn:hover {
-    background: var(--c-tint-strong);
+    background: var(--c-blue);
   }
   .calendar :global(.rot-l) {
     transform: rotate(90deg);
@@ -196,7 +196,7 @@ const data = events.map((e) => ({
     font-size: 1rem;
     font-weight: 800;
     text-transform: capitalize;
-    color: var(--c-green-deep);
+    color: var(--c-link);
   }
   .cal__grid :global(abbr) {
     text-decoration: none;
@@ -205,15 +205,15 @@ const data = events.map((e) => ({
     height: 7.25rem;
     padding: 0.4rem 0.5rem;
     vertical-align: top;
-    background: #fafcf3;
+    background: var(--c-sand);
     border-radius: 14px;
   }
   .cal__grid :global(td.out) {
     background: transparent;
   }
   .cal__grid :global(td.today) {
-    background: var(--c-sun-tint);
-    box-shadow: inset 0 0 0 2px var(--c-sun);
+    background: var(--c-blue-tint);
+    box-shadow: inset 0 0 0 2px var(--c-blue);
   }
   .cal__grid :global(.n) {
     display: block;
@@ -236,19 +236,19 @@ const data = events.map((e) => ({
     font-weight: 700;
     line-height: 1.3;
     text-decoration: none;
-    color: #fff;
-    background: var(--c-green);
+    color: var(--c-ink);
+    background: var(--c-blue);
     overflow: hidden;
   }
   .cal__grid :global(.ev--izlet) {
-    background: #b4546a;
+    background: var(--c-green);
   }
   .cal__grid :global(.ev--dogodek) {
-    background: #8a6a2a;
+    background: var(--c-yellow);
   }
   .cal__grid :global(.ev:hover) {
-    filter: brightness(0.9);
-    color: #fff;
+    filter: brightness(0.92);
+    color: var(--c-ink);
   }
   .cal__legend {
     display: flex;
@@ -264,12 +264,13 @@ const data = events.map((e) => ({
     height: 0.8rem;
     margin-right: 0.35rem;
     border-radius: 50%;
-    background: var(--c-green);
+    background: var(--c-blue);
+    box-shadow: inset 0 0 0 1px rgb(32 51 28 / 0.25);
   }
   .dot--izlet {
-    background: #b4546a;
+    background: var(--c-green);
   }
   .dot--dogodek {
-    background: #8a6a2a;
+    background: var(--c-yellow);
   }
 </style>

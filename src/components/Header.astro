@@ -1,7 +1,8 @@
 ---
-import { nav, utilityLinks, joinHref } from '@/data/nav';
+import { nav, utilityLinks, joinHref, toneFor } from '@/data/nav';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
+import { logo } from '@/assets/brand/logo';
 import { url, stripBase } from '@/lib/url';
 
 const path = stripBase(Astro.url.pathname);
@@ -26,15 +27,16 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
 
 <header class="site-header">
   <div class="container bar">
-    <a class="brand" href={url('/')} aria-label="Ajda Dolenjska – domov">
-      <Logo />
+    <a class="brand" href={url('/')} aria-label="Ajda Dolenjska – domov" style={`--logo-ratio: ${(logo.width / logo.height).toFixed(3)}`}>
+      <span class="brand__badge"><Logo /></span>
+      <span class="brand__name" aria-hidden="true">Ajda Dolenjska</span>
     </a>
 
     <nav class="main-nav" aria-label="Glavna navigacija">
       <ul>
         {
           nav.map((s) => (
-            <li class="nav-item">
+            <li class="nav-item" data-tone={toneFor(s.href)}>
               <a href={url(s.href)} aria-current={s.key === currentKey ? 'true' : undefined}>
                 {s.label}
                 <Icon name="chevron-down" size={18} class="chev" />
@@ -61,7 +63,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
       <a class="icon-btn" href={url('/iskanje/')} aria-label="Iskanje po spletni strani">
         <Icon name="search" size={22} />
       </a>
-      <a class="btn btn--sun btn--sm join" href={url(joinHref)} data-join>Postani član</a>
+      <a class="btn btn--join btn--sm join" href={url(joinHref)} data-join>Postani član</a>
       <button
         class="icon-btn menu-toggle"
         type="button"
@@ -85,7 +87,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
 
       {
         nav.map((s) => (
-          <details class="m-group" open={s.key === currentKey}>
+          <details class="m-group" open={s.key === currentKey} data-tone={toneFor(s.href)}>
             <summary>
               <Icon name={s.icon} size={24} />
               <span>{s.label}</span>
@@ -105,7 +107,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
       }
 
       <div class="m-cta">
-        <a class="btn btn--sun" href={url(joinHref)} data-join>Postani član</a>
+        <a class="btn btn--join" href={url(joinHref)} data-join>Postani član</a>
         <a class="btn btn--ghost" href={url('/drustvo/kontakt/')}>Kontakt</a>
       </div>
       <ul class="m-utility">
@@ -164,7 +166,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     list-style: none;
   }
   .topbar a {
-    color: var(--c-green-deep);
+    color: var(--c-link);
     font-weight: 600;
     text-decoration: none;
     opacity: 0.85;
@@ -175,7 +177,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     text-decoration: underline;
   }
 
-  /* ---------- floating glass bar ---------- */
+  /* ---------- floating bar ---------- */
   .site-header {
     position: sticky;
     top: 0;
@@ -190,28 +192,77 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     min-height: 3.6rem;
     padding: 0.3rem 0.4rem 0.3rem 1.25rem;
     border-radius: 999px;
-    background: rgb(255 255 255 / 0.62);
-    border: 1px solid rgb(255 255 255 / 0.75);
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--c-line);
     box-shadow: 0 10px 30px -18px rgb(32 51 28 / 0.35);
-    backdrop-filter: saturate(1.6) blur(16px);
-    -webkit-backdrop-filter: saturate(1.6) blur(16px);
-    transition:
-      background-color 0.35s,
-      box-shadow 0.35s,
-      border-color 0.35s;
+    transition: box-shadow 0.35s;
   }
   .site-header.is-scrolled .bar,
   :global(body.menu-open) .bar {
-    background: rgb(255 255 255 / 0.92);
-    border-color: var(--c-line);
     box-shadow: 0 14px 34px -16px rgb(32 51 28 / 0.32);
   }
+
+  /* ---------- brand: the colour logo hangs below the bar on a white tab ----------
+     The curved society name is only readable when the logo is big, so it hangs
+     out of the bar at the top of the page and shrinks into it once scrolled.
+     Pages leave room for it with --badge-overhang (global.css). */
   .brand {
-    display: block;
+    --badge-h: 5.5rem;
+    --badge-pad: 0.55rem;
+    display: flex;
     flex: none;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 2.75rem;
+    color: var(--c-ink);
+    text-decoration: none;
   }
-  .brand :global(.logo--header) {
-    height: 2.6rem;
+  .brand:hover {
+    color: var(--c-ink);
+  }
+  /* holds the badge's width in the bar (--logo-ratio comes from the logo file) */
+  .brand__badge {
+    flex: none;
+    align-self: stretch;
+    width: calc((var(--badge-h) - 2 * var(--badge-pad)) * var(--logo-ratio) + 2 * var(--badge-pad));
+    transition: width 0.35s var(--ease-out);
+  }
+  .brand__badge :global(.logo) {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    height: var(--badge-h);
+    padding: var(--badge-pad);
+    background: #fff;
+    border-radius: 0 0 1.4rem 1.4rem;
+    box-shadow: 0 16px 28px -18px rgb(32 51 28 / 0.45);
+    transition:
+      height 0.35s var(--ease-out),
+      padding 0.35s var(--ease-out),
+      box-shadow 0.35s;
+  }
+  .site-header.is-scrolled .brand,
+  :global(body.menu-open) .brand {
+    --badge-h: 3.5rem;
+    --badge-pad: 0.3rem;
+  }
+  .site-header.is-scrolled .brand__badge :global(.logo),
+  :global(body.menu-open) .brand__badge :global(.logo) {
+    background: transparent;
+    box-shadow: none;
+  }
+  .brand__name {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+  @media (max-width: 380px) {
+    .brand__name {
+      font-size: 1.05rem;
+    }
   }
 
   .actions {
@@ -227,13 +278,13 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: var(--c-green-deep);
+    color: var(--c-link);
     cursor: pointer;
     transition: background-color 0.15s;
   }
   .icon-btn:hover {
-    background: var(--c-tint-strong);
-    color: var(--c-green-deep);
+    background: var(--c-green-soft);
+    color: var(--c-link);
   }
   .menu-toggle .close,
   .menu-toggle[aria-expanded='true'] .open {
@@ -305,7 +356,11 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     display: none;
   }
   .m-group summary :global(svg:first-child) {
-    color: var(--c-brand);
+    padding: 0.2rem;
+    border-radius: 50%;
+    background: var(--tone);
+    color: var(--c-ink);
+    box-sizing: content-box;
   }
   .m-group summary span {
     flex: 1;
@@ -329,7 +384,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     color: var(--c-ink);
   }
   .m-group li a[aria-current] {
-    color: var(--c-green);
+    color: var(--c-link);
   }
   .m-cta {
     display: grid;
@@ -354,6 +409,14 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
   @media (min-width: 1260px) {
     .topbar__inner {
       display: flex;
+    }
+    /* big enough to read the curved name, so the typed one only returns once it shrinks */
+    .site-header:not(.is-scrolled) .brand {
+      --badge-h: 9rem;
+      --badge-pad: 0.75rem;
+    }
+    .site-header:not(.is-scrolled) .brand__name {
+      display: none;
     }
     .main-nav {
       display: block;
@@ -391,13 +454,13 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     .nav-item > a :global(.chev) {
       width: 16px;
       height: 16px;
-      color: var(--c-brand);
+      color: var(--c-ink-soft);
       transition: transform 0.25s var(--ease-out);
     }
     .nav-item:hover > a,
     .nav-item:focus-within > a {
-      background: rgb(243 248 230 / 0.9);
-      color: var(--c-green-deep);
+      background: var(--tone-tint);
+      color: var(--c-ink);
     }
     .nav-item:hover > a :global(.chev),
     .nav-item:focus-within > a :global(.chev) {
@@ -410,16 +473,17 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
       left: 0.85rem;
       right: 1.85rem;
       bottom: 0.3rem;
-      height: 2px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--c-sun), var(--c-brand));
+      height: 4px;
+      border-radius: 4px;
+      background: var(--tone);
     }
     .nav-item > a[aria-current] {
-      color: var(--c-green-deep);
+      color: var(--c-ink);
     }
 
     .dropdown {
       position: absolute;
+      z-index: 2; /* above the hanging logo badge */
       top: 100%;
       left: 50%;
       min-width: 19rem;
@@ -471,17 +535,17 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
         padding-left 0.25s var(--ease-out);
     }
     .dropdown a :global(svg) {
-      color: var(--c-brand);
+      color: var(--c-link);
       flex: none;
     }
     .dropdown a:hover,
     .dropdown a:focus-visible {
       padding-left: 1.15rem;
-      background: var(--c-tint);
-      color: var(--c-green-deep);
+      background: var(--tone-tint);
+      color: var(--c-ink);
     }
     .dropdown a[aria-current] {
-      background: var(--c-tint-strong);
+      background: var(--tone);
     }
   }
 </style>

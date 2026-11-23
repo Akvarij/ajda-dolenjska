@@ -6,19 +6,19 @@ import { joinHref } from '@/data/nav';
 import { url } from '@/lib/url';
 
 interface Props {
-  /** Background of the band around the photo card. */
-  tone?: 'lime' | 'sun';
+  /** Yellow tint around the photo card; `none` leaves the page background. */
+  band?: 'none' | 'yellow';
   heading?: string;
   text?: string;
 }
 const {
-  tone = 'lime',
+  band = 'none',
   heading = 'Postanite del naše skupnosti',
   text = 'Člani se na delavnicah učimo pripravljati in uporabljati biodinamične preparate ter se srečujemo na piknikih, ekskurzijah in občnih zborih. Pridružite se ljudem, ki jim ni vseeno, kakšno hrano jemo in kakšno zemljo zapuščamo.',
 } = Astro.props;
 ---
 
-<section class:list={['join', `join--${tone}`]} data-join aria-labelledby="join-title">
+<section class:list={['join', band !== 'none' && `band--${band}`]} data-join aria-labelledby="join-title">
   <div class="container">
     <div class="join__card">
       <Image
@@ -33,10 +33,10 @@ const {
         <h2 id="join-title">{heading}</h2>
         <p>{text}</p>
         <div class="btn-row">
-          <a class="btn btn--sun" href={url(joinHref)}>
+          <a class="btn btn--join" href={url(joinHref)}>
             Postani član <Icon name="arrow-right" size={18} />
           </a>
-          <a class="btn btn--outline-light" href={url('/drustvo/o-drustvu/')}>Več o društvu</a>
+          <a class="btn btn--ghost" href={url('/drustvo/o-drustvu/')}>Več o društvu</a>
         </div>
       </div>
     </div>
@@ -47,9 +47,6 @@ const {
   .join {
     padding-block: clamp(2.5rem, 6vw, 4.5rem);
   }
-  .join--sun {
-    background: var(--c-sun-tint);
-  }
   .join__card {
     position: relative;
     isolation: isolate;
@@ -59,8 +56,8 @@ const {
     min-height: 22rem;
     padding: clamp(2rem, 6vw, 4.5rem);
     border-radius: clamp(1.75rem, 4vw, 3rem);
-    background: var(--c-forest);
-    box-shadow: 0 30px 60px -30px rgb(31 58 27 / 0.55);
+    background: var(--c-coral-tint);
+    box-shadow: 0 30px 60px -30px rgb(32 51 28 / 0.45);
   }
   .join__card :global(.join__photo) {
     position: absolute;
@@ -85,30 +82,38 @@ const {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background:
-      radial-gradient(40rem 20rem at 0% 100%, rgb(246 192 74 / 0.22), transparent 70%),
-      linear-gradient(100deg, rgb(25 50 22 / 0.94) 0%, rgb(25 50 22 / 0.8) 45%, rgb(25 50 22 / 0.42) 100%);
+    /* a light coral wash on the text side keeps ink text readable, the photo shows on the right */
+    background: linear-gradient(
+      100deg,
+      rgb(255 233 233 / 0.97) 0%,
+      rgb(255 233 233 / 0.9) 45%,
+      rgb(255 233 233 / 0.15) 100%
+    );
+  }
+  @media (max-width: 700px) {
+    .join__card::before {
+      background: rgb(255 233 233 / 0.9);
+    }
   }
   .join__text {
     max-width: 40rem;
-    color: #fff;
+    color: var(--c-ink);
   }
   .join__eyebrow {
     display: inline-block;
     margin-bottom: 0.9rem;
-    color: var(--c-sun);
+    color: var(--c-ink);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
   }
   .join h2 {
-    color: #fff;
     font-weight: 400;
   }
   .join__text p {
     margin-bottom: 1.75rem;
-    color: rgb(255 255 255 / 0.88);
+    color: var(--c-ink);
     font-size: 1.05rem;
   }
 </style>
