@@ -14,11 +14,11 @@ const Heading = `h${level}` as 'h2' | 'h3';
 const d = post.data;
 ---
 
-<article class="card">
+<article class="card" data-tone="coral">
   <Pic image={d.image} alt={d.imageAlt} seed={post.id} />
   <div class="card__body">
     <div class="meta">
-      <span class:list={['badge', d.kind === 'clanek' && 'badge--blossom']}>{kindLabel(post)}</span>
+      <span class:list={['badge', d.kind === 'novica' && 'badge--yellow']}>{kindLabel(post)}</span>
       <time datetime={d.date.toISOString().slice(0, 10)}>{formatDate(d.date)}</time>
     </div>
     <Heading><a href={postUrl(post)}>{d.title}</a></Heading>

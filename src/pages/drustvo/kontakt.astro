@@ -15,7 +15,7 @@ import { url } from '@/lib/url';
 >
   <div class="contact">
     <div class="info">
-      <article class="panel panel--tint">
+      <article class="panel panel--green">
         <h2>{site.legalName}</h2>
         <ul class="facts">
           <li>
@@ -41,7 +41,7 @@ import { url } from '@/lib/url';
         </ul>
       </article>
 
-      <article class="panel panel--sun">
+      <article class="panel panel--yellow">
         <h2>Tečaji in setveni koledar</h2>
         <p>
           Za vprašanja o osnovnem tečaju biodinamike in o setvenem koledarju se obrnite na kontaktno
@@ -61,7 +61,7 @@ import { url } from '@/lib/url';
     <h2 id="map-title">Kako do nas</h2>
     <MapEmbed query={fullAddress} title={`Zemljevid: ${fullAddress}`} />
   </section>
-  <JoinBand slot="after" tone="sun" />
+  <JoinBand slot="after" band="yellow" />
 </ContentPage>
 
 <style>

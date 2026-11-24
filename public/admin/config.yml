@@ -1,63 +1,98 @@
 # Decap CMS: a simple editing screen at /admin/ for 2–3 editors, no technical knowledge needed.
 # It reads and writes the Markdown files in src/content, so every change is a Git commit.
 #
-# BEFORE USE: connect a login method (see README, "Urejanje vsebin").
+# Editors log in through DecapBridge (Google or password, no GitHub account needed).
+# The block comes from the DecapBridge dashboard (README, "Urejanje brez tehničnega znanja").
 backend:
-  name: github
-  repo: Akvarij/ajda-dolenjska   # <- GitHub "owner/repository"
+  name: git-gateway
+  repo: Akvarij/ajda-dolenjska
   branch: main
-  # base_url: https://your-oauth-proxy.example.com   # needed for GitHub login outside Netlify
+  auth_type: pkce
+  base_url: https://auth.decapbridge.com
+  auth_endpoint: /sites/1ea984d9-faa4-458e-bdf9-24fa7d154740/pkce
+  auth_token_endpoint: /sites/1ea984d9-faa4-458e-bdf9-24fa7d154740/token
+  gateway_url: https://gateway.decapbridge.com
+  # Commits are made with the site's token: the editor's name goes in the message
+  commit_messages:
+    create: Create {{collection}} “{{slug}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    update: Update {{collection}} “{{slug}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    delete: Delete {{collection}} “{{slug}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    uploadMedia: Upload “{{path}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    deleteMedia: Delete “{{path}}” - {{author-name}} <{{author-login}}> via DecapBridge
+    openAuthoring: Message {{message}} - {{author-name}} <{{author-login}}> via DecapBridge
+
+# Who is logged in, read from the DecapBridge login
+auth:
+  email_claim: email
+  first_name_claim: first_name
+  last_name_claim: last_name
+  avatar_url_claim: avatar_url
 
 # Run `npx decap-server` next to `npm run dev` and open /admin/ to try the editor locally.
 local_backend: true
 
 locale: sl
-site_url: https://www.ajda-dolenjska.si
-display_url: https://www.ajda-dolenjska.si
-logo_url: /favicon.svg
+# The GitHub Pages preview until the move to Neoserv (README, "Selitev na Neoserv").
+site_url: https://akvarij.github.io/ajda-dolenjska/
+display_url: https://akvarij.github.io/ajda-dolenjska/
+# Relative: the editor is served under /ajda-dolenjska/admin/ on the preview, /admin/ later.
+logo: { src: ../apple-touch-icon.png }
+
+# Plain file names and URLs: "Občni zbor" becomes obcni-zbor.
+slug: { encoding: ascii, clean_accents: true }
 
 media_folder: src/assets/uploads
 public_folder: ../../assets/uploads
 
 collections:
   # ------------------------------------------------------------------ Dogodki
+  # Ordered for first-time editors: what every event needs first, optional details after.
   - name: events
     label: Dogodki
     label_singular: Dogodek
     folder: src/content/events
     extension: md
     create: true
-    slug: '{{slug}}'
+    # The date keeps repeated titles ("Srečanje članov") from clashing.
+    slug: "{{fields.date | date('YYYY-MM-DD')}}-{{slug}}"
     summary: '{{date}} · {{title}}'
     sortable_fields: [date, title]
+    # The preview pane doesn't look like the real site and only confuses.
+    editor: { preview: false }
     view_filters:
       - { label: Delavnice, field: type, pattern: delavnica }
       - { label: Izobraževanja, field: type, pattern: izobrazevanje }
       - { label: Izleti, field: type, pattern: izlet }
     fields:
-      - { label: Naslov, name: title, widget: string }
+      - { label: Naslov, name: title, widget: string, hint: 'Kratko ime dogodka, na primer »Delavnica izdelave preparatov«.' }
+      - { label: Datum, name: date, widget: datetime, date_format: 'YYYY-MM-DD', format: 'YYYY-MM-DD', time_format: false, hint: 'Prvi dan dogodka.' }
+      - { label: Začetek (ura), name: time, widget: string, required: false, hint: 'Na primer 09:00 (z dvopičjem, ne s piko).', pattern: ['^\d{1,2}:\d{2}$', 'Vpišite uro z dvopičjem, na primer 09:00'] }
+      - { label: Lokacija (ime kraja), name: location, widget: string, hint: 'Na primer »Šmarješke Toplice« ali »Kmetija Krese, Gabrje«.' }
+      - { label: Kratek opis, name: summary, widget: text, hint: 'Ena ali dve povedi. Prikaže se na seznamu dogodkov.' }
+      - { label: Podroben opis, name: body, widget: markdown, required: false, hint: 'Program, kaj prinesti, kako do tja ...' }
       - label: Vrsta
         name: type
         widget: select
         default: dogodek
+        hint: 'Če niste prepričani, pustite »Dogodek«.'
         options:
           - { label: Dogodek, value: dogodek }
           - { label: Izobraževanje, value: izobrazevanje }
           - { label: Delavnica, value: delavnica }
           - { label: Izlet, value: izlet }
           - { label: Srečanje, value: srecanje }
-      - { label: Datum, name: date, widget: datetime, date_format: 'YYYY-MM-DD', format: 'YYYY-MM-DD', time_format: false }
-      - { label: Zadnji dan (če traja več dni), name: endDate, widget: datetime, date_format: 'YYYY-MM-DD', format: 'YYYY-MM-DD', time_format: false, required: false }
-      - { label: Začetek (ura), name: time, widget: string, required: false, hint: 'Na primer 09:00', pattern: ['^\d{1,2}:\d{2}$', 'Vpišite uro v obliki 09:00'] }
-      - { label: Konec (ura), name: endTime, widget: string, required: false, hint: 'Na primer 13:00', pattern: ['^\d{1,2}:\d{2}$', 'Vpišite uro v obliki 13:00'] }
-      - { label: Lokacija (ime kraja), name: location, widget: string }
-      - { label: Naslov lokacije, name: address, widget: string, required: false, hint: 'Ulica, pošta in kraj. Uporabi se za zemljevid in navigacijo.' }
+      - { label: Zadnji dan (če traja več dni), name: endDate, widget: datetime, date_format: 'YYYY-MM-DD', format: 'YYYY-MM-DD', time_format: false, required: false, hint: 'Pustite prazno, če dogodek traja en dan.' }
+      - { label: Konec (ura), name: endTime, widget: string, required: false, hint: 'Na primer 13:00 (z dvopičjem, ne s piko).', pattern: ['^\d{1,2}:\d{2}$', 'Vpišite uro z dvopičjem, na primer 13:00'] }
+      - { label: Naslov lokacije, name: address, widget: string, required: false, hint: 'Ulica, pošta in kraj. Iz tega nastane zemljevid.' }
       - { label: Predavatelj, name: speaker, widget: string, required: false }
-      - { label: Kratek opis (za seznam in iskanje), name: summary, widget: text }
-      - { label: Prispevek / cena, name: price, widget: string, required: false }
+      - { label: Prispevek / cena, name: price, widget: string, required: false, hint: 'Na primer »20 € za člane, 30 € za nečlane«. Prazno, če je brezplačno.' }
+      - { label: Slika, name: image, widget: image, required: false }
+      - { label: Opis slike, name: imageAlt, widget: string, required: false, hint: 'Kaj je na sliki, z nekaj besedami. Za slabovidne.' }
       - label: Prijava
         name: registration
         widget: object
+        collapsed: true
+        hint: 'Odprite, če je za dogodek potrebna prijava.'
         fields:
           - { label: Prijava je obvezna, name: required, widget: boolean, default: false }
           - { label: Rok za prijavo, name: deadline, widget: datetime, date_format: 'YYYY-MM-DD', format: 'YYYY-MM-DD', time_format: false, required: false }
@@ -66,14 +101,13 @@ collections:
         name: contact
         widget: object
         required: false
+        collapsed: true
+        hint: 'Pustite zaprto, če ljudje kličejo glavni kontakt društva.'
         fields:
           - { label: Ime, name: name, widget: string, required: false }
           - { label: Telefon, name: phone, widget: string, required: false }
           - { label: E-naslov, name: email, widget: string, required: false }
-      - { label: Slika, name: image, widget: image, required: false }
-      - { label: Opis slike, name: imageAlt, widget: string, required: false }
-      - { label: Skrito (osnutek), name: draft, widget: boolean, default: false }
-      - { label: Podroben opis, name: body, widget: markdown }
+      - { label: Skrito (osnutek), name: draft, widget: boolean, default: false, hint: 'Obkljukajte, če dogodek še ni pripravljen za objavo. Na strani ga ne bo.' }
 
   # ------------------------------------------------------------ Novice in članki
   - name: news
@@ -100,12 +134,13 @@ collections:
       - { label: Naslovna slika, name: image, widget: image, required: false }
       - { label: Opis slike, name: imageAlt, widget: string, required: false }
       - { label: Povezana kmetija, name: relatedFarm, widget: relation, collection: farms, search_fields: [name], value_field: '{{slug}}', display_fields: [name], required: false }
-      - { label: Premakni v arhiv (objave, starejše od leta, gredo tja same), name: archived, widget: boolean, default: false }
+      - { label: 'Premakni v arhiv (objave, starejše od leta, gredo tja same)', name: archived, widget: boolean, default: false }
       - { label: Skrito (osnutek), name: draft, widget: boolean, default: false }
       - { label: Besedilo, name: body, widget: markdown }
 
   # -------------------------------------------------------------------- Kmetije
   - name: farms
+    hide: true # edited in code; kept for the news→farm link and direct links
     label: Kmetije
     label_singular: Kmetija
     folder: src/content/farms
@@ -158,7 +193,7 @@ collections:
         fields:
           - { label: Fotografija, name: src, widget: image }
           - { label: Opis fotografije, name: alt, widget: string }
-      - { label: Besedilo (neobvezno), name: body, widget: markdown, required: false }
+      - { label: Besedilo, name: body, widget: markdown, required: false }
 
   # ------------------------------------------------------- Gradiva in dokumenti
   - name: documents
@@ -176,18 +211,19 @@ collections:
         name: category
         widget: select
         options:
-          - { label: Gradivo (Arhiv, Gradiva in predavanja), value: gradivo }
+          - { label: 'Gradivo (Arhiv, Gradiva in predavanja)', value: gradivo }
           - { label: Predavanje, value: predavanje }
           - { label: Dokument društva (Arhiv), value: dokument }
       - { label: Datum, name: date, widget: datetime, date_format: 'YYYY-MM-DD', format: 'YYYY-MM-DD', time_format: false }
       - { label: Kratek opis, name: description, widget: text }
       - { label: Predavatelj, name: speaker, widget: string, required: false }
       - { label: Datoteka (PDF ...), name: file, widget: file, media_folder: /public/dokumenti, public_folder: /dokumenti }
-      - { label: Podatek o datoteki (na primer PDF, 1,2 MB), name: fileInfo, widget: string, required: false }
+      - { label: 'Podatek o datoteki (na primer PDF, 1,2 MB)', name: fileInfo, widget: string, required: false }
       - { label: Premakni v arhiv, name: archived, widget: boolean, default: false }
 
   # -------------------------------------------------------------- Video in avdio
   - name: media
+    hide: true # edited in code
     label: Video in avdio
     label_singular: Posnetek
     folder: src/content/media
@@ -210,6 +246,7 @@ collections:
 
   # ----------------------------------------------------------- Besedilne strani
   - name: pages
+    hide: true # edited in code
     label: Besedilne strani
     label_singular: Stran
     folder: src/content/pages
@@ -224,6 +261,14 @@ collections:
       - { label: Naslov, name: title, widget: string }
       - { label: Uvodno besedilo, name: lead, widget: text, required: false }
       - { label: Slika v glavi strani, name: headerImage, widget: image, required: false, hint: 'Fotografija za naslovom strani. Brez nje je tam ajdovo polje.' }
+      - label: Gumbi pod naslovom
+        name: links
+        widget: list
+        required: false
+        hint: 'Npr. »Galerija slik« s povezavo /aktualno/fotografije/'
+        fields:
+          - { label: Napis, name: label, widget: string }
+          - { label: Povezava, name: href, widget: string }
       - { label: Slika, name: image, widget: image, required: false }
       - { label: Opis slike, name: imageAlt, widget: string, required: false }
       - label: Na koncu strani ponudi

@@ -1,6 +1,8 @@
 ---
 title: "Prehojena pot"
 lead: "Ohraniti hočemo spomine na naše začetke, znanje pa želimo predajati tudi prihodnjim generacijam."
+links:
+  - { label: "Galerija slik", href: "/aktualno/fotografije/" }
 nextStep: learn
 ---
 

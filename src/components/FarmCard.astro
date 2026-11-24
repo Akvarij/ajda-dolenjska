@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
-import Pic from './Pic.astro';
 import { url } from '@/lib/url';
 
 interface Props {
@@ -14,13 +13,13 @@ const Heading = `h${level}` as 'h2' | 'h3';
 const d = farm.data;
 ---
 
-<article class="card">
-  <Pic image={d.image} alt={d.imageAlt} seed={farm.id} />
+<article class="card" data-tone="green">
+  {/* No photo on farm cards until the farms send their own; the farm page still shows one if it has it. */}
   <div class="card__body">
     <div class="meta">
       <Icon name="pin" size={20} />
       <span>{d.city}</span>
-      {d.certifications.map((c) => <span class="badge badge--sun">{c}</span>)}
+      {d.certifications.map((c) => <span class="badge badge--yellow">{c}</span>)}
     </div>
     <Heading><a href={url(`/kmetije/${farm.id}/`)}>{d.name}</a></Heading>
     <p>{d.summary}</p>

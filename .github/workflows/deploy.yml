@@ -29,6 +29,8 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v5
       - run: npm ci
+      # The editor form must match the content schemas, or an editor's save breaks the build
+      - run: npm test
       - run: npm run build
         env:
           # Where Pages serves the site: akvarij.github.io/ajda-dolenjska/ for now,

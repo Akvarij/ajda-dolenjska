@@ -1,12 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import Placeholder from './Placeholder.astro';
+import { libraryPhotoFor } from '@/lib/photos';
 
 interface Props {
   image?: ImageMetadata;
   alt?: string;
-  /** Picks the illustration variant when there is no photo. */
+  /** Picks the library photo when there is no photo of its own. */
   seed?: number | string;
   ratio?: string;
   sizes?: string;
@@ -29,7 +29,7 @@ const {
     image ? (
       <Image src={image} alt={alt} widths={[480, 800, 1200]} sizes={sizes} loading={loading} />
     ) : (
-      <Placeholder seed={seed} />
+      <Image src={libraryPhotoFor(seed)} alt="" widths={[480, 800, 1200]} sizes={sizes} loading={loading} />
     )
   }
 </div>
@@ -37,7 +37,7 @@ const {
 <style>
   .pic {
     overflow: hidden;
-    background: var(--c-tint);
+    background: var(--c-green-tint);
   }
   .pic :global(img) {
     display: block;

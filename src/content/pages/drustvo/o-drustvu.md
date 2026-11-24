@@ -2,6 +2,8 @@
 title: "Podatki o društvu"
 lead: "Kdo smo, kje delujemo in kako nas najdete."
 headerImage: ../../../assets/photos/setev-na-njivi.jpg
+links:
+  - { label: "Galerija slik", href: "/aktualno/fotografije/" }
 nextStep: learn
 ---
 

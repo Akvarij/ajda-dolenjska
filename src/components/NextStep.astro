@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import NewsletterForm from './NewsletterForm.astro';
-import { joinHref } from '@/data/nav';
+import { joinHref, toneFor } from '@/data/nav';
 import { url } from '@/lib/url';
 
 interface Next {
@@ -31,13 +31,13 @@ const wantsJoin = variant === 'learn' || variant === 'article' || variant === 'f
 const wantsNews = variant !== 'farm';
 ---
 
-<section class="next-step band--tint" aria-labelledby="next-step-title">
+<section class="next-step band--sand" aria-labelledby="next-step-title">
   <div class="container">
     <h2 id="next-step-title">{heading}</h2>
     <div class="steps">
       {
         wantsNext && next && (
-          <a class="step step--link" href={url(next.href)}>
+          <a class="step step--link" href={url(next.href)} data-tone={toneFor(next.href)}>
             <span class="step__icon"><Icon name="arrow-right" size={28} /></span>
             <span class="step__title">{next.label}</span>
             {next.description && <span class="step__text">{next.description}</span>}
@@ -47,7 +47,7 @@ const wantsNews = variant !== 'farm';
 
       {
         variant === 'event' && registration && (
-          <a class="step step--link step--sun" href="#prijava">
+          <a class="step step--link" href="#prijava" data-tone="yellow">
             <span class="step__icon"><Icon name="check" size={28} /></span>
             <span class="step__title">Prijavite se na dogodek</span>
             <span class="step__text">Prijava je obvezna. Izpolnite kratek obrazec.</span>
@@ -57,7 +57,7 @@ const wantsNews = variant !== 'farm';
 
       {
         (variant === 'event' || variant === 'past-event') && (
-          <a class="step step--link" href={url('/dejavnosti/dogodki/')}>
+          <a class="step step--link" href={url('/dejavnosti/dogodki/')} data-tone="blue">
             <span class="step__icon"><Icon name="calendar" size={28} /></span>
             <span class="step__title">
               {variant === 'past-event' ? 'Poglejte prihajajoče dogodke' : 'Vsi dogodki'}
@@ -69,7 +69,7 @@ const wantsNews = variant !== 'farm';
 
       {
         wantsJoin && (
-          <a class="step step--link" href={url(joinHref)} data-join>
+          <a class="step step--link" href={url(joinHref)} data-join data-tone="olive">
             <span class="step__icon"><Icon name="heart" size={28} /></span>
             <span class="step__title">Postanite član</span>
             <span class="step__text">Delavnice o preparatih, izmenjava izkušenj, pikniki in ekskurzije.</span>
@@ -79,7 +79,7 @@ const wantsNews = variant !== 'farm';
 
       {
         wantsNews && (
-          <div class="step step--news">
+          <div class="step step--news" data-tone="coral">
             <span class="step__icon"><Icon name="newspaper" size={28} /></span>
             <span class="step__title">Ostanite v stiku</span>
             <span class="step__text">Naročite se na e-novice in ne zamudite nobenega dogodka.</span>
@@ -111,8 +111,8 @@ const wantsNews = variant !== 'farm';
     flex-direction: column;
     gap: 0.4rem;
     padding: 1.5rem;
-    background: #fff;
-    border: 1px solid var(--c-line);
+    /* a solid block in the destination's tone, so all text is ink */
+    background: var(--tone);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     color: var(--c-ink);
@@ -125,10 +125,6 @@ const wantsNews = variant !== 'farm';
     transform: translateY(-3px);
     box-shadow: var(--shadow);
     color: var(--c-ink);
-  }
-  .step--sun {
-    background: var(--c-sun-tint);
-    border-color: #f6dd9b;
   }
   .step--news {
     grid-column: span 2;
@@ -145,11 +141,7 @@ const wantsNews = variant !== 'farm';
     height: 3.25rem;
     margin-bottom: 0.5rem;
     border-radius: 50%;
-    background: var(--c-tint-strong);
-    color: var(--c-green-deep);
-  }
-  .step--sun .step__icon {
-    background: var(--c-sun);
+    background: #fff;
     color: var(--c-ink);
   }
   .step__title {
@@ -158,8 +150,12 @@ const wantsNews = variant !== 'farm';
     font-weight: 600;
     line-height: 1.2;
   }
+  /* solid pastel: links (e.g. in the newsletter consent) are ink too */
+  .step :global(a:not(.btn)) {
+    color: var(--c-ink);
+  }
   .step__text {
-    color: var(--c-ink-soft);
+    color: var(--c-ink);
     margin-bottom: 0.5rem;
   }
 </style>

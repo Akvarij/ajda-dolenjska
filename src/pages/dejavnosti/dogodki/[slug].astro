@@ -45,7 +45,7 @@ const section = d.type === 'izobrazevanje' || d.type === 'delavnica'
     <div class="btn-row hero-actions">
       {
         needsRegistration && (
-          <a class="btn btn--sun" href="#prijava">
+          <a class="btn btn--join" href="#prijava">
             <Icon name="check" size={20} /> Prijavi se na dogodek
           </a>
         )
@@ -86,7 +86,7 @@ const section = d.type === 'izobrazevanje' || d.type === 'delavnica'
 
           {
             needsRegistration && (
-              <section id="prijava" class="panel panel--sun registration" aria-labelledby="prijava-title">
+              <section id="prijava" class="panel panel--yellow registration" aria-labelledby="prijava-title">
                 <h2 id="prijava-title">Prijava na dogodek</h2>
                 <RegistrationForm eventTitle={d.title} eventWhen={when} />
               </section>
@@ -95,7 +95,7 @@ const section = d.type === 'izobrazevanje' || d.type === 'delavnica'
         </div>
 
         <aside class="aside" aria-label="Podatki o dogodku">
-          <div class="panel panel--tint">
+          <div class="panel panel--green">
             <h2>Podrobnosti</h2>
             <ul class="facts">
               <li>
@@ -178,8 +178,8 @@ const section = d.type === 'izobrazevanje' || d.type === 'delavnica'
     margin: 0 0 2rem;
     padding: 1.1rem 1.4rem;
     border-radius: 20px;
-    background: var(--c-sun-tint);
-    border: 1px solid #f6dd9b;
+    background: var(--c-yellow-tint);
+    border: 1px solid var(--c-yellow);
     font-size: 1.1rem;
   }
   .notice :global(svg) {

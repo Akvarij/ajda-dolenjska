@@ -1,32 +1,31 @@
 ---
 import { Image } from 'astro:assets';
-import wordmark from '@/assets/brand/logo-wordmark.png';
-import full from '@/assets/brand/logo-full.png';
+import { logo } from '@/assets/brand/logo';
 
 interface Props {
-  variant?: 'header' | 'full';
+  /** `badge`: the header badge, sized by the header. `footer`: the full logo on its own. */
+  variant?: 'badge' | 'footer';
 }
-const { variant = 'header' } = Astro.props;
+const { variant = 'badge' } = Astro.props;
 const alt = 'Ajda Dolenjska, društvo za biološko-dinamično gospodarjenje';
 ---
 
-{
-  variant === 'header' ? (
-    <Image src={wordmark} alt={alt} width={300} class="logo logo--header" loading="eager" />
-  ) : (
-    <Image src={full} alt={alt} width={300} class="logo logo--full" />
-  )
-}
+<Image
+  src={logo}
+  alt={alt}
+  widths={[120, 240, 360]}
+  sizes={variant === 'badge' ? '6rem' : '10rem'}
+  class:list={['logo', `logo--${variant}`]}
+  loading={variant === 'badge' ? 'eager' : 'lazy'}
+/>
 
 <style>
-  .logo--header {
-    height: 3.55rem;
+  .logo {
+    display: block;
     width: auto;
-    display: block;
+    max-width: none;
   }
-  .logo--full {
-    width: min(100%, 12rem);
-    height: auto;
-    display: block;
+  .logo--footer {
+    height: 10rem;
   }
 </style>

@@ -30,9 +30,9 @@ Vsaka sprememba na veji `main` se samodejno objavi prek [.github/workflows/deplo
 | Navigacija in zemljevid strani (glava, noga, razdelki, drobtinice) | [src/data/nav.ts](src/data/nav.ts)                       |
 | Vsebine (Markdown)                                                 | [src/content/](src/content/)                             |
 | Oblika vsebin (obvezna polja ...)                                  | [src/content.config.ts](src/content.config.ts)           |
-| Barve, pisave, osnovni slogi                                       | [src/styles/global.css](src/styles/global.css) (`:root`) |
+| Barve (iz oblikovalskega dokumenta, ena na vrsto vsebine), pisave Merriweather in Source Sans 3, najmanjša velikost pisave (`--fs-min`, 16 px) | [src/styles/global.css](src/styles/global.css) (`:root`), `toneFor` v [src/data/nav.ts](src/data/nav.ts) |
 | Komponente (kartice, obrazci, koledar ...)                         | [src/components/](src/components/)                       |
-| Animacije: polje v glavi (oblaki, cvetni prah, metulja)            | [src/components/FieldBackdrop.astro](src/components/FieldBackdrop.astro) |
+| Fotografija v glavi strani (mirna, brez animacij)                  | [src/components/FieldBackdrop.astro](src/components/FieldBackdrop.astro) |
 | Animacije ob drsenju, plavajoča glava, gumb »na vrh«               | [src/scripts/motion.ts](src/scripts/motion.ts)           |
 | Strani                                                             | [src/pages/](src/pages/)                                 |
 
@@ -76,13 +76,27 @@ Stran dogodka samodejno dobi obrazec za prijavo (če je `required: true`), zemlj
 
 V [public/admin/](public/admin/) je pripravljen **Decap CMS**: urejevalnik v brskalniku na naslovu `/admin/`, ki piše v iste Markdown datoteke (vsaka sprememba je zapis v Gitu). Obrazci so v slovenščini in ustrezajo shemam vsebin.
 
-Pred uporabo je treba:
+Uredniki vidijo Dogodke, Novice in članke, Fotogalerije ter Gradiva in dokumente. Besedilne strani, Kmetije ter Video in avdio so v urejevalniku skrite (`hide: true`) in se urejajo v kodi.
 
-1. Repozitorij je na GitHubu (`Akvarij/ajda-dolenjska`, nastavljeno v [public/admin/config.yml](public/admin/config.yml)).
-2. Urediti prijavo urednikov: na Netlify jo ponudi vgrajeno, drugje je potreben majhen OAuth posrednik ([navodila Decap](https://decapcms.org/docs/github-backend/)).
-3. Lokalni preizkus: `npx decap-server` v drugem oknu, nato `/admin/` ob `npm run dev`.
+**Prijava urednikov: [DecapBridge](https://decapbridge.com/)** (brezplačno do 10 urednikov). Uredniki ne potrebujejo GitHub računa: dobijo vabilo po e-pošti in se prijavijo z Googlom ali z geslom.
 
-> Konfiguracija se razčleni brez napak in vsa polja obstajajo v shemah, vendar je nisem preizkusil proti pravemu GitHub računu.
+1. Na decapbridge.com ustvarite račun in dodajte stran: GitHub, repozitorij `Akvarij/ajda-dolenjska`, način prijave **PKCE** (prijava z Googlom), naslov prijave `https://akvarij.github.io/ajda-dolenjska/admin/index.html`.
+2. Na GitHubu ustvarite *fine-grained token* samo za ta repozitorij, z dovoljenjem *Contents: Read and write*. **Datum poteka si zapišite v koledar:** ko žeton poteče, urejanje neha delovati, dokler ga ne zamenjate v DecapBridge.
+3. Blok `backend:`, ki ga ustvari DecapBridge, prilepite v [public/admin/config.yml](public/admin/config.yml) (`branch: main` ostane).
+4. V zavihku *Manage collaborators* povabite urednike z njihovim Google e-naslovom.
+5. Obvestila GitHub Actions o neuspeli gradnji morajo ostati vklopljena: če urednikova sprememba gradnjo pokvari, to izveste samo tako.
+
+Vsaka shranitev je zapis v vejo `main`, po katerem se stran zgradi znova (približno 2 minuti). Ker uredniki pišejo v `main`, pred lokalnim delom vedno zaženite `git pull --rebase`.
+
+`npm test` preveri, da se polja v obrazcu ujemajo s shemami vsebin. Teče tudi na GitHubu pred vsako gradnjo. Lokalni preizkus urejevalnika: `npx decap-server` v drugem oknu, nato `/admin/` ob `npm run dev`.
+
+### Selitev na Neoserv: urejevalnik
+
+Ob selitvi na www.ajda-dolenjska.si spremenite:
+
+- `site_url` in `display_url` v [public/admin/config.yml](public/admin/config.yml);
+- naslov prijave v nastavitvah strani na DecapBridge (`https://www.ajda-dolenjska.si/admin/index.html`);
+- naslove v navodilih za urednike.
 
 ## Obrazci
 
@@ -110,9 +124,9 @@ Stari naslovi WordPress (`/pridelovalci`, `/ekoloska-kmetija-*`, `/kontakti`, `/
 
 Naslednje je **vzorčno** in ga je treba nadomestiti z resničnim gradivom:
 
-- **Fotografije.** Povsod, kjer ni slike, je narisana ilustracija ([src/lib/scene.js](src/lib/scene.js)); galeriji in PDF-ji so ustvarjeni z `node scripts/generate-sample-assets.mjs`. Prave fotografije dodajte v vsebine (`image:`).
+- **Fotografije.** Novice, kmetije in posnetki brez svoje slike dobijo fotografijo iz knjižnice ([src/assets/photos/knjiznica/](src/assets/photos/knjiznica/), [src/lib/photos.ts](src/lib/photos.ts)); vsaka objava ima vedno isto. Knjižnico napolnite s fotografijami iz mape »Ajda-Oblikovanje/Slike-spletna-stran«. Vzorčni galeriji in PDF-ji so ustvarjeni z `node scripts/generate-sample-assets.mjs`. Prave fotografije dodajte v vsebine (`image:`).
 - **Fotografije polja ajde** v [src/assets/photos/](src/assets/photos/) (glava domače strani, glave podstrani, uvod, pas »Včlanitev«) so z [Unsplash](https://unsplash.com/license) (brezplačna uporaba, navedba avtorja ni obvezna). Ko bo društvo imelo lastne fotografije, zamenjajte datoteke z istim imenom: `ajdovo-polje.jpg` (široka krajina z nebom v zgornji polovici), `ajda-cvet.jpg`, `cvetoca-ajda.jpg`.
-- **Logotip.** Iz obstoječe JPG datoteke (248 px / 939 px) je narejen prosojen PNG ([src/assets/brand/](src/assets/brand/)). Za oster izris na vseh zaslonih potrebujete vektorsko datoteko (SVG).
+- **Logotip.** Barvni (`logo-barvni.png`) in črni (`logo-crni.png`, za tiskovine; na strani se ne uporablja) logotip v [src/assets/brand/](src/assets/brand/) sta začasno narejena iz JPG datotek (prosojno ozadje). Ko bodo na voljo SVG datoteke, jih dodajte v isto mapo in zamenjajte ime datoteke v [src/assets/brand/logo.ts](src/assets/brand/logo.ts) (glava in noga ga prebereta od tam), nato preverite z `npm run build`. Ikona strani (`public/favicon.png`, `public/apple-touch-icon.png`) je izrez slikovnega dela logotipa; lahko jo zamenjate z `Ajda-favicon.png` iz mape »Ajda-Oblikovanje«.
 - **Dogodki, novice, članki, galerije, dokumenti** so primeri. Izjema so podatki o kmetijah in kontaktih, prepisani s stare strani.
 - **Vodstvo** vsebuje samo kontaktno osebo.
 - **Davčna številka** v nogi je prepisana s stare strani (»SI79287379«); preverite oznako.
@@ -122,4 +136,4 @@ Naslednje je **vzorčno** in ga je treba nadomestiti z resničnim gradivom:
 - **Članski del** (iz načrta): `/clani/` je za zdaj pregled bližnjic za člane brez prijave, saj statična stran ne more varovati vsebin. Za pravo prijavo je treba izbrati gostovanje z zaščito (npr. Cloudflare Access ali Netlify z geslom) ali ločeno aplikacijo. Takrat se lahko gumba »Postani član« za prijavljene člane skrijeta (oznaka `data-join` je že na vseh).
 - **Objave iz družbenih omrežij po #oznaki:** zahteva zunanjo storitev (npr. Behold, Elfsight) ali Meta API s ključem. Povezave do profilov nastavite v `site.social`; prikažejo se samo izpolnjene.
 - **Prijava na dogodke z omejenim številom mest** in potrditvena e-pošta zahtevata zalednega ponudnika obrazcev.
-- **Animacije** so dodane (počasen zoom fotografije, oblaki, cvetni prah, metulja, razkrivanje ob drsenju). Obiskovalci, ki imajo v sistemu vklopljeno »zmanjšano gibanje«, vidijo mirno stran brez premikanja.
+- **Animacije:** na željo društva so fotografije mirne (brez približevanja), čebel, cvetnega prahu in oblakov ni več. Ostala so le razkrivanje ob drsenju in prehodi gumbov; obiskovalci z vklopljenim »zmanjšanim gibanjem« vidijo stran brez premikanja.
