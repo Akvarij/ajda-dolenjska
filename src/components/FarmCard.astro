@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
-import Pic from './Pic.astro';
 import { url } from '@/lib/url';
 
 interface Props {
@@ -15,7 +14,7 @@ const d = farm.data;
 ---
 
 <article class="card" data-tone="green">
-  <Pic image={d.image} alt={d.imageAlt} seed={farm.id} />
+  {/* No photo on farm cards until the farms send their own; the farm page still shows one if it has it. */}
   <div class="card__body">
     <div class="meta">
       <Icon name="pin" size={20} />

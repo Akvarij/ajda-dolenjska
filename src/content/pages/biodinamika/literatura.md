@@ -4,6 +4,8 @@ lead: "Knjige o biodinamičnem gospodarjenju in spletne strani, kjer lahko izves
 nextStep: learn
 ---
 
+<!-- Stranka predlaga fotografije naslovnic knjig. Ko bodo na voljo, jih dodajte v src/assets/uploads/ in v tabelo. -->
+
 Navajamo dela, ki so na razpolago na temo biodinamičnega gospodarjenja. Knjige lahko naročite na spletni strani [Založbe Ajda, Vrzdenec](https://ajda-vrzdenec-zalozba.si/). Na njej je tudi veliko zapisov in posnetkov predavanj.
 
 ## Knjige

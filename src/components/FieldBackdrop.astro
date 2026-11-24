@@ -1,10 +1,10 @@
 ---
 /**
- * Animated field backdrop: a photo, a still sun, floating pollen and, on the
- * home page, bees. Everything moving is decorative and stops for visitors who
- * prefer reduced motion. `hero` is
- * the full, unclouded version for the home page, `calm` a lighter one with
- * drifting clouds for page headers. `photo` defaults to the buckwheat field.
+ * Field backdrop: a still photo and, over the default buckwheat field, a
+ * painted blue sky and a soft sun. Nothing moves: the client found zooming
+ * photos, bees and pollen restless (and they cost frames on slower devices).
+ * `hero` is the full-bleed home version, `calm` sits on the right of page
+ * headers. `photo` defaults to the buckwheat field.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -19,25 +19,9 @@ interface Props {
 }
 const { variant = 'hero', photo = field, focus, class: className } = Astro.props;
 const hero = variant === 'hero';
-// The buckwheat photo has a hazy white sky, so it gets a blue tint, a drawn sun and clouds.
+// The buckwheat photo has a hazy white sky, so it gets a blue tint and a drawn sun.
 // Other photos keep their own sky and light.
 const paintSky = photo === field;
-
-// Deterministic pseudo-random numbers so every build renders the same scene.
-let seed = hero ? 11 : 5;
-const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
-const between = (a: number, b: number) => a + rand() * (b - a);
-
-const motes = Array.from({ length: hero ? 18 : 9 }, () => ({
-  left: between(2, 98).toFixed(1),
-  size: between(4, 9).toFixed(1),
-  dur: between(14, 26).toFixed(1),
-  delay: (-between(0, 26)).toFixed(1),
-  sway: between(10, 26).toFixed(0),
-}));
-
-// Which way each bee sets off: they are drawn facing right, -1 flies left first.
-const bees = hero ? [1, -1, -1] : [];
 ---
 
 <div
@@ -45,74 +29,22 @@ const bees = hero ? [1, -1, -1] : [];
   style={focus && `--focus:${focus}`}
   aria-hidden="true"
 >
-  <div class="field__zoom">
+  <div class="field__frame">
     <Image
       class="field__photo"
       src={photo}
       alt=""
       widths={(hero ? [800, 1280, 1800, 2400] : [800, 1280, 1800]).filter((w) => w <= photo.width)}
-      sizes={hero ? '100vw' : '(min-width: 900px) 60vw, 100vw'}
+      // On portrait screens the photo is cropped to the screen's height, so it needs to be
+      // about 1.5× that wide; sizing by width alone made phones load a blurry, too-small copy.
+      sizes={hero ? '(orientation: portrait) 150vh, 100vw' : '(min-width: 900px) 60vw, (orientation: portrait) 100vh, 100vw'}
+      quality={85}
       loading={hero ? 'eager' : 'lazy'}
       fetchpriority={hero ? 'high' : 'auto'}
     />
     {paintSky && <div class="field__sky" />}
   </div>
   {paintSky && <div class="field__sun" />}
-  {
-    !hero && paintSky && (
-      <div class="field__clouds motion-only">
-        <span class="cloud cloud--1" />
-        <span class="cloud cloud--2" />
-        <span class="cloud cloud--3" />
-      </div>
-    )
-  }
-  <div class="field__drift motion-only">
-    {
-      motes.map((m) => (
-        <span
-          class="mote"
-          style={`--x:${m.left}%;--s:${m.size}px;--dur:${m.dur}s;--delay:${m.delay}s;--sway:${m.sway}px`}
-        />
-      ))
-    }
-  </div>
-  {
-    hero && (
-      <div class="field__buzz motion-only">
-        {bees.map((face, i) => (
-          <span class={`bee-fly bee-fly--${i + 1}`} style={`--face:${face}`}>
-            <span class="bee-fly__path">
-              <svg class="bee" viewBox="-24 -22 48 36">
-                <defs>
-                  <clipPath id={`bee-body-${i}`}>
-                    <ellipse cx="0" cy="2" rx="12" ry="8.5" />
-                  </clipPath>
-                </defs>
-                <g class="bee__wing bee__wing--back">
-                  <ellipse cx="-4" cy="-8" rx="5" ry="9" transform="rotate(-28 -4 -8)" />
-                </g>
-                <path class="bee__sting" d="M-11 .6-17 2.6-11 4.6z" />
-                <ellipse class="bee__body" cx="0" cy="2" rx="12" ry="8.5" />
-                <g clip-path={`url(#bee-body-${i})`} class="bee__stripes">
-                  <rect x="-8.5" y="-8" width="3.4" height="20" />
-                  <rect x="-1.6" y="-8" width="3.4" height="20" />
-                  <rect x="5.2" y="-8" width="2.8" height="20" />
-                </g>
-                <ellipse class="bee__outline" cx="0" cy="2" rx="12" ry="8.5" />
-                <path class="bee__antenna" d="M13.5-3.5c.5-3 2-5 4.5-5.5M11.5-4c-.3-3 .5-5.5 2.5-6.5" />
-                <circle class="bee__head" cx="12.5" cy="1" r="5" />
-                <circle class="bee__eye" cx="14.6" cy="-.2" r="1.3" />
-                <g class="bee__wing">
-                  <ellipse cx="1.5" cy="-9.5" rx="5.5" ry="10" transform="rotate(16 1.5 -9.5)" />
-                </g>
-              </svg>
-            </span>
-          </span>
-        ))}
-      </div>
-    )
-  }
 </div>
 
 <style>
@@ -128,29 +60,18 @@ const bees = hero ? [1, -1, -1] : [];
     inset: 0;
   }
 
-  /* ---------- photo, very slowly breathing in ---------- */
-  .field__zoom {
+  /* ---------- the photo, still ---------- */
+  .field__frame {
     isolation: isolate;
-    animation: slow-zoom 34s ease-in-out infinite alternate;
-    will-change: transform;
   }
-  .field__zoom :global(.field__photo) {
+  .field__frame :global(.field__photo) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: var(--focus, 50% 62%);
   }
-  @keyframes slow-zoom {
-    from {
-      transform: scale(1.02);
-    }
-    to {
-      transform: scale(1.12) translate(-1.5%, 1%);
-    }
-  }
 
   /* ---------- the hazy sky turns into a sunny one ---------- */
-  /* tinted together with the photo, so it stays on the horizon while zooming */
   .field__sky {
     position: absolute;
     inset: 0;
@@ -196,223 +117,6 @@ const bees = hero ? [1, -1, -1] : [];
     width: clamp(11rem, 18vw, 16rem);
   }
 
-  /* ---------- clouds ---------- */
-  .cloud {
-    position: absolute;
-    left: 0;
-    width: 22rem;
-    height: 6rem;
-    border-radius: 50%;
-    background:
-      radial-gradient(closest-side at 30% 60%, #fff 0, rgb(255 255 255 / 0.85) 55%, transparent 100%),
-      radial-gradient(closest-side at 62% 45%, #fff 0, rgb(255 255 255 / 0.8) 50%, transparent 100%),
-      radial-gradient(closest-side at 80% 65%, #fff 0, rgb(255 255 255 / 0.7) 45%, transparent 100%);
-    filter: blur(6px);
-    opacity: 0.85;
-    animation: cloud-drift var(--dur) linear var(--delay) infinite;
-  }
-  .cloud--1 {
-    top: 8%;
-    --dur: 95s;
-    --delay: -30s;
-  }
-  .cloud--2 {
-    top: 20%;
-    width: 15rem;
-    height: 4.5rem;
-    opacity: 0.7;
-    --dur: 130s;
-    --delay: -95s;
-  }
-  .cloud--3 {
-    top: 4%;
-    width: 11rem;
-    height: 3.5rem;
-    opacity: 0.6;
-    --dur: 160s;
-    --delay: -20s;
-  }
-  @keyframes cloud-drift {
-    from {
-      translate: -25rem 0;
-    }
-    to {
-      translate: calc(100cqw + 2rem) 0;
-    }
-  }
-
-  /* ---------- pollen rising in the warm air ---------- */
-  .mote {
-    position: absolute;
-    left: var(--x);
-    top: 100%;
-    width: var(--s);
-    height: var(--s);
-    border-radius: 50%;
-    background: radial-gradient(circle, #fffbe6 0, var(--c-yellow) 45%, rgb(255 224 138 / 0) 72%);
-    box-shadow: 0 0 10px 2px rgb(255 226 130 / 0.55);
-    opacity: 0;
-    animation: mote-rise var(--dur) linear var(--delay) infinite;
-  }
-  @keyframes mote-rise {
-    0% {
-      opacity: 0;
-      translate: 0 0;
-    }
-    10% {
-      opacity: 0.95;
-    }
-    25% {
-      translate: var(--sway) -28cqh;
-    }
-    50% {
-      translate: calc(var(--sway) * -1) -56cqh;
-    }
-    75% {
-      translate: var(--sway) -84cqh;
-    }
-    88% {
-      opacity: 0.8;
-    }
-    100% {
-      opacity: 0;
-      translate: 0 -112cqh;
-    }
-  }
-
-  /* ---------- bees: out and back, turning round at each end ---------- */
-  .bee-fly {
-    position: absolute;
-    inset: auto;
-    animation: bee-x var(--fx) ease-in-out infinite;
-  }
-  .bee-fly__path {
-    display: block;
-    animation: bee-y var(--fy) ease-in-out infinite alternate;
-  }
-  .bee-fly--1 {
-    left: 52%;
-    top: 34%;
-    --fx: 12s;
-    --fy: 1.9s;
-    --range-x: 26cqw;
-    --range-y: 7cqh;
-  }
-  .bee-fly--2 {
-    left: 86%;
-    top: 56%;
-    --fx: 15s;
-    --fy: 2.4s;
-    --range-x: -24cqw;
-    --range-y: -9cqh;
-  }
-  .bee-fly--3 {
-    left: 74%;
-    top: 74%;
-    --fx: 10s;
-    --fy: 1.6s;
-    --range-x: -14cqw;
-    --range-y: 5cqh;
-  }
-  /* on narrow screens, fly above and below the hero text instead */
-  @media (max-width: 959px) {
-    .bee-fly--1 {
-      left: 12%;
-      top: 12%;
-    }
-    .bee-fly--3 {
-      top: 90%;
-    }
-  }
-  @keyframes bee-x {
-    0% {
-      translate: 0 0;
-      scale: var(--face) 1;
-    }
-    46% {
-      scale: var(--face) 1;
-    }
-    50% {
-      translate: var(--range-x) 0;
-    }
-    54% {
-      scale: calc(var(--face) * -1) 1;
-    }
-    96% {
-      scale: calc(var(--face) * -1) 1;
-    }
-    100% {
-      translate: 0 0;
-      scale: var(--face) 1;
-    }
-  }
-  @keyframes bee-y {
-    from {
-      translate: 0 0;
-    }
-    to {
-      translate: 0 var(--range-y);
-    }
-  }
-  .bee {
-    display: block;
-    width: 2.3rem;
-    height: auto;
-    overflow: visible;
-    filter: drop-shadow(0 4px 4px rgb(32 51 28 / 0.25));
-    animation: bee-hover 0.35s ease-in-out infinite alternate;
-  }
-  .bee-fly--2 .bee {
-    width: 2rem;
-  }
-  .bee-fly--3 .bee {
-    width: 1.7rem;
-  }
-  @keyframes bee-hover {
-    to {
-      translate: 0 2px;
-    }
-  }
-  .bee__body {
-    fill: #f6c13a;
-  }
-  .bee__stripes,
-  .bee__head,
-  .bee__sting {
-    fill: #2c2214;
-  }
-  .bee__outline {
-    fill: none;
-    stroke: #2c2214;
-    stroke-width: 1;
-  }
-  .bee__eye {
-    fill: #fff;
-  }
-  .bee__antenna {
-    fill: none;
-    stroke: #2c2214;
-    stroke-width: 1;
-    stroke-linecap: round;
-  }
-  .bee__wing {
-    fill: rgb(255 255 255 / 0.78);
-    stroke: #9ab3c4;
-    stroke-width: 0.6;
-    transform-box: view-box;
-    transform-origin: 0 -3px;
-    animation: buzz 0.07s linear infinite alternate;
-  }
-  .bee__wing--back {
-    fill: rgb(235 244 250 / 0.7);
-    animation-delay: -0.035s;
-  }
-  @keyframes buzz {
-    to {
-      transform: rotate(-30deg) scaleY(0.7);
-    }
-  }
-
   /* ---------- page-header variant: photo only on the right, softer ---------- */
   .field--calm {
     left: auto;
@@ -420,14 +124,8 @@ const bees = hero ? [1, -1, -1] : [];
     -webkit-mask-image: linear-gradient(90deg, transparent 0, rgb(0 0 0 / 0.6) 28%, #000 60%);
     mask-image: linear-gradient(90deg, transparent 0, rgb(0 0 0 / 0.6) 28%, #000 60%);
   }
-  .field--calm .field__zoom {
-    animation-duration: 50s;
-  }
-  .field--calm .field__zoom :global(.field__photo) {
+  .field--calm .field__frame :global(.field__photo) {
     object-position: var(--focus, 50% 42%);
-  }
-  .field--calm .cloud {
-    filter: blur(8px);
   }
   @media (max-width: 700px) {
     .field--calm {

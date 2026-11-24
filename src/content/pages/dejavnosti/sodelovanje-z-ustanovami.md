@@ -1,8 +1,13 @@
 ---
 title: "Sodelovanje z ustanovami"
 lead: "Šole, vrtci, občine, kmetijske in izobraževalne ustanove, mediji in partnerji. Skupaj približamo biodinamiko in lokalno pridelavo hrane več ljudem."
+links:
+  - { label: "Članki o sodelovanjih", href: "/aktualno/clanki/" }
+  - { label: "Galerija slik", href: "/aktualno/fotografije/" }
 nextStep: join
 ---
+
+<!-- Stranka želi povezave na članke in slike preteklih sodelovanj. Ko bodo objavljeni, jih dodajte tudi v besedilo (npr. »Obisk OŠ … 2026« s povezavo na članek ali galerijo). -->
 
 ## Za koga
 

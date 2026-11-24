@@ -1,18 +1,19 @@
 /* ==========================================================================
    Ajda Dolenjska – global styles
-   Five pastels from the society's colour logo, one per kind of content
+   The five colours of the society's design document (BARVE: #ffca3a,
+   #ff595e, #8ac926, #1982c4, #729447) at 75% on white, one per kind of content
    (see "tones"), on a warm white page. Comfortable 17px body text.
    The pastels are too light for text: on a solid pastel everything is ink,
    soft text and links only sit on white or the light tints.
    ========================================================================== */
 
 :root {
-  /* the palette */
-  --c-yellow: #ffe08a; /* Biodinamika */
-  --c-coral: #ff8f92; /* Aktualno */
-  --c-green: #b6dd77; /* Kmetije */
-  --c-blue: #8fc6e8; /* Dejavnosti */
-  --c-olive: #9bb27a; /* Društvo, Arhiv, footer */
+  /* the palette: design-document colours softened to 75%; ink stays ≥4.8:1 on each */
+  --c-yellow: #ffd76b; /* Biodinamika */
+  --c-coral: #ff8286; /* Aktualno */
+  --c-green: #a7d65c; /* Kmetije */
+  --c-blue: #52a1d3; /* Dejavnosti */
+  --c-olive: #95af75; /* Društvo, Arhiv, footer */
 
   /* light tints for bands and panels: soft text and links stay readable on these */
   --c-yellow-tint: color-mix(in srgb, var(--c-yellow) 30%, #fff);
@@ -23,7 +24,7 @@
   --c-green-soft: color-mix(in srgb, var(--c-green) 55%, #fff);
 
   /* surfaces */
-  --c-bg: #fffdf7;
+  --c-bg: #ffffff; /* pure white: the client found cream less readable */
   --c-surface: #ffffff;
   /* hue-less band behind solid pastel cards, so no card sits on its own colour */
   --c-sand: #f4f1e8;
@@ -39,8 +40,12 @@
   --c-line: #e6ead9;
   --c-focus: var(--c-ink); /* blue was only 2.3:1 on the pastels */
 
-  --font-body: 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3 Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Merriweather Variable', Georgia, 'Times New Roman', serif;
+
+  /* The smallest text anywhere on the site (labels, badges, meta, footer).
+     The audience is mostly older readers, so nothing goes below 16px. */
+  --fs-min: 1rem;
 
   --radius: 18px;
   --radius-lg: 28px;
@@ -99,7 +104,7 @@ body {
   background: var(--c-bg);
   color: var(--c-ink);
   font-family: var(--font-body);
-  font-size: 1.0625rem; /* 17px */
+  font-size: 1.125rem; /* 18px */
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -117,23 +122,22 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-optical-sizing: auto;
-  line-height: 1.12;
-  letter-spacing: -0.015em;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--c-ink);
   margin: 0 0 0.5em;
   text-wrap: balance;
 }
 h1 {
-  font-size: clamp(2rem, 4.6vw, 3.25rem);
+  font-size: clamp(1.9rem, 4vw, 2.85rem);
 }
 h2 {
-  font-size: clamp(1.55rem, 3vw, 2.3rem);
+  font-size: clamp(1.5rem, 2.6vw, 2.05rem);
 }
 h3 {
   font-size: clamp(1.12rem, 1.8vw, 1.28rem);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.005em;
 }
 h4 {
@@ -253,8 +257,8 @@ a:hover {
   align-items: center;
   gap: 0.7rem;
   font-weight: 700;
-  font-size: 0.78rem;
-  letter-spacing: 0.2em;
+  font-size: var(--fs-min);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-link);
   margin-bottom: 0.9rem;
@@ -274,6 +278,7 @@ a:hover {
   max-width: 48ch;
 }
 
+/* --3 and --4 use auto-fill so a lone card keeps its column width instead of stretching */
 .grid {
   display: grid;
   gap: clamp(1.25rem, 3vw, 2rem);
@@ -282,10 +287,10 @@ a:hover {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
 }
 .grid--3 {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.5rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18.5rem), 1fr));
 }
 .grid--4 {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14.5rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14.5rem), 1fr));
 }
 
 /* ---------- buttons ---------- */
@@ -300,7 +305,7 @@ a:hover {
   border-radius: 999px;
   border: 2px solid transparent;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: var(--fs-min);
   font-weight: 700;
   white-space: nowrap;
   line-height: 1.2;
@@ -352,7 +357,7 @@ a:hover {
 .btn--sm {
   min-height: 2.6rem;
   padding: 0.4rem 1.15rem;
-  font-size: 0.9rem;
+  font-size: var(--fs-min);
 }
 .btn-row {
   display: flex;
@@ -386,7 +391,7 @@ a:hover {
   /* the tone of the card it sits in */
   background: var(--tone, var(--c-olive));
   color: var(--c-ink);
-  font-size: 0.8rem;
+  font-size: var(--fs-min);
   font-weight: 700;
   line-height: 1.5;
 }
@@ -415,7 +420,7 @@ a:hover {
   border-radius: 999px;
   background: var(--tone-tint, var(--c-olive-tint));
   border: 1px solid var(--c-line);
-  font-size: 0.85rem;
+  font-size: var(--fs-min);
   font-weight: 600;
   color: var(--c-ink);
 }
@@ -470,14 +475,6 @@ a:hover {
 /* photo cards: a band of the card's tone under the picture */
 .card > .pic {
   border-bottom: 6px solid var(--tone, var(--c-olive));
-}
-/* photos and illustrations zoom gently inside their frame */
-.card .pic > * {
-  transition: transform 0.9s var(--ease-out);
-}
-.card:hover .pic > *,
-.card:focus-within .pic > * {
-  transform: scale(1.06);
 }
 .card__body {
   display: flex;
@@ -540,7 +537,7 @@ a:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.75rem;
-  font-size: 0.9rem;
+  font-size: var(--fs-min);
   color: var(--c-ink-soft);
 }
 
@@ -550,7 +547,7 @@ a:hover {
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.95rem;
+  font-size: var(--fs-min);
 }
 .facts li {
   display: flex;
@@ -612,7 +609,7 @@ a:hover {
   max-width: 100%;
   overflow-x: auto;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-size: var(--fs-min);
   margin: 1.5em 0;
 }
 .prose th,
@@ -698,10 +695,10 @@ a:hover {
 .field > label,
 .field > .label {
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: var(--fs-min);
 }
 .field .hint {
-  font-size: 0.9rem;
+  font-size: var(--fs-min);
   color: var(--c-ink-soft);
   margin: 0;
 }
@@ -747,7 +744,7 @@ textarea:focus {
   display: flex;
   gap: 0.8rem;
   align-items: flex-start;
-  font-size: 0.92rem;
+  font-size: var(--fs-min);
   line-height: 1.5;
 }
 .check input {

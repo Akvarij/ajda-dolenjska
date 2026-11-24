@@ -2,7 +2,8 @@
 import { getCollection } from 'astro:content';
 import ContentPage from '@/layouts/ContentPage.astro';
 import Icon from '@/components/Icon.astro';
-import Placeholder from '@/components/Placeholder.astro';
+import { Image } from 'astro:assets';
+import { libraryPhotoFor } from '@/lib/photos';
 import NewsletterBand from '@/components/NewsletterBand.astro';
 import { formatDate } from '@/lib/format';
 import { toPlayable } from '@/lib/media';
@@ -24,7 +25,7 @@ const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime(
             <article class="card" data-tone="coral">
               {m.data.kind === 'video' && play.kind === 'iframe' ? (
                 <div class="player" data-player data-src={play.src} data-title={m.data.title}>
-                  <Placeholder seed={m.id} />
+                  <Image class="player__poster" src={libraryPhotoFor(m.id)} alt="" widths={[480, 800, 1200]} sizes="(min-width: 900px) 50vw, 100vw" />
                   <button type="button" class="player__btn" aria-label={`Predvajaj: ${m.data.title}`}>
                     <Icon name="play" size={56} />
                   </button>
@@ -84,6 +85,13 @@ const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime(
     aspect-ratio: 16 / 9;
     background: var(--c-coral-tint);
   }
+  .player :global(.player__poster) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
   .player :global(iframe) {
     position: absolute;
     inset: 0;
@@ -117,7 +125,7 @@ const items = (await getCollection('media')).sort((a, b) => b.data.date.getTime(
     padding: 0.15rem 0.7rem;
     border-radius: 999px;
     background: rgb(255 255 255 / 0.9);
-    font-size: 0.95rem;
+    font-size: var(--fs-min);
     font-weight: 700;
   }
   .audio {

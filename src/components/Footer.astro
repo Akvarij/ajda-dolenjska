@@ -92,7 +92,7 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     border-radius: clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.75rem) 0 0;
     background: var(--c-olive);
     color: var(--c-ink);
-    font-size: 0.95rem;
+    font-size: var(--fs-min);
   }
   .footer__grid {
     display: grid;
@@ -122,9 +122,9 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     margin: 0.4rem 0 1.1rem;
     color: var(--c-ink);
     font-family: var(--font-body);
-    font-size: 0.78rem;
+    font-size: var(--fs-min);
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
   ul {
@@ -195,7 +195,7 @@ const socials = (['facebook', 'instagram', 'youtube'] as const)
     gap: 0.5rem 2rem;
     padding-block: 1.25rem 1.5rem;
     border-top: 1px solid rgb(32 51 28 / 0.2);
-    font-size: 0.85rem;
+    font-size: var(--fs-min);
   }
   .footer__bottom p {
     margin: 0;

@@ -1,6 +1,5 @@
 ---
 import Icon from './Icon.astro';
-import Placeholder from './Placeholder.astro';
 import { mapsDirectionsUrl, mapsEmbedUrl, mapsSearchUrl } from '@/lib/events';
 
 interface Props {
@@ -17,7 +16,6 @@ const src = embedUrl ?? (query ? mapsEmbedUrl(query) : '');
 ---
 
 <div class="map" data-map data-src={src} data-title={title}>
-  <Placeholder seed={7} class="map__bg" />
   <div class="map__cta">
     <Icon name="pin" size={36} />
     <p>
@@ -69,11 +67,6 @@ const src = embedUrl ?? (query ? mapsEmbedUrl(query) : '');
     overflow: hidden;
     border: 1px solid var(--c-line);
     background: var(--c-green-tint);
-  }
-  .map :global(.map__bg) {
-    position: absolute;
-    inset: 0;
-    opacity: 0.55;
   }
   .map__cta {
     position: relative;

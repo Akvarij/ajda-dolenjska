@@ -145,7 +145,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
   .topbar {
     position: relative;
     z-index: 51;
-    font-size: 0.85rem;
+    font-size: var(--fs-min);
   }
   .topbar__inner {
     display: none;
@@ -348,7 +348,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     padding: 0.85rem 0.25rem;
     font-family: var(--font-display);
     font-size: 1.2rem;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
     list-style: none;
   }
@@ -399,7 +399,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
     margin: 1.1rem 0 0;
     padding: 0;
     list-style: none;
-    font-size: 0.95rem;
+    font-size: var(--fs-min);
   }
   .m-utility a {
     font-weight: 700;
@@ -526,7 +526,7 @@ const currentKey = nav.find((s) => path.startsWith(s.href))?.key;
       gap: 0.8rem;
       padding: 0.65rem 0.9rem;
       border-radius: 14px;
-      font-size: 0.95rem;
+      font-size: var(--fs-min);
       font-weight: 600;
       color: var(--c-ink);
       text-decoration: none;

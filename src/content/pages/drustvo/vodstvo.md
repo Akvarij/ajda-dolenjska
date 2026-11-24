@@ -1,12 +1,18 @@
 ---
 title: "Vodstvo in organizacija društva"
 lead: "Ožje vodstvo društva so predsednik in dva podpredsednika."
+links:
+  - { label: "Kontakt", href: "/drustvo/kontakt/" }
 nextStep: learn
 ---
 
 ## Predsednik Jože Gregorčič
 
 Je ekološki kmet, ki prideluje žitarice in nekaj sadja. Na njegovi kmetiji v Gorenji vasi pri Šmarjeti ima društvo svoj sedež. Na tej lokaciji poteka večina delavnic in srečanj društva. Tu so shranjeni preparati društva. V enem od objektov kmetije je dobila prostore tudi waldorfska šola. Jože je predan ideji biodinamike. Svoje znanje in praktične izkušnje deli z vsemi, ki pridejo k njemu na posvet, in teh ni malo.
+
+**Kontakt:** [040 458 598](tel:+38640458598) · [joze.jojo@gmail.com](mailto:joze.jojo@gmail.com)
+
+<!-- Stranka želi pod vsakim predstavnikom njegov kontakt. Manjkajo telefon/e-pošta za Jožico Troje in Petra Goršina (ali skupni info e-naslov društva). -->
 
 ## Podpredsednica Jožica Troje
 
